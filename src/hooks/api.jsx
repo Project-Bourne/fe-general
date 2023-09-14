@@ -5,7 +5,7 @@
  */
 let access = '';
 if (typeof window !== 'undefined') {
-  access = localStorage.getItem("deep-access") || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdkNjA0OTUzLTk0YzAtNGYzOC05N2I3LWFlYWEyYWI5YjRjMCIsInJvbGUiOiIxIiwiaWF0IjoxNjkzOTE2MTU2LCJleHAiOjE2OTQwMDI1NTZ9.lMsoXieVsXff68LqEq7DVxRud2nFwhXPyggBBwRi0s4';
+  access = localStorage.getItem("deep-access") || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGE5ZmIxLTRlMzktNDRiNC1hZjM2LTc2MDNkMjJlMDMzMCIsImlhdCI6MTY5NDQzNTQwOSwiZXhwIjoxNjk0NTIxODA5fQ.P3uuF3rGuQcZ-9RgPwOvUzGDtn3uvUiPMGdTcR5jmtI';
 }export const requestHeader = {
     Accept: 'application/json',
     'Cache-Control': 'no-cache',

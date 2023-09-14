@@ -88,75 +88,114 @@ function Dropdown(props: DropdownModel) {
 }
 
 // dropdown component of countries and flag
-function DropdownWithFlag(props) {
-  const { selectItem, style } = props;
+function DropdownWithFlag(props: DropdownModel) {
+  const { onClick, selectItem, className, style, isDisabled } = props;
   const [dropdown, setDropdown] = useState(false);
   const [country, setCountry] = useState({
-    name: 'Nigeria',
-    flag: 'https://flagcdn.com/ng.svg',
+    name: "Nigeria",
+    flag: "https://flagcdn.com/ng.svg",
   });
   const [filteredCountries, setFilteredCountries] = useState(countries);
-  const [countrySearch, setCountrySearch] = useState('');
-
-  const dropdownRef = useRef();
+  const [countrySearch, setCountrySearch] = useState("");
   const searchInput = useRef();
 
+  const dropdownRef = useRef();
   useOnClickOutside(dropdownRef, () => {
     setDropdown(false);
-    setCountrySearch('');
+    setCountrySearch("");
   });
 
+  // toggle dropdown if component is not disabled
   const handleDropdown = () => {
-    setDropdown(!dropdown);
+    if (!isDisabled) {
+      setDropdown(!dropdown);
+    } else {
+      return;
+    }
+    // if (dropdown) {
+    //     document.getElementById('country-search').addEventListener('click', () => {
+    //         document.getElementById('country-search').focus()
+    //     })
+    // }
   };
-
-  const handleItemSelect = (countryName, flag) => {
-    setCountry({ name: countryName, flag });
+  // add a selected country from dropdown
+  const handleItemSelect = (country, flag) => {
+    setCountry({ name: country, flag });
     setDropdown(false);
-    selectItem(countryName);
+    selectItem(country);
     setFilteredCountries(countries);
-    setCountrySearch('');
+    setCountrySearch("");
   };
 
   const filterCountries = (event) => {
-    const searchText = event.target.value.toLowerCase();
-    const filteredCountries = countries.filter((country) =>
-      country.name.toLowerCase().startsWith(searchText)
-    );
+    // event.preventDefault();
+    // setCountrySearch(event.target.value);
+    console.log("Filtering", event.target.value);
+    let filteredCountries = countries.filter((country) => {
+      if (
+        country.name
+          .toLowerCase()
+          .startsWith(event.target.value.toLocaleLowerCase())
+      ) {
+        return country;
+      }
+    });
     setFilteredCountries(filteredCountries);
-    setCountrySearch(searchText);
+    // searchInput.current.focues();
+    // document.getElementById('country-search').focus();
   };
 
+  // dropdwon compoent
   const Menu = () => {
+    // close dropdown menu when outside is clicked
+    const menuRef = useRef();
+    useOnClickOutside(menuRef, () => {
+      setDropdown(false);
+      setCountrySearch("");
+    });
+
     return (
-      <div className="h-[170px] hover:cursor-pointer w-full shadow-md overflow-scroll bg-white absolute z-7">
-        <input
-          className="static w-[400px] mx-auto px-4 mb-2 border-b-2 h-[40px] text-black"
-          id="country-search"
-          placeholder="Search"
-          type="text"
-          onChange={filterCountries}
-          value={countrySearch}
-          ref={searchInput}
-        />
+      <div
+        // ref={menuRef}
+        className={`h-[170px] hover:cursor-pointer w-full shadow-md overflow-scroll bg-white absolute z-7`}
+      >
+        {/* <input 
+                  className="static w-[400px] mx-auto px-4 mb-2 border-b-2 h-[40px] text-black" 
+                  id="country-search"
+                  placeholder="Search"
+                  type="text"
+                  onChange={(event: any) => {
+                      event.preventDefault();
+                      setCountrySearch(event.target.value);
+                      filterCountries(event);
+                  }}
+                  key={'search-input'}
+                  // ref={searchInput}
+                  value={countrySearch}
+              /> */}
         <div className="">
-          {filteredCountries.map((item, index) => (
-            <div
-              key={index}
-              className={`flex gap-2 px-2 py-1 hover:bg-gray-200 cursor-pointer items-center`}
-              onClick={() => handleItemSelect(item.name, item.flag)}
-            >
-              <Image
-                src={item.flag}
-                alt="Flag"
-                height={20}
-                width={20}
-                className="rounded-full h-[20px] w-[20px]"
-                priority
-              />
-              <div className="text-[15px] font-light">{item.name}</div>
-            </div>
-          ))}
+          {filteredCountries
+            .sort((a, b) => {
+              if (a.name > b.name) return 1;
+              if (a.name < b.name) return -1;
+            })
+            .map((item: any, index: number) => (
+              <div
+                key={index}
+                className={`flex gap-2 px-2 py-1 hover:bg-gray-200 cursor-pointer items-center`}
+                onClick={() => handleItemSelect(item.name, item.image)}
+              >
+                <Image
+                  src={item.image}
+                  alt="Filter"
+                  height={20}
+                  width={20}
+                  className="rounded-full h-[20px] w-[20px]"
+                  priority
+                />
+                <div className="text-[15px] font-light">{item.name}</div>
+              </div>
+            ))}
         </div>
       </div>
     );
@@ -171,7 +210,7 @@ function DropdownWithFlag(props) {
         <div className="flex gap-2 items-center">
           <Image
             src={country.flag}
-            alt="Flag"
+            alt="Filter"
             height={20}
             width={20}
             className="rounded-full h-[20px] w-[20px]"
@@ -179,9 +218,27 @@ function DropdownWithFlag(props) {
           />
           <div className="text-[15px] font-light">{country.name}</div>
         </div>
-        <div>&#8964;</div>
+        <div>&#8964; </div>
       </div>
-      {dropdown && <Menu />}
+      {dropdown && (
+        <>
+          <input
+            className="static w-[100%] mx-auto px-4 mb-2 border-b-2 h-[40px] text-black"
+            id="country-search"
+            placeholder="Search"
+            type="text"
+            onChange={(event: any) => {
+              event.preventDefault();
+              setCountrySearch(event.target.value);
+              filterCountries(event);
+            }}
+            key={"search-input"}
+            // ref={searchInput}
+            value={countrySearch}
+          />
+          <Menu />
+        </>
+      )}
     </div>
   );
 }

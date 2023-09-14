@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const UserSlice = createSlice({
   name: "User",
   initialState: {
-    user: {}
+    user: {},
+    dropDown: ''
   },
 
   reducers: {
@@ -17,12 +18,16 @@ const UserSlice = createSlice({
         state.user.lastName = action.payload.lastName;
         state.user.email = action.payload.email;
       },
+      setDropDown: (state, action) => {
+        state.dropDown = action.payload;
+      },
   },
 });
 
 export const {
     setSingleUser,
     updateSingleUser,
+    setDropDown
 } = UserSlice.actions;
 
 export default UserSlice.reducer;

@@ -8,48 +8,37 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDropDown } from '@/redux/reducer/userSlice';
 
-const options = [
-    {
-        id:0,
-        role: "Station Officer"
-    },
-    {
-        id:1,
-        role: "Desk Officer"
-    },
-    {
-        id:2,
-        role: "Admin"
-    },
-    {
-        id:3,
-        role: "Supervisor"
-    },
-    {
-        id:4,
-        role: "Pending"
-    },
-    {
-        id:5,
-        role: "Approved"
-    },
-];
+const roleMapping = {
+    "0": "All",
+    "1": "Admin",
+    "2": "Supervisor",
+    "3": "Liason Officer",
+    "4": "Station Officer",
+    "5": "Desk Officer",
+    "6": "Analyst",
+  };
+  
+  const options = Object.keys(roleMapping).map((key) => ({
+    id: key,
+    role: roleMapping[key],
+  }));
 
 export default function SplitButton() {
+    const dispatch = useDispatch();
+    const {dropDown} = useSelector((state: any) => state.user);
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const [selectedRoleIndex, setSelectedRoleIndex] = React.useState<any>(0); // Default to the first role
+    const [selectedStatus, setSelectedStatus] = React.useState(''); // Empty string for status
 
-    const handleClick = () => {
-        console.info(`You clicked ${options[selectedIndex].id}`);
-    };
-
-    const handleMenuItemClick = (
-        event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-        index: number,
-    ) => {
-        setSelectedIndex(index);
+    const handleRoleClick = (index: any) => {
+        setSelectedRoleIndex(index);
+        dispatch(setDropDown(index));
+        console.log(index);
+        setSelectedStatus(''); // Reset the selected status when changing roles
         setOpen(false);
     };
 
@@ -70,8 +59,10 @@ export default function SplitButton() {
 
     return (
         <React.Fragment>
-            <ButtonGroup ref={anchorRef} className=''>
-                <Button onClick={handleClick}>{options[selectedIndex].role}</Button>
+            <ButtonGroup ref={anchorRef}>
+                <Button onClick={() => handleRoleClick(dropDown)}>
+                    {typeof(dropDown) === 'number' ? options[dropDown].role : dropDown}
+                </Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
@@ -107,12 +98,24 @@ export default function SplitButton() {
                                     {options.map((option, index) => (
                                         <MenuItem
                                             key={option.id}
-                                            selected={index === selectedIndex}
-                                            onClick={(event) => handleMenuItemClick(event, index)}
+                                            selected={selectedRoleIndex === index}
+                                            onClick={() => handleRoleClick(index)}
                                         >
                                             {option.role}
                                         </MenuItem>
                                     ))}
+                                    <MenuItem
+                                        selected={selectedStatus === 'Pending'}
+                                        onClick={() => handleRoleClick('Pending')}
+                                    >
+                                        Pending
+                                    </MenuItem>
+                                    <MenuItem
+                                        selected={selectedStatus === 'Approved'}
+                                        onClick={() => handleRoleClick('Approved')}
+                                    >
+                                        Approved
+                                    </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>
                         </Paper>

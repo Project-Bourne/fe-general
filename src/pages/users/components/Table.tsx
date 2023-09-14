@@ -9,10 +9,15 @@ import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import BlockModal from './blockModal'
+import ApproveModal from "./ApproveModal";
+import RejectModal from "./RejectModal";
 import UserService from '@/services/users'
 import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
 import DeleteModal from "./deleteModal";
+import { useDispatch, useSelector } from "react-redux";
+import { set } from "date-fns";
+import { setDropDown } from "@/redux/reducer/userSlice";
 // set number of items to be displayed per page
 const calculateRange = (data, rowsPerPage) => {
   const range = [];
@@ -34,11 +39,15 @@ function CustomTable({
   rowsPerPage,
   usertype,
 }) {
+  const { dropDown } = useSelector((state: any) => state?.user)
+const disptch = useDispatch()
   const [tableRange, setTableRange] = useState([]);
   const [slice, setSlice] = useState([]);
   const [page, setPage] = useState(1);
   const [users, setUsers] = useState([])
   const [showDelete, setShowDelete] = useState(false)
+  const [showApprove, setShowApprove] = useState(false)
+  const [showReject, setShowReject] = useState(false)
   const [showBlock, setShowBlock] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -82,9 +91,58 @@ function CustomTable({
     }
     setShowDelete(false);
   };
+
+ 
+
+  const handleApprove = async (id) => {
+    const response = await UserService.deleteUser(id);
+    console.log(response);
+    if (response.status) {
+      NotificationService.success({
+        message: "success!",
+        addedText: <p>{response.message}.</p>,
+      });
+    } else {
+      NotificationService.error({
+        message: "error!",
+        addedText: (
+          <p>
+            {response.message}. Something went wrong, please try again
+          </p>
+        ),
+      });
+    }
+    setShowApprove(false);
+  };
+
+  const handleReject = async (id) => {
+    const response = await UserService.deleteUser(id);
+    console.log(response);
+    if (response.status) {
+      NotificationService.success({
+        message: "success!",
+        addedText: <p>{response.message}.</p>,
+      });
+    } else {
+      NotificationService.error({
+        message: "error!",
+        addedText: (
+          <p>
+            {response.message}. Something went wrong, please try again
+          </p>
+        ),
+      });
+    }
+   setShowReject(false);
+  };
+
+  
+
   const cancelblock = () => {
     setShowBlock(false);
     setShowDelete(false)
+    setShowApprove(false)
+    setShowReject(false)
   };
 
   const openBlockModal = (user) => {
@@ -97,8 +155,20 @@ function CustomTable({
     setShowDelete(true);
   };
 
+  const openApproveModal = (user) => {
+    setSelectedUser(user);
+    setShowApprove(true);
+  }
+  const openRejectModal = (user) => {
+    setSelectedUser(user);
+    setShowReject(true);
+  }
 
 
+
+  useEffect(() => {
+    disptch(setDropDown(0));
+  },[]);
 
   // set table items to be rendered when table is paginated
   useEffect(() => {
@@ -165,15 +235,16 @@ function CustomTable({
             <TableBody>
               {slice?.map((item) => (
                 <>
-                  <TableRow key={item.uuid} className="hover:bg-gray-50">
+                  <TableRow key={item?.uuid} className="hover:bg-gray-50">
                     <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline">
-                      <Link href={`users/${item.uuid}`}>{item.firstName} {item.lastName}</Link>
+                      <Link href={`users/${item?.uuid}`}>{item?.firstName} {item?.lastName}</Link>
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      {item.role}
+                      {item?.role}
                     </TableCell>
                     <TableCell className=" text-xs capitalize">
                       {item.country}
+    
                     </TableCell>
                     <TableCell align="right">
                       <div className="flex gap-x-[0.2rem] items-center">
@@ -187,7 +258,18 @@ function CustomTable({
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-x-3 items-center">
+                      {
+                        dropDown == 'Pending' ? (
+                          <div className="flex gap-x-3 items-center">
+                        <button className="bg-transparent text-xs p-0 text-[#9F9036]" onClick={() => openApproveModal(item)}>
+                          Approve
+                        </button>
+                        <button className="bg-transparent text-xs p-0 text-sirp-primary" onClick={() => openRejectModal(item)}>
+                          Reject
+                        </button>
+                      </div>
+                        ) : (
+                          <div className="flex gap-x-3 items-center">
                         <button className="bg-transparent text-xs p-0 text-[#9F9036]" onClick={() => openBlockModal(item)}>
                           Block
                         </button>
@@ -195,6 +277,9 @@ function CustomTable({
                           Delete
                         </button>
                       </div>
+                        )
+                      }
+                      
                     </TableCell>
                     {/* {usertype >= 0 ? (
                     <TableCell>
@@ -279,10 +364,34 @@ function CustomTable({
       {selectedUser && showDelete && (
         <CustomModal
           style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
-          closeModal={() => setShowBlock(false)}
+          closeModal={() => setShowDelete(false)}
         >
           <DeleteModal
             handleDelete={() => handleDelete(selectedUser.uuid)}
+            cancelblock={cancelblock}
+            user={selectedUser}
+          />
+        </CustomModal>
+      )}
+      {selectedUser && showApprove && (
+        <CustomModal
+          style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
+          closeModal={() => setShowApprove(false)}
+        >
+          <ApproveModal
+            handleApprove={() => handleApprove(selectedUser.uuid)}
+            cancelblock={cancelblock}
+            user={selectedUser}
+          />
+        </CustomModal>
+      )}
+      {selectedUser && showReject && (
+        <CustomModal
+          style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
+          closeModal={() => setShowReject(false)}
+        >
+          <RejectModal
+            handleReject={() => handleReject(selectedUser.uuid)}
             cancelblock={cancelblock}
             user={selectedUser}
           />
