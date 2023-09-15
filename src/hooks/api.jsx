@@ -3,16 +3,17 @@
 /**
  * Object Request Header
  */
-let access = '';
-if (typeof window !== 'undefined') {
-  access = localStorage.getItem("deep-access") || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGE5ZmIxLTRlMzktNDRiNC1hZjM2LTc2MDNkMjJlMDMzMCIsImlhdCI6MTY5NDQzNTQwOSwiZXhwIjoxNjk0NTIxODA5fQ.P3uuF3rGuQcZ-9RgPwOvUzGDtn3uvUiPMGdTcR5jmtI';
-}export const requestHeader = {
-    Accept: 'application/json',
-    'Cache-Control': 'no-cache',
-    'Content-Type': 'application/json',
-    'deep-token': access,
+let access = "";
+if (typeof window !== "undefined") {
+  access =
+    localStorage.getItem("deep-access") ||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdkNjA0OTUzLTk0YzAtNGYzOC05N2I3LWFlYWEyYWI5YjRjMCIsImlhdCI6MTY5NDc2OTk5MCwiZXhwIjoxNjk0ODU2MzkwfQ.fRMjxGY7PBBrZEAbBYHQg2L8tbcN8wbA6jro9c25sME'
 }
-
+export const requestHeader = {
+  Accept: "application/json",
+  "Cache-Control": "no-cache",
+  "Content-Type": "application/json",
+  "deep-token": access,
+};
 
 let API_USER_URL = "http://192.81.213.226:80/";
 
@@ -67,7 +68,7 @@ export async function request(url, method, payload, token, text, form) {
       .catch((err) => {
         console.error(`Request Error ${url}: `, err);
         // throw new Error(err);
-        return err
+        return err;
       });
   }
 }

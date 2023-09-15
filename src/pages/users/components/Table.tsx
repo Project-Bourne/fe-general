@@ -8,10 +8,10 @@ import Paper from "@mui/material/Paper";
 import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import BlockModal from './blockModal'
+import BlockModal from "./blockModal";
 import ApproveModal from "./ApproveModal";
 import RejectModal from "./RejectModal";
-import UserService from '@/services/users'
+import UserService from "@/services/users";
 import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
 import DeleteModal from "./deleteModal";
@@ -39,16 +39,16 @@ function CustomTable({
   rowsPerPage,
   usertype,
 }) {
-  const { dropDown } = useSelector((state: any) => state?.user)
-const disptch = useDispatch()
+  const { dropDown } = useSelector((state: any) => state?.user);
+  const disptch = useDispatch();
   const [tableRange, setTableRange] = useState([]);
   const [slice, setSlice] = useState([]);
   const [page, setPage] = useState(1);
-  const [users, setUsers] = useState([])
-  const [showDelete, setShowDelete] = useState(false)
-  const [showApprove, setShowApprove] = useState(false)
-  const [showReject, setShowReject] = useState(false)
-  const [showBlock, setShowBlock] = useState(false)
+  const [users, setUsers] = useState([]);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showApprove, setShowApprove] = useState(false);
+  const [showReject, setShowReject] = useState(false);
+  const [showBlock, setShowBlock] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const handleBlock = async (id) => {
@@ -63,9 +63,7 @@ const disptch = useDispatch()
       NotificationService.error({
         message: "error!",
         addedText: (
-          <p>
-            {response.message}. Something went wrong, please try again
-          </p>
+          <p>{response.message}. Something went wrong, please try again</p>
         ),
       });
     }
@@ -83,19 +81,15 @@ const disptch = useDispatch()
       NotificationService.error({
         message: "error!",
         addedText: (
-          <p>
-            {response.message}. Something went wrong, please try again
-          </p>
+          <p>{response.message}. Something went wrong, please try again</p>
         ),
       });
     }
     setShowDelete(false);
   };
 
- 
-
   const handleApprove = async (id) => {
-    const response = await UserService.deleteUser(id);
+    const response = await UserService.verifyUser(id);
     console.log(response);
     if (response.status) {
       NotificationService.success({
@@ -106,9 +100,7 @@ const disptch = useDispatch()
       NotificationService.error({
         message: "error!",
         addedText: (
-          <p>
-            {response.message}. Something went wrong, please try again
-          </p>
+          <p>{response.message}. Something went wrong, please try again</p>
         ),
       });
     }
@@ -127,22 +119,18 @@ const disptch = useDispatch()
       NotificationService.error({
         message: "error!",
         addedText: (
-          <p>
-            {response.message}. Something went wrong, please try again
-          </p>
+          <p>{response.message}. Something went wrong, please try again</p>
         ),
       });
     }
-   setShowReject(false);
+    setShowReject(false);
   };
-
-  
 
   const cancelblock = () => {
     setShowBlock(false);
-    setShowDelete(false)
-    setShowApprove(false)
-    setShowReject(false)
+    setShowDelete(false);
+    setShowApprove(false);
+    setShowReject(false);
   };
 
   const openBlockModal = (user) => {
@@ -158,17 +146,15 @@ const disptch = useDispatch()
   const openApproveModal = (user) => {
     setSelectedUser(user);
     setShowApprove(true);
-  }
+  };
   const openRejectModal = (user) => {
     setSelectedUser(user);
     setShowReject(true);
-  }
-
-
+  };
 
   useEffect(() => {
     disptch(setDropDown(0));
-  },[]);
+  }, []);
 
   // set table items to be rendered when table is paginated
   useEffect(() => {
@@ -182,17 +168,15 @@ const disptch = useDispatch()
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await UserService.getUsers()
+        const response = await UserService.getUsers();
         if (response.status) {
-          setUsers(response.data)
-          console.log(response)
+          setUsers(response.data);
+          console.log(response);
         }
-      } catch (error) {
-        
-      }
-    }
-    fetchUsers()
-  }, [])
+      } catch (error) {}
+    };
+    fetchUsers();
+  }, []);
   //   table footer
   useEffect(() => {
     if (slice.length < 1 && page !== 1) {
@@ -203,7 +187,7 @@ const disptch = useDispatch()
   // handle paginate buttons
   const handlePaginate = (
     event: React.MouseEvent<HTMLButtonElement>,
-    type: string,
+    type: string
   ) => {
     event.preventDefault();
     if (type === "next") {
@@ -237,49 +221,61 @@ const disptch = useDispatch()
                 <>
                   <TableRow key={item?.uuid} className="hover:bg-gray-50">
                     <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline">
-                      <Link href={`users/${item?.uuid}`}>{item?.firstName} {item?.lastName}</Link>
+                      <Link href={`users/${item?.uuid}`}>
+                        {item?.firstName} {item?.lastName}
+                      </Link>
                     </TableCell>
                     <TableCell className="text-xs capitalize">
                       {item?.role}
                     </TableCell>
                     <TableCell className=" text-xs capitalize">
                       {item.country}
-    
                     </TableCell>
                     <TableCell align="right">
                       <div className="flex gap-x-[0.2rem] items-center">
                         <div
-                          className={`rounded-full w-2 h-2 ${item.status === "Online"
-                            ? "bg-green-600"
-                            : "bg-[#EF4444]"
-                            }`}
+                          className={`rounded-full w-2 h-2 ${
+                            item.status === "Online"
+                              ? "bg-green-600"
+                              : "bg-[#EF4444]"
+                          }`}
                         ></div>
                         <p className="text-xs">{item.status}</p>
                       </div>
                     </TableCell>
                     <TableCell>
-                      {
-                        dropDown == 'Pending' ? (
+                      {item.verified ? (
                           <div className="flex gap-x-3 items-center">
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]" onClick={() => openApproveModal(item)}>
-                          Approve
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-sirp-primary" onClick={() => openRejectModal(item)}>
-                          Reject
-                        </button>
-                      </div>
-                        ) : (
-                          <div className="flex gap-x-3 items-center">
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]" onClick={() => openBlockModal(item)}>
-                          Block
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-sirp-primary" onClick={() => openDeleteModal(item)}>
-                          Delete
-                        </button>
-                      </div>
-                        )
-                      }
-                      
+                          <button
+                            className="bg-transparent text-xs p-0 text-[#9F9036]"
+                            onClick={() => openBlockModal(item)}
+                          >
+                            Block
+                          </button>
+                          <button
+                            className="bg-transparent text-xs p-0 text-sirp-primary"
+                            onClick={() => openDeleteModal(item)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                       
+                      ) : (
+                        <div className="flex gap-x-3 items-center">
+                          <button
+                            className="bg-transparent text-xs p-0 text-[#9F9036]"
+                            onClick={() => openApproveModal(item)}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            className="bg-transparent text-xs p-0 text-sirp-primary"
+                            onClick={() => openRejectModal(item)}
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
                     </TableCell>
                     {/* {usertype >= 0 ? (
                     <TableCell>

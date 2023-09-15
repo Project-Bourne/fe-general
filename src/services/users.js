@@ -50,6 +50,21 @@ class UserService {
       throw error;
     }
   }
+  static async verifyUser(id) {
+    try {
+      const response = await request(
+        `verify-user/${id}`,
+        "PUT",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   static async blockUser(id) {
     try {
