@@ -17,21 +17,22 @@ import NotificationService from "@/services/notification.service";
 import DeleteModal from "./deleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import UnblockModal from "./UnblockModal";
-import { fetchData } from "@/hooks/Fetchdata";
+import Loader from "@/components/ui/Loader";
+import { setOptions } from "react-chartjs-2/dist/utils";
 // set number of items to be displayed per page
-const calculateRange = (data, rowsPerPage) => {
-  const range = [];
-  const num = Math.ceil(data.length / rowsPerPage);
-  let i = 1;
-  for (let i = 1; i <= num; i++) {
-    range.push(i);
-  }
-  return range;
-};
+// const calculateRange = (data, rowsPerPage) => {
+//   const range = [];
+//   const num = Math.ceil(data.length / rowsPerPage);
+//   let i = 1;
+//   for (let i = 1; i <= num; i++) {
+//     range.push(i);
+//   }
+//   return range;
+// };
 
-const sliceData = (data, page, rowsPerPage) => {
-  return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-};
+// const sliceData = (data, page, rowsPerPage) => {
+//   return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+// };
 
 function CustomTable({
   tableHeaderData,
@@ -39,36 +40,63 @@ function CustomTable({
   rowsPerPage,
   usertype,
 }) {
-  const { allUsers } = useSelector((state: any) => state?.user);
   const dispatch = useDispatch();
   const [tableRange, setTableRange] = useState([]);
   const [slice, setSlice] = useState([]);
   const [page, setPage] = useState(1);
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showApprove, setShowApprove] = useState(false);
   const [showReject, setShowReject] = useState(false);
   const [showBlock, setShowBlock] = useState(false);
   const [showUnblock, setShowUnblock] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const { dropDown } = useSelector((state: any) => state?.user);
 
   useEffect(() => {
-    // Call the fetchData function to update the Redux store with user data
-    fetchData(dispatch)
-      .then(() => {
-        // Once the data is updated in the Redux store, you can set the 'users' state
-        setUsers(allUsers);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []); // Include 'dispatch' and 'allUsers' in the dependency array
+    setIsLoading(true);
+    const fetchData = async () => {
+      try {
+        if (isMostlyNumbers(dropDown)) {
+          // It's mostly numbers, treat it as a number
+          const response = await UserService.filterByRoles(dropDown);
+          const data = response.data;
+          setUsers(data);
+        } else {
+          // It's mostly text, treat it as text
+          const response = await UserService.filterByAction(dropDown);
+          const data = response.data;
+          setUsers(data);
+        }
+        setIsLoading(false); // Set isLoading to false when data fetching is complete
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false); // Set isLoading to false in case of an error
+      }
+    };
+
+    function isMostlyNumbers(value) {
+      // Count the number of digits in the value
+      const digitCount = (value.match(/\d/g) || []).length;
+      const letterCount = (value.match(/[a-zA-Z]/g) || []).length;
+
+      // If there are more digits than letters, consider it mostly numbers
+      return digitCount >= letterCount;
+    }
+
+    fetchData(); // Call the async function
+
+  }, [
+    dispatch,
+    dropDown,
+  ]);
+
 
   const handleBlock = async (id) => {
     const response = await UserService.blockUser(id);
     console.log(response);
     if (response.status) {
-      await fetchData(dispatch);
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
@@ -191,15 +219,14 @@ function CustomTable({
     setShowReject(true);
   };
 
-
   // set table items to be rendered when table is paginated
-  useEffect(() => {
-    const range = calculateRange(users, rowsPerPage);
-    setTableRange([...range]);
+  // useEffect(() => {
+  //   const range = calculateRange(users, rowsPerPage);
+  //   setTableRange([...range]);
 
-    const slice = sliceData(users, page, rowsPerPage);
-    setSlice([...slice]);
-  }, [users, setTableRange, page, setSlice]);
+  //   const slice = sliceData(users, page, rowsPerPage);
+  //   setSlice([...slice]);
+  // }, [users, setTableRange, page, setSlice]);
 
   //   table footer
   useEffect(() => {
@@ -224,6 +251,16 @@ function CustomTable({
 
   return (
     <TableContainer component={Paper} className="shadow-sm border-r-0">
+      {isLoading && (
+        <CustomModal
+          style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
+          closeModal={() => {setIsLoading(false)}}
+        >
+          <div className="flex flex-row justify-center items-center">
+            <Loader />
+          </div>
+        </CustomModal>
+      )}
       <Table sx={{ minWidth: 650 }}>
         <TableHead className="bg-gray-100">
           <TableRow>
@@ -238,10 +275,10 @@ function CustomTable({
             ))}
           </TableRow>
         </TableHead>
-        {users.length > 0 ? (
+        {Array.isArray(users) && users.length > 0 ? (
           <>
             <TableBody>
-              {slice?.map((item) => (
+              {users?.map((item) => (
                 <>
                   <TableRow key={item?.uuid} className="hover:bg-gray-50">
                     <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline">
@@ -250,7 +287,7 @@ function CustomTable({
                       </Link>
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      {item?.role.roleName}
+                      {/* {item?.role.roleName} */}
                     </TableCell>
                     <TableCell className=" text-xs capitalize">
                       {item.country}

@@ -51,6 +51,39 @@ class UserService {
     }
   }
 
+  static async filterByRoles(id) {
+    try {
+      const response = await request(
+        `filter?filterType=role&filterValue=${id}`,
+        "GET",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async filterByAction(id) {
+    try {
+      const response = await request(
+        `filter?filterType=${id}&filterValue=`,
+        "GET",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
   static async deleteUser(id) {
     try {
       const response = await request(

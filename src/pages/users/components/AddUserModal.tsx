@@ -41,7 +41,7 @@ const AddUserModal = (props) => {
     lastName: "",
     roleUuid: "",
     password: "",
-    country: "",
+    country: [""],
   });
 
   // Define event handlers for input changes
@@ -71,7 +71,9 @@ const AddUserModal = (props) => {
   };
 
   const handleSetCountry = (selectedCountry) => {
-    setFormData({ ...formData, country: selectedCountry });
+    let res = [];
+    res.push(selectedCountry)
+    setFormData({ ...formData, country: res });
   };
 
   const handleSubmit = async (e) => {
@@ -90,7 +92,7 @@ const AddUserModal = (props) => {
           lastName: "",
           password: "",
           roleUuid: "",
-          country: "",
+          country: ["Nigeria"],
         });
         props.closeModal();
       } else {

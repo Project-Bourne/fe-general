@@ -9,13 +9,13 @@ import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import { useDispatch, useSelector } from "react-redux";
-import { setDropDown } from "@/redux/reducer/userSlice";
+import { setDropDown, setDropDownName } from "@/redux/reducer/userSlice";
 import UserService from "@/services/users";
 import NotificationService from "@/services/notification.service";
 
 export default function SplitButton() {
   const dispatch = useDispatch();
-  const { dropDown } = useSelector((state: any) => state.user);
+  const { dropDown, dropDownName } = useSelector((state: any) => state.user);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [options, setOptions] = React.useState([]); // Initialize as an empty array
@@ -37,10 +37,15 @@ export default function SplitButton() {
               role: roleData.roleName,
             }))
           );
+        } else {
+          NotificationService.error({
+            message: "Error!",
+            addedText: <p>{response.message}</p>,
+          });
         }
       } catch (error) {
         NotificationService.error({
-          message: "success!",
+          message: "Error!",
           addedText: <p>{error.message}</p>,
         });
         // Handle the error as needed
@@ -53,7 +58,9 @@ export default function SplitButton() {
   const handleRoleClick = (roleId: string | null, roleName: string) => {
     setSelectedRoleId(roleId);
     dispatch(setDropDown(roleId)); // If needed, dispatch the UUID to Redux
+    dispatch(setDropDownName(roleName)); // If needed, dispatch the UUID to Redux
     setSelectedRoleName(roleName); // Update the selected role name
+    dropDown;
     setOpen(false);
   };
 
@@ -76,7 +83,7 @@ export default function SplitButton() {
     <React.Fragment>
       <ButtonGroup ref={anchorRef}>
         <Button onClick={() => handleRoleClick(null, "All")}>
-          {selectedRoleName !== "" ? selectedRoleName : "Select Role"}
+          {selectedRoleName !== "" ? selectedRoleName : dropDownName}
         </Button>
         <Button
           size="small"
@@ -112,7 +119,7 @@ export default function SplitButton() {
                 <MenuList id="split-button-menu" autoFocusItem>
                   <MenuItem
                     selected={selectedRoleId === null}
-                    onClick={() => handleRoleClick(null, "All")}
+                    onClick={() => handleRoleClick("all", "All")}
                   >
                     All
                   </MenuItem>
@@ -128,15 +135,33 @@ export default function SplitButton() {
                   ))}
                   <MenuItem
                     selected={selectedRoleName === "Pending"}
-                    onClick={() => handleRoleClick("Pending", "Pending")}
+                    onClick={() => handleRoleClick("pending", "Pending")}
                   >
                     Pending
                   </MenuItem>
                   <MenuItem
                     selected={selectedRoleName === "Approved"}
-                    onClick={() => handleRoleClick("Approved", "Approved")}
+                    onClick={() => handleRoleClick("verified", "Approved")}
                   >
                     Approved
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedRoleName === "Blocked"}
+                    onClick={() => handleRoleClick("blocked", "Blocked")}
+                  >
+                    Blocked
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedRoleName === "Rejected"}
+                    onClick={() => handleRoleClick("rejected", "Rejected")}
+                  >
+                    Rejected
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedRoleName === "Deleted"}
+                    onClick={() => handleRoleClick("deleted", "Deleted")}
+                  >
+                    Deleted
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>
