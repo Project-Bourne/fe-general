@@ -1,127 +1,149 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import { useDispatch, useSelector } from 'react-redux';
-import { setDropDown } from '@/redux/reducer/userSlice';
-
-const roleMapping = {
-    "0": "All",
-    "1": "Admin",
-    "2": "Supervisor",
-    "3": "Liason Officer",
-    "4": "Station Officer",
-    "5": "Desk Officer",
-    "6": "Analyst",
-  };
-  
-  const options = Object.keys(roleMapping).map((key) => ({
-    id: key,
-    role: roleMapping[key],
-  }));
+import React, { useEffect } from "react";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import { useDispatch, useSelector } from "react-redux";
+import { setDropDown } from "@/redux/reducer/userSlice";
+import UserService from "@/services/users";
+import NotificationService from "@/services/notification.service";
 
 export default function SplitButton() {
-    const dispatch = useDispatch();
-    const {dropDown} = useSelector((state: any) => state.user);
-    const [open, setOpen] = React.useState(false);
-    const anchorRef = React.useRef<HTMLDivElement>(null);
-    const [selectedRoleIndex, setSelectedRoleIndex] = React.useState<any>(0); // Default to the first role
-    const [selectedStatus, setSelectedStatus] = React.useState(''); // Empty string for status
+  const dispatch = useDispatch();
+  const { dropDown } = useSelector((state: any) => state.user);
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef<HTMLDivElement>(null);
+  const [options, setOptions] = React.useState([]); // Initialize as an empty array
+  const [selectedRoleId, setSelectedRoleId] = React.useState<string | null>(
+    null
+  ); // Use 'null' to represent no selection
+  const [selectedRoleName, setSelectedRoleName] = React.useState(""); // Empty string for role name
 
-    const handleRoleClick = (index: any) => {
-        setSelectedRoleIndex(index);
-        dispatch(setDropDown(index));
-        console.log(index);
-        setSelectedStatus(''); // Reset the selected status when changing roles
-        setOpen(false);
-    };
-
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
-    };
-
-    const handleClose = (event: Event) => {
-        if (
-            anchorRef.current &&
-            anchorRef.current.contains(event.target as HTMLElement)
-        ) {
-            return;
+  useEffect(() => {
+    const getRoles = async () => {
+      try {
+        const response = await UserService.getUserRoles();
+        if (response.status) {
+          const data = response.data;
+          // Now, options will contain the roles with UUIDs
+          setOptions(
+            data.map((roleData) => ({
+              id: roleData.uuid,
+              role: roleData.roleName,
+            }))
+          );
         }
-
-        setOpen(false);
+      } catch (error) {
+        NotificationService.error({
+          message: "success!",
+          addedText: <p>{error.message}</p>,
+        });
+        // Handle the error as needed
+      }
     };
 
-    return (
-        <React.Fragment>
-            <ButtonGroup ref={anchorRef}>
-                <Button onClick={() => handleRoleClick(dropDown)}>
-                    {typeof(dropDown) === 'number' ? options[dropDown].role : dropDown}
-                </Button>
-                <Button
-                    size="small"
-                    aria-controls={open ? 'split-button-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-label="select merge strategy"
-                    aria-haspopup="menu"
-                    onClick={handleToggle}
-                >
-                    <ArrowDropDownIcon />
-                </Button>
-            </ButtonGroup>
-            <Popper
-                sx={{
-                    zIndex: 1,
-                }}
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
-            >
-                {({ TransitionProps, placement }) => (
-                    <Grow
-                        {...TransitionProps}
-                        style={{
-                            transformOrigin:
-                                placement === 'bottom' ? 'center top' : 'center bottom',
-                        }}
+    getRoles();
+  }, []); // Empty dependency array to run this effect only once
+
+  const handleRoleClick = (roleId: string | null, roleName: string) => {
+    setSelectedRoleId(roleId);
+    dispatch(setDropDown(roleId)); // If needed, dispatch the UUID to Redux
+    setSelectedRoleName(roleName); // Update the selected role name
+    setOpen(false);
+  };
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event: Event) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <ButtonGroup ref={anchorRef}>
+        <Button onClick={() => handleRoleClick(null, "All")}>
+          {selectedRoleName !== "" ? selectedRoleName : "Select Role"}
+        </Button>
+        <Button
+          size="small"
+          aria-controls={open ? "split-button-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-label="select merge strategy"
+          aria-haspopup="menu"
+          onClick={handleToggle}
+        >
+          <ArrowDropDownIcon />
+        </Button>
+      </ButtonGroup>
+      <Popper
+        sx={{
+          zIndex: 1,
+        }}
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === "bottom" ? "center top" : "center bottom",
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList id="split-button-menu" autoFocusItem>
+                  <MenuItem
+                    selected={selectedRoleId === null}
+                    onClick={() => handleRoleClick(null, "All")}
+                  >
+                    All
+                  </MenuItem>
+
+                  {options.map((option) => (
+                    <MenuItem
+                      key={option.id}
+                      selected={selectedRoleId === option.id}
+                      onClick={() => handleRoleClick(option.id, option.role)}
                     >
-                        <Paper>
-                            <ClickAwayListener onClickAway={handleClose}>
-                                <MenuList id="split-button-menu" autoFocusItem>
-                                    {options.map((option, index) => (
-                                        <MenuItem
-                                            key={option.id}
-                                            selected={selectedRoleIndex === index}
-                                            onClick={() => handleRoleClick(index)}
-                                        >
-                                            {option.role}
-                                        </MenuItem>
-                                    ))}
-                                    <MenuItem
-                                        selected={selectedStatus === 'Pending'}
-                                        onClick={() => handleRoleClick('Pending')}
-                                    >
-                                        Pending
-                                    </MenuItem>
-                                    <MenuItem
-                                        selected={selectedStatus === 'Approved'}
-                                        onClick={() => handleRoleClick('Approved')}
-                                    >
-                                        Approved
-                                    </MenuItem>
-                                </MenuList>
-                            </ClickAwayListener>
-                        </Paper>
-                    </Grow>
-                )}
-            </Popper>
-        </React.Fragment>
-    );
+                      {option.role}
+                    </MenuItem>
+                  ))}
+                  <MenuItem
+                    selected={selectedRoleName === "Pending"}
+                    onClick={() => handleRoleClick("Pending", "Pending")}
+                  >
+                    Pending
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedRoleName === "Approved"}
+                    onClick={() => handleRoleClick("Approved", "Approved")}
+                  >
+                    Approved
+                  </MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    </React.Fragment>
+  );
 }

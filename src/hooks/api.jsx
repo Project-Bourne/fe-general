@@ -6,7 +6,7 @@
 let access = "";
 if (typeof window !== "undefined") {
   access =
-    localStorage.getItem("deep-access") ||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdkNjA0OTUzLTk0YzAtNGYzOC05N2I3LWFlYWEyYWI5YjRjMCIsImlhdCI6MTY5NDc2OTk5MCwiZXhwIjoxNjk0ODU2MzkwfQ.fRMjxGY7PBBrZEAbBYHQg2L8tbcN8wbA6jro9c25sME'
+    localStorage.getItem("deep-access") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0OWIyNzc3LWNjZjUtNDhhNy05NmRjLTM0M2VkZWYxYmJlMyIsImlhdCI6MTY5NTEwOTIxMiwiZXhwIjoxNjk1MTk1NjEyfQ.YEwQGNApsFZp2jD8yUBO6vaWosZvbg1YGn-y9rQrDU4"
 }
 export const requestHeader = {
   Accept: "application/json",

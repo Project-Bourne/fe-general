@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import UserService from '@/services/users'
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux';
-import BlockModal from './components/blockModal'
+import BlockModal from './components/BlockModal'
 import {
   ActivityLogSection,
   Header,

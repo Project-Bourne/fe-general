@@ -8,7 +8,7 @@ import Paper from "@mui/material/Paper";
 import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import BlockModal from "./blockModal";
+import BlockModal from "./BlockModal";
 import ApproveModal from "./ApproveModal";
 import RejectModal from "./RejectModal";
 import UserService from "@/services/users";
@@ -16,8 +16,8 @@ import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
 import DeleteModal from "./deleteModal";
 import { useDispatch, useSelector } from "react-redux";
-import { set } from "date-fns";
-import { setDropDown } from "@/redux/reducer/userSlice";
+import UnblockModal from "./UnblockModal";
+import { fetchData } from "@/hooks/Fetchdata";
 // set number of items to be displayed per page
 const calculateRange = (data, rowsPerPage) => {
   const range = [];
@@ -39,8 +39,8 @@ function CustomTable({
   rowsPerPage,
   usertype,
 }) {
-  const { dropDown } = useSelector((state: any) => state?.user);
-  const disptch = useDispatch();
+  const { allUsers } = useSelector((state: any) => state?.user);
+  const dispatch = useDispatch();
   const [tableRange, setTableRange] = useState([]);
   const [slice, setSlice] = useState([]);
   const [page, setPage] = useState(1);
@@ -49,12 +49,26 @@ function CustomTable({
   const [showApprove, setShowApprove] = useState(false);
   const [showReject, setShowReject] = useState(false);
   const [showBlock, setShowBlock] = useState(false);
+  const [showUnblock, setShowUnblock] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  useEffect(() => {
+    // Call the fetchData function to update the Redux store with user data
+    fetchData(dispatch)
+      .then(() => {
+        // Once the data is updated in the Redux store, you can set the 'users' state
+        setUsers(allUsers);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []); // Include 'dispatch' and 'allUsers' in the dependency array
 
   const handleBlock = async (id) => {
     const response = await UserService.blockUser(id);
     console.log(response);
     if (response.status) {
+      await fetchData(dispatch);
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
@@ -69,6 +83,7 @@ function CustomTable({
     }
     setShowBlock(false);
   };
+
   const handleDelete = async (id) => {
     const response = await UserService.deleteUser(id);
     console.log(response);
@@ -107,6 +122,24 @@ function CustomTable({
     setShowApprove(false);
   };
 
+  const handleUnblock = async (id) => {
+    const response = await UserService.unBlockUser(id);
+    console.log(response);
+    if (response.status) {
+      NotificationService.success({
+        message: "success!",
+        addedText: <p>{response.message}.</p>,
+      });
+    } else {
+      NotificationService.error({
+        message: "error!",
+        addedText: (
+          <p>{response.message}. Something went wrong, please try again</p>
+        ),
+      });
+    }
+    setShowUnblock(false);
+  };
   const handleReject = async (id) => {
     const response = await UserService.deleteUser(id);
     console.log(response);
@@ -131,11 +164,17 @@ function CustomTable({
     setShowDelete(false);
     setShowApprove(false);
     setShowReject(false);
+    setShowUnblock(false);
   };
 
   const openBlockModal = (user) => {
     setSelectedUser(user);
     setShowBlock(true);
+  };
+
+  const openUnblockModal = (user) => {
+    setSelectedUser(user);
+    setShowUnblock(true);
   };
 
   const openDeleteModal = (user) => {
@@ -152,9 +191,6 @@ function CustomTable({
     setShowReject(true);
   };
 
-  useEffect(() => {
-    disptch(setDropDown(0));
-  }, []);
 
   // set table items to be rendered when table is paginated
   useEffect(() => {
@@ -165,18 +201,6 @@ function CustomTable({
     setSlice([...slice]);
   }, [users, setTableRange, page, setSlice]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await UserService.getUsers();
-        if (response.status) {
-          setUsers(response.data);
-          console.log(response);
-        }
-      } catch (error) {}
-    };
-    fetchUsers();
-  }, []);
   //   table footer
   useEffect(() => {
     if (slice.length < 1 && page !== 1) {
@@ -226,7 +250,7 @@ function CustomTable({
                       </Link>
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      {item?.role}
+                      {item?.role.roleName}
                     </TableCell>
                     <TableCell className=" text-xs capitalize">
                       {item.country}
@@ -245,13 +269,24 @@ function CustomTable({
                     </TableCell>
                     <TableCell>
                       {item.verified ? (
-                          <div className="flex gap-x-3 items-center">
-                          <button
-                            className="bg-transparent text-xs p-0 text-[#9F9036]"
-                            onClick={() => openBlockModal(item)}
-                          >
-                            Block
-                          </button>
+                        <div className="flex gap-x-3 items-center">
+                          {/* check if user is blocked */}
+                          {item.blocked ? (
+                            <button
+                              className="bg-transparent text-xs p-0 text-[#9F9036]"
+                              onClick={() => openUnblockModal(item)}
+                            >
+                              Unblock
+                            </button>
+                          ) : (
+                            <button
+                              className="bg-transparent text-xs p-0 text-[#9F9036]"
+                              onClick={() => openBlockModal(item)}
+                            >
+                              Block
+                            </button>
+                          )}
+
                           <button
                             className="bg-transparent text-xs p-0 text-sirp-primary"
                             onClick={() => openDeleteModal(item)}
@@ -259,7 +294,6 @@ function CustomTable({
                             Delete
                           </button>
                         </div>
-                       
                       ) : (
                         <div className="flex gap-x-3 items-center">
                           <button
@@ -345,6 +379,9 @@ function CustomTable({
           </TableBody>
         )}
       </Table>
+
+      {/* modal for block user, delete user, approve user, reject user, unblock user  */}
+
       {selectedUser && showBlock && (
         <CustomModal
           style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
@@ -388,6 +425,18 @@ function CustomTable({
         >
           <RejectModal
             handleReject={() => handleReject(selectedUser.uuid)}
+            cancelblock={cancelblock}
+            user={selectedUser}
+          />
+        </CustomModal>
+      )}
+      {selectedUser && showUnblock && (
+        <CustomModal
+          style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
+          closeModal={() => setShowUnblock(false)}
+        >
+          <UnblockModal
+            handleUnblock={() => handleUnblock(selectedUser.uuid)}
             cancelblock={cancelblock}
             user={selectedUser}
           />

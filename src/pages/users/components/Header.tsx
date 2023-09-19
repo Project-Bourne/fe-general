@@ -115,7 +115,7 @@ function Header() {
           <Button
             className="flex gap-x-1 items-center"
             onClick={() => setToggleModal(true)}
-            size="md"
+            size="sm"
             background="bg-sirp-primary"
             value={
               <div className="flex gap-x-1 text-[12px] items-center justify-center">
