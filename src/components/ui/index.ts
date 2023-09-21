@@ -4,6 +4,7 @@ import Button from "./Button";
 import CustomSwitch from "./CustomSwitch";
 import CustomModal from "./CustomModal";
 import Breadcrumbs from "./Breadcrumbs";
+import ImagePreview from "./ImagePreview";
 
 export {
   Input,
@@ -13,4 +14,5 @@ export {
   CustomSwitch,
   CustomModal,
   Breadcrumbs,
+  ImagePreview
 };

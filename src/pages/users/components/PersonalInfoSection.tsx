@@ -6,6 +6,8 @@ import NotificationService from "@/services/notification.service";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleUser } from "@/redux/reducer/userSlice";
+
+
 export default function PersonalInfoSection({
   handleDeleteUser,
   blockUser,

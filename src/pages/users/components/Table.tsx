@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UnblockModal from "./UnblockModal";
 import Loader from "@/components/ui/Loader";
 import { setOptions } from "react-chartjs-2/dist/utils";
+import { set } from "date-fns";
 // set number of items to be displayed per page
 // const calculateRange = (data, rowsPerPage) => {
 //   const range = [];
@@ -52,6 +53,12 @@ function CustomTable({
   const [showBlock, setShowBlock] = useState(false);
   const [showUnblock, setShowUnblock] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  //this state is to reload the table
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [isRejected, setIsRejected] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  const [isUnblocked, setIsUnblocked] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const { dropDown } = useSelector((state: any) => state?.user);
 
   useEffect(() => {
@@ -86,12 +93,15 @@ function CustomTable({
     }
 
     fetchData(); // Call the async function
-
   }, [
     dispatch,
     dropDown,
+    isBlocked,
+    isRejected,
+    isApproved,
+    isUnblocked,
+    isDeleted,
   ]);
-
 
   const handleBlock = async (id) => {
     const response = await UserService.blockUser(id);
@@ -101,6 +111,7 @@ function CustomTable({
         message: "success!",
         addedText: <p>{response.message}.</p>,
       });
+      setIsBlocked(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -120,6 +131,7 @@ function CustomTable({
         message: "success!",
         addedText: <p>{response.message}.</p>,
       });
+      setIsDeleted(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -139,6 +151,7 @@ function CustomTable({
         message: "success!",
         addedText: <p>{response.message}.</p>,
       });
+      setIsApproved(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -158,6 +171,7 @@ function CustomTable({
         message: "success!",
         addedText: <p>{response.message}.</p>,
       });
+      setIsUnblocked(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -169,13 +183,14 @@ function CustomTable({
     setShowUnblock(false);
   };
   const handleReject = async (id) => {
-    const response = await UserService.deleteUser(id);
+    const response = await UserService.rejecteUser(id);
     console.log(response);
     if (response.status) {
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
       });
+      setIsRejected(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -254,7 +269,9 @@ function CustomTable({
       {isLoading && (
         <CustomModal
           style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
-          closeModal={() => {setIsLoading(false)}}
+          closeModal={() => {
+            setIsLoading(false);
+          }}
         >
           <div className="flex flex-row justify-center items-center">
             <Loader />
@@ -287,7 +304,7 @@ function CustomTable({
                       </Link>
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      {/* {item?.role.roleName} */}
+                      {item?.role?.roleName}
                     </TableCell>
                     <TableCell className=" text-xs capitalize">
                       {item.country}
@@ -296,12 +313,14 @@ function CustomTable({
                       <div className="flex gap-x-[0.2rem] items-center">
                         <div
                           className={`rounded-full w-2 h-2 ${
-                            item.status === "Online"
+                            item.onlineStatus === "1"
                               ? "bg-green-600"
                               : "bg-[#EF4444]"
                           }`}
                         ></div>
-                        <p className="text-xs">{item.status}</p>
+                        <p className="text-xs">
+                          {item.onlineStatus === "1" ? "Online" : "Offline"}
+                        </p>
                       </div>
                     </TableCell>
                     <TableCell>

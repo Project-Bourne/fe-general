@@ -99,6 +99,22 @@ class UserService {
       throw error;
     }
   }
+  
+  static async rejecteUser(id) {
+    try {
+      const response = await request(
+        `reject-user/${id}`,
+        "PUT",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   static async verifyUser(id) {
     try {

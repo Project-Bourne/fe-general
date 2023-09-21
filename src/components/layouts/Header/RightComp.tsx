@@ -1,7 +1,16 @@
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 
 function RightComp() {
+  const router = useRouter();
+  const [toggleIrp, setToggleIrp] = useState(false);
+
+  const handleIRP = () => {
+    setToggleIrp(!toggleIrp);
+  };
+
+  
   return (
     <div className="flex flex-row items-center self-start">
       <div className={`${styles.view1} bg-white`}>
@@ -28,7 +37,7 @@ function RightComp() {
       </div>
 
       <div className="bg-sirp-lightGrey flex flex-row mr-2 py-3 px-3 md:px-5 h-[45px] rounded-[12px] items-center justify-center cursor-pointer">
-        <div className="flex flex-row items-center justify-center">
+        <div className="flex flex-row items-center justify-center relative">
           <Image
             src={require("../../../assets/images/user1.jpg")}
             alt="userImage"
@@ -45,7 +54,16 @@ function RightComp() {
             height={18}
             className="mx-3 object-contain hidden md:block"
             priority
+            onClick={handleIRP}
           />
+           {toggleIrp && (
+            <div
+              className="absolute bg-sirp-lightGrey text-[13px] py-2 px-2 w-[90px] text-center top-[3rem] rounded-lg items-center justify-center"
+              onClick={() => router.push("http://192.81.213.226:30/dashboard")} // Wrap router.push in curly braces
+            >
+              <h2>Go to IRP</h2>
+            </div>
+          )}
         </div>
 
         {/* line break */}

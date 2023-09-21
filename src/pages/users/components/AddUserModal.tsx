@@ -104,7 +104,7 @@ const AddUserModal = (props) => {
     } catch (error) {
       NotificationService.error({
         message: "Error!",
-        addedText: <p>An error occurred while creating the user.</p>,
+        addedText: <p>{error.msg} please try again</p>,
       });
     }
   };

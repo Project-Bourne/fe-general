@@ -9,7 +9,7 @@ import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import { useDispatch, useSelector } from "react-redux";
-import { setDropDown, setDropDownName } from "@/redux/reducer/userSlice";
+import { setDropDown, setDropDownName, setRoles } from "@/redux/reducer/userSlice";
 import UserService from "@/services/users";
 import NotificationService from "@/services/notification.service";
 
@@ -18,11 +18,11 @@ export default function SplitButton() {
   const { dropDown, dropDownName } = useSelector((state: any) => state.user);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);
-  const [options, setOptions] = React.useState([]); // Initialize as an empty array
+  const [options, setOptions] = React.useState([]);
   const [selectedRoleId, setSelectedRoleId] = React.useState<string | null>(
-    null
-  ); // Use 'null' to represent no selection
-  const [selectedRoleName, setSelectedRoleName] = React.useState(""); // Empty string for role name
+    dropDown // Initialize selectedRoleId with the value from Redux
+  );
+  const [selectedRoleName, setSelectedRoleName] = React.useState(dropDownName);
 
   useEffect(() => {
     const getRoles = async () => {
@@ -30,12 +30,14 @@ export default function SplitButton() {
         const response = await UserService.getUserRoles();
         if (response.status) {
           const data = response.data;
+          dispatch(setRoles(data));
           // Now, options will contain the roles with UUIDs
           setOptions(
             data.map((roleData) => ({
               id: roleData.uuid,
               role: roleData.roleName,
             }))
+            
           );
         } else {
           NotificationService.error({
@@ -57,10 +59,9 @@ export default function SplitButton() {
 
   const handleRoleClick = (roleId: string | null, roleName: string) => {
     setSelectedRoleId(roleId);
-    dispatch(setDropDown(roleId)); // If needed, dispatch the UUID to Redux
-    dispatch(setDropDownName(roleName)); // If needed, dispatch the UUID to Redux
-    setSelectedRoleName(roleName); // Update the selected role name
-    dropDown;
+    dispatch(setDropDown(roleId));
+    dispatch(setDropDownName(roleName));
+    setSelectedRoleName(roleName);
     setOpen(false);
   };
 
@@ -82,7 +83,7 @@ export default function SplitButton() {
   return (
     <React.Fragment>
       <ButtonGroup ref={anchorRef}>
-        <Button onClick={() => handleRoleClick(null, "All")}>
+        <Button onClick={() => handleRoleClick(dropDown, dropDownName)}>
           {selectedRoleName !== "" ? selectedRoleName : dropDownName}
         </Button>
         <Button
@@ -123,12 +124,12 @@ export default function SplitButton() {
                   >
                     All
                   </MenuItem>
-
                   {options.map((option) => (
                     <MenuItem
                       key={option.id}
                       selected={selectedRoleId === option.id}
                       onClick={() => handleRoleClick(option.id, option.role)}
+                      className="capitalize"
                     >
                       {option.role}
                     </MenuItem>
