@@ -25,6 +25,7 @@
     "eslint-config-next": "13.4.7",
     "framer-motion": "^10.16.2",
     "luxon": "^3.4.2",
+    "multiselect-react-dropdown": "^2.0.25",
     "next": "13.4.7",
     "postcss": "8.4.24",
     "react": "18.2.0",

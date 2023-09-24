@@ -60,6 +60,7 @@ function CustomTable({
   const [isUnblocked, setIsUnblocked] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const { dropDown } = useSelector((state: any) => state?.user);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -234,15 +235,6 @@ function CustomTable({
     setShowReject(true);
   };
 
-  // set table items to be rendered when table is paginated
-  // useEffect(() => {
-  //   const range = calculateRange(users, rowsPerPage);
-  //   setTableRange([...range]);
-
-  //   const slice = sliceData(users, page, rowsPerPage);
-  //   setSlice([...slice]);
-  // }, [users, setTableRange, page, setSlice]);
-
   //   table footer
   useEffect(() => {
     if (slice.length < 1 && page !== 1) {
@@ -262,6 +254,10 @@ function CustomTable({
     if (type === "back") {
       if (page > 1) setPage(page - 1);
     }
+  };
+
+  const toggleShowMore = () => {
+    setShowMore(!showMore);
   };
 
   return (
@@ -295,7 +291,7 @@ function CustomTable({
         {Array.isArray(users) && users.length > 0 ? (
           <>
             <TableBody>
-              {users?.map((item) => (
+              {users?.map((item, index) => (
                 <>
                   <TableRow key={item?.uuid} className="hover:bg-gray-50">
                     <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline">
@@ -306,9 +302,20 @@ function CustomTable({
                     <TableCell className="text-xs capitalize">
                       {item?.role?.roleName}
                     </TableCell>
-                    <TableCell className=" text-xs capitalize">
-                      {item.country}
+                    <TableCell className="text-xs capitalize">
+                      {item.country.map((countryName, countryIndex) =>
+                        countryIndex < 2 || showMore ? `${countryName} ` : ""
+                      )}
+                      {item.country.length > 3 && !showMore && (
+                        <button
+                          className="text-sirp-primary hover:underline"
+                          onClick={() => toggleShowMore()}
+                        >
+                          More
+                        </button>
+                      )}
                     </TableCell>
+
                     <TableCell align="right">
                       <div className="flex gap-x-[0.2rem] items-center">
                         <div

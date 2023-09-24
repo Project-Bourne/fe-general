@@ -13,14 +13,13 @@ const UserSlice = createSlice({
     setSingleUser: (state, action) => {
       state.user = action.payload;
     },
-    updateSingleUser: (state, action) => {
+    setUpdatedData: (state, action) => {
         // Update user data in the Redux store here
         // For example, you can update specific fields like this:
         state.user.firstName = action.payload.firstName;
         state.user.lastName = action.payload.lastName;
-        state.user.email = action.payload.email;
-        state.user.role = action.payload.role;
-        state.user.image = action.payload.image;
+        state.user.roleUuid = action.payload.role;
+        state.user.roleName = action.payload.roleName;
         state.user.country = action.payload.country;
         state.user.password = action.payload.password;
 
@@ -40,10 +39,10 @@ const UserSlice = createSlice({
 export const {
     setAllUsers,
     setSingleUser,
-    updateSingleUser,
     setDropDown,
     setDropDownName,
     setUpdatedData,
+    updateSingleUser,
     setRoles
 } = UserSlice.actions;
 

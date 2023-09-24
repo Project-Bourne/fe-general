@@ -7,10 +7,13 @@ import NotificationService from "@/services/notification.service";
 import { setSingleUser, setUpdatedData } from "@/redux/reducer/userSlice";
 import UserService from "@/services/users";
 import mail from "../../assets/icons/mail.svg";
+import key from "../../assets/icons/key-svgrepo-com.svg";
 import user_icon from "../../assets/icons/userIcon.svg";
 import delete_icon from "../../assets/icons/delete.svg";
 import edit_icon from "../../assets/icons/edit.svg";
-const countries = require("../../utils/countries.json");
+import { is } from "date-fns/locale";
+import Multiselect from "multiselect-react-dropdown";
+const countriesData = require("../../utils/countries.json");
 
 const ProfileSettings = () => {
   const router = useRouter();
@@ -21,19 +24,28 @@ const ProfileSettings = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const [country, setCountry] = useState(null);
+  const [password, setPassword] = useState("");
+  const [country, setCountry] = useState([null]); // Initialize as an array with a default value
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isTooLarge, setIsTooLarge] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [options, setOptions] = useState([]);
   const [selectedRoleUuid, setSelectedRoleUuid] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [selectedCountry, setSelectedCountry] = useState([]);
+
+  const handleCountrySelect = (selectedList, selectedItem) => {
+    console.log("Selected Values:", selectedList);
+    const newkeys = selectedList.map((item) => item.key);
+    setSelectedCountry(newkeys);
+    console.log(selectedCountry);
+  };
 
   useEffect(() => {
-    // This code block will run only once when the component mounts.
     setFirstname(user?.firstName);
     setLastname(user?.lastName);
-    
+    setPassword(user?.password);
+    setCountry(user?.country);
+
     const fetchuserData = async () => {
       if (id) {
         const response = await UserService.getUserById(id);
@@ -41,21 +53,19 @@ const ProfileSettings = () => {
       }
     };
     fetchuserData();
-    
+
     const fetchUserRoles = async () => {
       try {
         const response = await UserService.getUserRoles();
         if (response.status) {
           const data = response.data;
-          // Now, options will contain the roles with UUIDs
           setOptions(
             data.map((roleData) => ({
               id: roleData.uuid,
               role: roleData.roleName,
             }))
           );
-  
-          // Check if the user has a role UUID and set it as the selected role UUID
+
           if (user?.roleUuid) {
             setSelectedRoleUuid(user.roleUuid);
           }
@@ -70,19 +80,24 @@ const ProfileSettings = () => {
           message: "Error!",
           addedText: <p>{error.message}</p>,
         });
-        // Handle the error as needed
       }
     };
-  
-    fetchUserRoles();
-  }, []); // Empty dependency array ensures this runs only once
-  
 
-  const handleCountrySelect = (selectedCountry) => {
-    // Do something with the selected country, e.g., set it in state
-    setCountry(selectedCountry);
-  };
-  
+    fetchUserRoles();
+  }, [user?.firstName, user?.lastName]);
+
+  // convert the user's country array to an array of objects with the key and id properties
+  const stringArray = country;
+  const useCountry = stringArray.map((item, index) => ({
+    id: index,
+    key: item,
+  }));
+
+  // convert the countries array to an array of objects with the key and id properties
+  const countries = countriesData.map((country, index) => ({
+    id: index,
+    key: country.name,
+  }));
 
   const handleProfileEditToggle = () => {
     setIsReadOnly(false);
@@ -125,35 +140,46 @@ const ProfileSettings = () => {
     setProfilePhoto(null);
   };
 
-  const handleProfileSubmit = (e: any) => {
-    const img = profilePhoto?.url;
+  const handleProfileSubmit = async (e: any) => {
     if (firstname !== "" && lastname !== "") {
-      UserService.updateUser(user?.uuid, { firstname, lastname, img })
-        .then((res) => {
-          if (res?.status) {
-            NotificationService.success({
-              message: res?.message,
-            });
-            dispatch(
-              setUpdatedData({
-                firstName: firstname,
-                lastName: lastname,
-                image: img,
-              })
-            );
-          } else {
-            NotificationService.error({
-              message: "Profile update failed!",
-            });
-          }
-        })
-        .catch((err) => {
-          NotificationService.error({
-            message: "Profile update failed!",
-            addedText: err?.message,
-          });
+      try {
+        const response = await UserService.updateUser(user?.uuid, {
+          password,
+          country,
+          firstname,
+          lastname,
+          selectedRoleUuid,
         });
+
+        if (response?.status) {
+          NotificationService.success({
+            message: "success!",
+            addedText: <p>{response.message}.</p>,
+          });
+
+          dispatch(
+            setUpdatedData({
+              firstName: firstname,
+              lastName: lastname,
+              roleUuid: selectedRoleUuid,
+              password: password,
+              country: selectedCountry,
+            })
+          );
+        } else {
+          NotificationService.success({
+            message: "success!",
+            addedText: <p>{response.message}.</p>,
+          });
+        }
+      } catch (err) {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>{err.message}.</p>,
+        });
+      }
     }
+
     setIsReadOnly(true);
     setProfilePhoto(null);
   };
@@ -228,6 +254,31 @@ const ProfileSettings = () => {
         </div>
 
         {/* Email */}
+        <div className="flex flex-row items-center my-[20px] w-full">
+          <label htmlFor="email" className="text-[12px] text-sirp-grey">
+            Password:{" "}
+          </label>
+
+          <div className="ml-[0.4rem] w-full items-center flex flex-row relative">
+            <Image
+              src={key}
+              alt="mail"
+              width={16}
+              height={16}
+              className="absolute self-center item-center left-[2.6vh]"
+            />
+
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e: any) => setPassword(e.target.value)}
+              placeholder="User Password"
+              className="text-[12px] text-black border-[1.5px] rounded-md py-2 px-7 mx-4 w-full md:w-[38%]"
+              readOnly={isReadOnly}
+            />
+          </div>
+        </div>
         <div className="flex flex-row items-center my-[20px] w-full">
           <label htmlFor="email" className="text-[12px] text-sirp-grey">
             Email:{" "}
@@ -351,17 +402,20 @@ const ProfileSettings = () => {
             </label>
           </div>
 
-          <DropdownWithFlag
-            data={countries}
-            selectItem={handleCountrySelect}
-            className="text-[12px] text-black border-[1.5px] rounded-md py-2 px-7  w-[38%]"
-            style={"w-[38%] mx-4"}
-            // multiple={tru}
-            // isDisabled={isReadOnly}
+          <Multiselect
+            displayValue="key"
+            onKeyPressFn={function noRefCheck() {}}
+            onRemove={function noRefCheck() {
+              console.log("removed");
+            }}
+            onSearch={function noRefCheck() {}}
+            onSelect={handleCountrySelect} // Attach the handler function
+            options={countries}
+            selectedValues={useCountry}
+            disable={isReadOnly}
           />
         </div>
       </div>
-      {/* <View2 /> */}
 
       {selectedPhoto && (
         <CustomModal

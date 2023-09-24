@@ -98,7 +98,7 @@ const AddUserModal = (props) => {
       } else {
         NotificationService.error({
           message: "Error!",
-          addedText: <p>{response.msg} please try again</p>,
+          addedText: <p>{response.message} please try again</p>,
         });
       }
     } catch (error) {

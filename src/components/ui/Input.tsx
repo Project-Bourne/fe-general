@@ -98,7 +98,7 @@ function Dropdown(props: DropdownModel) {
 
 // dropdown component of countries and flag
 function DropdownWithFlag(props: DropdownModel) {
-  const { onClick, selectItem, className, style, isDisabled } = props;
+  const { selectItem, className, style, isDisabled } = props;
   const [dropdown, setDropdown] = useState(false);
   const { user } = useSelector((state: any) => state.user);
   const [country, setCountry] = useState({
