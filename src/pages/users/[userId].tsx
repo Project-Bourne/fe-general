@@ -11,7 +11,6 @@ import key from "../../assets/icons/key-svgrepo-com.svg";
 import user_icon from "../../assets/icons/userIcon.svg";
 import delete_icon from "../../assets/icons/delete.svg";
 import edit_icon from "../../assets/icons/edit.svg";
-import { is } from "date-fns/locale";
 import Multiselect from "multiselect-react-dropdown";
 const countriesData = require("../../utils/countries.json");
 
@@ -25,20 +24,33 @@ const ProfileSettings = () => {
   const [lastname, setLastname] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [password, setPassword] = useState("");
-  const [country, setCountry] = useState([null]); // Initialize as an array with a default value
+  const [country, setCountry] = useState(user?.country); // Initialize as an array with a default value
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isTooLarge, setIsTooLarge] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [options, setOptions] = useState([]);
-  const [selectedRoleUuid, setSelectedRoleUuid] = useState(null);
+  const [selectedRoleUuid, setSelectedRoleUuid] = useState(user?.roleUuid);
   const [selectedCountry, setSelectedCountry] = useState([]);
+  const [reload, setReload] = useState(false);
 
-  const handleCountrySelect = (selectedList, selectedItem) => {
-    console.log("Selected Values:", selectedList);
+  const handleCountrySelect = (selectedList) => {
     const newkeys = selectedList.map((item) => item.key);
     setSelectedCountry(newkeys);
-    console.log(selectedCountry);
   };
+
+  const handleRemoveCountry = (selectedList, removedItem) => {
+    console.log("Removed Item:", removedItem);
+    const newSelectedList = selectedList.filter(
+      (item) => item.key !== removedItem.key
+    );
+    const newKeys = newSelectedList.map((item) => item.key);
+    setSelectedCountry(newKeys);
+  };
+
+  useEffect(() => {
+    console.log("selectedCountry:", selectedCountry);
+    console.log("country:", country);
+  }, [selectedCountry, reload]);
 
   useEffect(() => {
     setFirstname(user?.firstName);
@@ -86,9 +98,11 @@ const ProfileSettings = () => {
     fetchUserRoles();
   }, [user?.firstName, user?.lastName]);
 
+  console.log("country:", country);
+
   // convert the user's country array to an array of objects with the key and id properties
   const stringArray = country;
-  const useCountry = stringArray.map((item, index) => ({
+  const useCountry = stringArray?.map((item, index) => ({
     id: index,
     key: item,
   }));
@@ -145,10 +159,10 @@ const ProfileSettings = () => {
       try {
         const response = await UserService.updateUser(user?.uuid, {
           password,
-          country,
-          firstname,
-          lastname,
-          selectedRoleUuid,
+          country: selectedCountry.length === 0 ? country : selectedCountry,
+          firstName: firstname,
+          lastName: lastname,
+          roleUuid: selectedRoleUuid,
         });
 
         if (response?.status) {
@@ -163,7 +177,7 @@ const ProfileSettings = () => {
               lastName: lastname,
               roleUuid: selectedRoleUuid,
               password: password,
-              country: selectedCountry,
+              country,
             })
           );
         } else {
@@ -405,11 +419,12 @@ const ProfileSettings = () => {
           <Multiselect
             displayValue="key"
             onKeyPressFn={function noRefCheck() {}}
-            onRemove={function noRefCheck() {
-              console.log("removed");
+            onRemove={(selectedList, removedItem) => {
+              handleRemoveCountry(selectedList, removedItem);
+              setReload(!reload); // Trigger a reload if needed
             }}
             onSearch={function noRefCheck() {}}
-            onSelect={handleCountrySelect} // Attach the handler function
+            onSelect={handleCountrySelect}
             options={countries}
             selectedValues={useCountry}
             disable={isReadOnly}

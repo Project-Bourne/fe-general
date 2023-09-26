@@ -18,23 +18,8 @@ import DeleteModal from "./deleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import UnblockModal from "./UnblockModal";
 import Loader from "@/components/ui/Loader";
-import { setOptions } from "react-chartjs-2/dist/utils";
-import { set } from "date-fns";
-// set number of items to be displayed per page
-// const calculateRange = (data, rowsPerPage) => {
-//   const range = [];
-//   const num = Math.ceil(data.length / rowsPerPage);
-//   let i = 1;
-//   for (let i = 1; i <= num; i++) {
-//     range.push(i);
-//   }
-//   return range;
-// };
 
-// const sliceData = (data, page, rowsPerPage) => {
-//   return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-// };
-
+// set number of items to be displayed per pag
 function CustomTable({
   tableHeaderData,
   tableBodyData,
@@ -61,6 +46,7 @@ function CustomTable({
   const [isDeleted, setIsDeleted] = useState(false);
   const { dropDown } = useSelector((state: any) => state?.user);
   const [showMore, setShowMore] = useState(false);
+  const [expandedRows, setExpandedRows] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -256,8 +242,12 @@ function CustomTable({
     }
   };
 
-  const toggleShowMore = () => {
-    setShowMore(!showMore);
+  const toggleExpandedRow = (index) => {
+    if (expandedRows.includes(index)) {
+      setExpandedRows(expandedRows.filter((rowIndex) => rowIndex !== index));
+    } else {
+      setExpandedRows([...expandedRows, index]);
+    }
   };
 
   return (
@@ -304,14 +294,16 @@ function CustomTable({
                     </TableCell>
                     <TableCell className="text-xs capitalize">
                       {item.country.map((countryName, countryIndex) =>
-                        countryIndex < 2 || showMore ? `${countryName} ` : ""
+                        countryIndex < 2 || expandedRows.includes(index)
+                          ? `${countryName} `
+                          : ""
                       )}
-                      {item.country.length > 3 && !showMore && (
+                      {item.country.length > 2 && (
                         <button
                           className="text-sirp-primary hover:underline"
-                          onClick={() => toggleShowMore()}
+                          onClick={() => toggleExpandedRow(index)}
                         >
-                          More
+                          {expandedRows.includes(index) ? "Less" : "More"}
                         </button>
                       )}
                     </TableCell>
@@ -374,35 +366,6 @@ function CustomTable({
                         </div>
                       )}
                     </TableCell>
-                    {/* {usertype >= 0 ? (
-                    <TableCell>
-                      <div className="flex gap-x-3 items-center">
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]">
-                          Chat
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]">
-                          Block
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-sirp-primary">
-                          Delete
-                        </button>
-                      </div>
-                    </TableCell>
-                  ) : (
-                    <TableCell>
-                      <div className="flex gap-x-3 items-center">
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]">
-                          Approve
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]">
-                          View
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-sirp-primary">
-                          Reject
-                        </button>
-                      </div>
-                    </TableCell>
-                  )} */}
                   </TableRow>
                 </>
               ))}
