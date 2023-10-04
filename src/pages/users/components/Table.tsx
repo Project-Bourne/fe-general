@@ -27,6 +27,7 @@ function CustomTable({
   usertype,
 }) {
   const dispatch = useDispatch();
+  const { deleteStatus } = useSelector((state: any) => state.user);
   const [tableRange, setTableRange] = useState([]);
   const [slice, setSlice] = useState([]);
   const [page, setPage] = useState(1);
@@ -293,18 +294,24 @@ function CustomTable({
                       {item?.role?.roleName}
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      {item.country.map((countryName, countryIndex) =>
-                        countryIndex < 2 || expandedRows.includes(index)
-                          ? `${countryName} `
-                          : ""
-                      )}
+                      {item.country.map((countryName, countryIndex) => (
+                        <span key={countryIndex}>
+                          {countryIndex < 2 || expandedRows.includes(index)
+                            ? `${countryName}, `
+                            : ""}
+                        </span>
+                      ))}
                       {item.country.length > 2 && (
-                        <button
-                          className="text-sirp-primary hover:underline"
-                          onClick={() => toggleExpandedRow(index)}
-                        >
-                          {expandedRows.includes(index) ? "Less" : "More"}
-                        </button>
+                        <span>
+                          <button
+                            className="text-sirp-primary hover:underline"
+                            onClick={() => toggleExpandedRow(index)}
+                          >
+                            {expandedRows.includes(index)
+                              ? "Less"
+                              : `+${item.country.length - 2} More`}
+                          </button>
+                        </span>
                       )}
                     </TableCell>
 
@@ -323,10 +330,13 @@ function CustomTable({
                       </div>
                     </TableCell>
                     <TableCell>
-                      {item.verified ? (
+                      {deleteStatus ? (
+                        <span>User Deleted</span>
+                      ) : item.verified ? (
+                        // User is verified
                         <div className="flex gap-x-3 items-center">
-                          {/* check if user is blocked */}
                           {item.blocked ? (
+                            // User is verified and blocked
                             <button
                               className="bg-transparent text-xs p-0 text-[#9F9036]"
                               onClick={() => openUnblockModal(item)}
@@ -334,6 +344,7 @@ function CustomTable({
                               Unblock
                             </button>
                           ) : (
+                            // User is verified but not blocked
                             <button
                               className="bg-transparent text-xs p-0 text-[#9F9036]"
                               onClick={() => openBlockModal(item)}
@@ -349,7 +360,11 @@ function CustomTable({
                             Delete
                           </button>
                         </div>
+                      ) : item.delete ? (
+                        // User is not verified and deleted
+                        <span>User Rejected</span>
                       ) : (
+                        // User is not verified but not deleted
                         <div className="flex gap-x-3 items-center">
                           <button
                             className="bg-transparent text-xs p-0 text-[#9F9036]"

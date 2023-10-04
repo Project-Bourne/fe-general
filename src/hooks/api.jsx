@@ -6,7 +6,8 @@
 let access = "";
 if (typeof window !== "undefined") {
   access =
-    localStorage.getItem("deep-access") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0OWIyNzc3LWNjZjUtNDhhNy05NmRjLTM0M2VkZWYxYmJlMyIsImlhdCI6MTY5NTY2Mzg4OSwiZXhwIjoxNjk1NzUwMjg5fQ.XYcnAR6NRk7q6NuJ303a04gw5tr1w-VjwzA7v-M3MQk"}
+    localStorage.getItem("deep-access") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyNjUwZDJiLTU4YTgtNDU4Yi05N2VlLTcxNDZlNjU0YThmYiIsImlhdCI6MTY5NjMzMzk0MywiZXhwIjoxNjk2NDIwMzQzfQ.p-IIT0mq_DooscGjaEMqtvYpKiLCGlHv5OZdFMtVTkk"
+}
 export const requestHeader = {
   Accept: "application/json",
   "Cache-Control": "no-cache",

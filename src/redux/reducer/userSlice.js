@@ -7,6 +7,7 @@ const UserSlice = createSlice({
     dropDown: 'all',
     dropDownName: 'All',
     roles: [],
+    deleteStatus: false,
   },
 
   reducers: {
@@ -32,7 +33,10 @@ const UserSlice = createSlice({
       },
       setRoles: (state, action) => {
         state.roles = action.payload;
-      }
+      },
+      setDeleteStatus: (state, action) => {
+        state.deleteStatus = action.payload;
+      },
   },
 });
 
@@ -43,7 +47,8 @@ export const {
     setDropDownName,
     setUpdatedData,
     updateSingleUser,
-    setRoles
+    setRoles,
+    setDeleteStatus,
 } = UserSlice.actions;
 
 export default UserSlice.reducer;
