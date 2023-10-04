@@ -170,6 +170,7 @@ function CustomTable({
     }
     setShowUnblock(false);
   };
+  
   const handleReject = async (id) => {
     const response = await UserService.rejecteUser(id);
     console.log(response);

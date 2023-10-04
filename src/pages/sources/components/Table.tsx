@@ -7,11 +7,16 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { CustomModal } from "@/components/ui";
+import { CustomModal} from "@/components/ui";
 import NotificationService from "@/services/notification.service";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import Loader from "@/components/ui/Loader";
+import SourceService from "@/services/sources";
+import {Tooltip} from "@mui/material";
+import EditeModal from "@/pages/sources/components/EditModal";
+import DeleteModal from "./deleteModal";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // set number of items to be displayed per pag
 function CustomTable({
@@ -24,11 +29,115 @@ function CustomTable({
   const [tableRange, setTableRange] = useState([]);
   const [slice, setSlice] = useState([]);
   const [page, setPage] = useState(1);
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [source, setSource] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [selectedSource, setSelectedSource] = useState([]);
 
- 
+  const EditSources = (source) => {
+    setSelectedSource(source);
+    setShowEdit(true);
+  };
 
+  const DeleteSources = (source) => {
+   setSelectedSource(source);
+    setShowDelete(true);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true); // Set isLoading to true before making the request
+      const response = await SourceService.getAllSources();
+      if (response.status) {
+        const data = response.data;
+        setSource(data);
+      } else {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>something happened. please try again</p>,
+          position: "top-center",
+        });
+      }
+    } catch (error: any) {
+      NotificationService.error({
+        message: "Error!",
+        addedText: <p> `${error}, something happened. please try again`</p>,
+        position: "top-center",
+      });
+    } finally {
+      setIsLoading(false); // Set isLoading to false when data fetching is complete (whether it succeeds or fails)
+    }
+  };
+
+  const handleEdit = async (editedSource) => {
+    setIsLoading(true);
+    try {
+      const response = await SourceService.EditSource(editedSource);
+      if (response.status) {
+        NotificationService.success({
+          message: "Success!",
+          addedText: <p>Source updated successfully</p>,
+          position: "top-center",
+        });
+        setIsLoading(false);
+        fetchData();
+      } else {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>something happened. please try again</p>,
+          position: "top-center",
+        });
+        setIsLoading(false);
+      }
+    } catch (error: any) {
+      NotificationService.error({
+        message: "Error!",
+        addedText: <p> `${error}, something happened. please try again`</p>,
+        position: "top-center",
+      });
+      setIsLoading(false);
+    }
+  };
+  
+  const handleDelete = async (deletedSource) => {
+    setIsLoading(true);
+    try {
+      const response = await SourceService.DeleteSource(deletedSource);
+      if (response.status) {
+        NotificationService.success({
+          message: "Success!",
+          addedText: <p>Source updated successfully</p>,
+          position: "top-center",
+        });
+        setIsLoading(false);
+        fetchData();
+      } else {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>something happened. please try again</p>,
+          position: "top-center",
+        });
+        setIsLoading(false);
+      }
+    } catch (error: any) {
+      NotificationService.error({
+        message: "Error!",
+        addedText: <p> `${error}, something happened. please try again`</p>,
+        position: "top-center",
+      });
+      setIsLoading(false);
+    }
+  };
+
+  const cancelModal = () => {
+    setShowEdit(false);
+    setShowDelete(false);
+  };
 
   //   table footer
   useEffect(() => {
@@ -50,7 +159,6 @@ function CustomTable({
       if (page > 1) setPage(page - 1);
     }
   };
-
 
   return (
     <TableContainer component={Paper} className="shadow-sm border-r-0">
@@ -80,24 +188,38 @@ function CustomTable({
             ))}
           </TableRow>
         </TableHead>
-        {Array.isArray(users) && users.length > 0 ? (
+        {Array.isArray(source) && source.length > 0 ? (
           <>
             <TableBody>
-              {users?.map((item, index) => (
+              {source?.map((item, index) => (
                 <>
-                  <TableRow key={item?.uuid} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline">
-                      <Link href={`users/${item?.uuid}`}>
-                        {item?.firstName} {item?.lastName}
-                      </Link>
+                  <TableRow key={index} className="hover:bg-gray-50">
+                    <TableCell className="text-xs capitalize">
+                      {item?.name}
+                    </TableCell>
+                    <TableCell className="text-xs">{item?.url}</TableCell>
+                    <TableCell className="text-xs capitalize">
+                      {item?.weight}
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      {item?.role?.roleName}
+                      {item.crawl ? "true" : "false"}
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      {item?.role?.roleName}
+                      <div className="flex gap-x-3 items-center">
+                        <Tooltip title="Edit">
+                        <EditIcon
+                          className="bg-transparent text-xs hover:cursor-pointer"
+                          onClick={() => EditSources(item)}
+                        />
+                        </Tooltip>
+                      <Tooltip title="Delete">
+                        <DeleteIcon
+                          className="bg-transparent text-xs hover:cursor-pointer"
+                          onClick={() => DeleteSources(item)}
+                        />
+                        </Tooltip>
+                      </div>
                     </TableCell>
-                   
                   </TableRow>
                 </>
               ))}
@@ -137,6 +259,30 @@ function CustomTable({
           </TableBody>
         )}
       </Table>
+      {selectedSource && showEdit && (
+        <CustomModal
+          style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
+          closeModal={() => setShowEdit(false)}
+        >
+          <EditeModal
+            handleEdit={handleEdit} 
+            cancelEditModal={cancelModal}
+            source={selectedSource}
+          />
+        </CustomModal>
+      )}
+      {selectedSource && showDelete && (
+        <CustomModal
+          style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
+          closeModal={() => setShowDelete(false)}
+        >
+          <DeleteModal
+            handleDelete={handleDelete}
+            cancelModal={cancelModal}
+            source={selectedSource}
+          />
+        </CustomModal>
+      )}
     </TableContainer>
   );
 }

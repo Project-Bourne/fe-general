@@ -4,7 +4,7 @@ import Image from "next/image";
 import SplitButton from "./dropdown";
 import { useState } from "react";
 import { HeaderModel } from "../models/users.module";
-import AddUserModal from "./AddUserModal";
+import AddSourceModal from "./AddSourceModal";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 
 function Header() {
@@ -24,10 +24,10 @@ function Header() {
             : "md:w-[18%] w-[45%] justify-end mr-5"
             `}
         >
-          <div className="flex flex-row items-center gap-1">
+          {/* <div className="flex flex-row items-center gap-1">
             <p className="text-sm">Filter by</p>
             <SplitButton />
-          </div>
+          </div> */}
 
           <Button
             className="flex gap-x-1 items-center"
@@ -56,7 +56,7 @@ function Header() {
           style="bg-white md:w-[50%] w-[90%] relative top-[5%] rounded-xl mx-auto pt-3 px-3 pb-5"
           closeModal={closeModalHandler}
         >
-          <AddUserModal closeModal={closeModalHandler} />
+          <AddSourceModal closeModal={closeModalHandler} />
         </CustomModal>
       )}
     </>

@@ -9,4 +9,6 @@ export const SourcesTableHeaderData: string[] = [
   "Source name",
   "Source URL",
   "Weight",
+  "Crawl",
+  "Actions"
 ];
