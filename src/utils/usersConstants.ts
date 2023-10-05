@@ -1,4 +1,4 @@
-import { LogDataModel, TableBodyDataModel } from "../models/users.module";
+import { LogDataModel, TableBodyDataModel } from "./mainUsers.module";
 interface TabHeaderModel {
   id: number;
   icon?: string;
@@ -41,62 +41,6 @@ export const TableHeaderData: string[] = [
 ];
 
 // export const TableBodyData: TableBodyDataModel[] = [
-//   {
-//     id: 0,
-//     name: "Magani Joseph",
-//     type: "Desk Officer",
-//     designation: "Nigeria",
-//     status: "Online",
-//   },
-//   {
-//     id: 1,
-//     name: "Magani Joseph",
-//     type: "Desk Officer",
-//     designation: "Nigeria",
-//     status: "Online",
-//   },
-//   {
-//     id: 2,
-//     name: "Magani Joseph",
-//     type: "Desk Officer",
-//     designation: "Nigeria",
-//     status: "Online",
-//   },
-//   {
-//     id: 3,
-//     name: "Magani Joseph",
-//     type: "Desk Officer",
-//     designation: "Nigeria",
-//     status: "Online",
-//   },
-//   {
-//     id: 4,
-//     name: "Magani Joseph",
-//     type: "Desk Officer",
-//     designation: "Nigeria",
-//     status: "Online",
-//   },
-//   {
-//     id: 5,
-//     name: "Magani Joseph",
-//     type: "Desk Officer",
-//     designation: "Nigeria",
-//     status: "Online",
-//   },
-//   {
-//     id: 0,
-//     name: "Magani Joseph",
-//     type: "Desk Officer",
-//     designation: "Nigeria",
-//     status: "Online",
-//   },
-//   {
-//     id: 0,
-//     name: "Magani Joseph",
-//     type: "Desk Officer",
-//     designation: "Nigeria",
-//     status: "Online",
-//   },
 // ];
 
 

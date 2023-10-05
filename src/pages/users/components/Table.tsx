@@ -22,9 +22,6 @@ import Loader from "@/components/ui/Loader";
 // set number of items to be displayed per pag
 function CustomTable({
   tableHeaderData,
-  tableBodyData,
-  rowsPerPage,
-  usertype,
 }) {
   const dispatch = useDispatch();
   const { deleteStatus } = useSelector((state: any) => state.user);
@@ -98,14 +95,15 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
       setIsBlocked(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
       });
     }
     setShowBlock(false);
@@ -118,14 +116,15 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
       setIsDeleted(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
       });
     }
     setShowDelete(false);
@@ -138,14 +137,15 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
       setIsApproved(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
       });
     }
     setShowApprove(false);
@@ -158,14 +158,15 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
       setIsUnblocked(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
       });
     }
     setShowUnblock(false);
@@ -178,14 +179,16 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
       setIsRejected(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
+        ,
       });
     }
     setShowReject(false);

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import PolarChartComponent from "../charts/polar";
 
-import info from "../../../../public/icons/info.svg";
+import info from "../../../assets/icons/info.svg";
 import { article_categories } from "@/utils/reports.constants";
 
 function ThirdRow() {

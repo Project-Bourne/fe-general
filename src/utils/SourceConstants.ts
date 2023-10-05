@@ -1,4 +1,4 @@
-import { LogDataModel, TableBodyDataModel } from "../models/users.module";
+import { LogDataModel, TableBodyDataModel } from "./source.module";
 interface TabHeaderModel {
   id: number;
   icon?: string;

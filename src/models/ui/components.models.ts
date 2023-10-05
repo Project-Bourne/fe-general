@@ -27,6 +27,7 @@ export interface ButtonModel
   background?: string;
   classNameStyle?: string;
   size?: "sm" | "md" | "lg" | "xl";
+  loading?: boolean;
 }
 
 export interface CustomSwitchType

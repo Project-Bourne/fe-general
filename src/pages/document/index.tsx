@@ -1,8 +1,6 @@
-// Users.js
-// import React, { useState } from "react";
-import { SourceList } from "./source";
-import { Header } from "./components";
-import { SourcesTableHeaderData } from "./utils/constants";
+import React from "react";
+import SourceList  from "./components/index";
+import  Header from "./components/Header";
 
 function Users() {
 
@@ -11,7 +9,7 @@ function Users() {
       <div>
         <Header />
         <div>
-          <SourceList tableData={SourcesTableHeaderData} usertype={-1} /></div>
+          <SourceList /></div>
       </div>
     </>
   );

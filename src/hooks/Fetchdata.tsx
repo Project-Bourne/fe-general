@@ -39,6 +39,7 @@ function handleApiResponse(dispatch, response) {
     NotificationService.success({
       message: "Success!",
       addedText: <p>{response.message}</p>,
+      position: "top-center",
     });
   }
 }

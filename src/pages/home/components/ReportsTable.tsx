@@ -12,8 +12,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import refresh from "../../../../public/icons/refresh.svg";
-import down from "../../../../public/icons/down.svg";
+import refresh from "../../../assets/icons/refresh.svg";
+import down from "../../../assets/icons/down.svg";
 
 function ReportsTable({ tableBodyData, showReportDetails }) {
   const [isRefreshing, setIsRefreshing] = useState(false);

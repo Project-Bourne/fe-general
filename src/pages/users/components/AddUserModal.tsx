@@ -5,7 +5,7 @@ import UserService from "@/services/users";
 
 const AddUserModal = (props) => {
   const [toggleModal, setToggleModal] = useState(false);
-  const [roleName, setRoleName] = useState('')
+  const [roleName, setRoleName] = useState("");
   const [options, setOptions] = React.useState([]); // Initialize as an empty array
 
   useEffect(() => {
@@ -27,6 +27,7 @@ const AddUserModal = (props) => {
         NotificationService.error({
           message: "success!",
           addedText: <p>{error.message}</p>,
+          position: "top-center",
         });
       }
     };
@@ -60,7 +61,7 @@ const AddUserModal = (props) => {
   const handleRoleChange = (e) => {
     // Find the selected role object based on the role name
     const selectedRoleName = e.target.value;
-    setRoleName(selectedRoleName)
+    setRoleName(selectedRoleName);
     const selectedRole = options.find((role) => role.role === selectedRoleName);
     // Set the formData.role to the ID of the selected role
     setFormData({ ...formData, roleUuid: selectedRole ? selectedRole.id : "" });
@@ -72,7 +73,7 @@ const AddUserModal = (props) => {
 
   const handleSetCountry = (selectedCountry) => {
     let res = [];
-    res.push(selectedCountry)
+    res.push(selectedCountry);
     setFormData({ ...formData, country: res });
   };
 
@@ -84,6 +85,7 @@ const AddUserModal = (props) => {
         NotificationService.success({
           message: "Success!",
           addedText: <p>{response.message}.</p>,
+          position: "top-center",
         });
         setToggleModal(false);
         setFormData({
@@ -99,12 +101,14 @@ const AddUserModal = (props) => {
         NotificationService.error({
           message: "Error!",
           addedText: <p>{response.message} please try again</p>,
+          position: "top-center",
         });
       }
     } catch (error) {
       NotificationService.error({
         message: "Error!",
         addedText: <p>{error.msg} please try again</p>,
+        position: "top-center",
       });
     }
   };

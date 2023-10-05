@@ -21,9 +21,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 // set number of items to be displayed per pag
 function CustomTable({
   tableHeaderData,
-  tableBodyData,
-  rowsPerPage,
-  usertype,
 }) {
   const dispatch = useDispatch();
   const [tableRange, setTableRange] = useState([]);
@@ -47,33 +44,33 @@ function CustomTable({
   };
 
   useEffect(() => {
-    fetchData();
-  }, [reload]);
+    // fetchData();
+  }, []);
 
-  const fetchData = async () => {
-    try {
-      setIsLoading(true); // Set isLoading to true before making the request
-      const response = await SourceService.getAllSources();
-      if (response.status) {
-        const data = response.data;
-        setSource(data);
-      } else {
-        NotificationService.error({
-          message: "Error!",
-          addedText: <p>something happened. please try again</p>,
-          position: "top-center",
-        });
-      }
-    } catch (error: any) {
-      NotificationService.error({
-        message: "Error!",
-        addedText: <p> `${error}, something happened. please try again`</p>,
-        position: "top-center",
-      });
-    } finally {
-      setIsLoading(false); // Set isLoading to false when data fetching is complete (whether it succeeds or fails)
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     setIsLoading(true); // Set isLoading to true before making the request
+  //     const response = await SourceService.getAllSources();
+  //     if (response.status) {
+  //       const data = response.data;
+  //       setSource(data);
+  //     } else {
+  //       NotificationService.error({
+  //         message: "Error!",
+  //         addedText: <p>something happened. please try again</p>,
+  //         position: "top-center",
+  //       });
+  //     }
+  //   } catch (error: any) {
+  //     NotificationService.error({
+  //       message: "Error!",
+  //       addedText: <p> `${error}, something happened. please try again`</p>,
+  //       position: "top-center",
+  //     });
+  //   } finally {
+  //     setIsLoading(false); // Set isLoading to false when data fetching is complete (whether it succeeds or fails)
+  //   }
+  // };
 
   const handleEdit = async (editedSource) => {
     setIsLoading(true);
@@ -86,7 +83,7 @@ function CustomTable({
           position: "top-center",
         });
         setIsLoading(false);
-        fetchData();
+        // fetchData();
       } else {
         NotificationService.error({
           message: "Error!",
@@ -116,7 +113,7 @@ function CustomTable({
           position: "top-center",
         });
         setIsLoading(false);
-        fetchData();
+        // fetchData();
       } else {
         NotificationService.error({
           message: "Error!",
@@ -163,7 +160,7 @@ function CustomTable({
 
   return (
     <TableContainer component={Paper} className="shadow-sm border-r-0">
-      {isLoading && (
+      {!isLoading && (
         <CustomModal
           style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
           closeModal={() => {

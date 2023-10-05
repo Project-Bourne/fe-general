@@ -1,7 +1,7 @@
 import { Button, Input } from "@/components/ui";
 import Image from "next/image";
 import Link from "next/link";
-import { ActivityCard } from "./ActivityCard";
+import ActivityCard  from "./ActivityCard";
 import { useRouter } from "next/router";
 
 export default function ActivityLogSection(user) {

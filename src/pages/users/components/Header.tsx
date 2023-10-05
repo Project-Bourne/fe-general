@@ -3,11 +3,11 @@ import UserService from "@/services/users";
 import Image from "next/image";
 import SplitButton from "./dropdown";
 import { useState } from "react";
-import { HeaderModel } from "../models/users.module";
+import { HeaderModel } from "../../../utils/mainUsers.module";
 import AddUserModal from "./AddUserModal";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 
-function Header() {
+function Header( props) {
   const [toggleModal, setToggleModal] = useState(false);
 
   const closeModalHandler = () => {

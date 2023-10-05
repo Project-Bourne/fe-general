@@ -21,9 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 // set number of items to be displayed per pag
 function CustomTable({
   tableHeaderData,
-  tableBodyData,
-  rowsPerPage,
-  usertype,
+  
 }) {
   const dispatch = useDispatch();
   const [tableRange, setTableRange] = useState([]);

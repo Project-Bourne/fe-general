@@ -47,12 +47,14 @@ export default function SplitButton() {
           NotificationService.error({
             message: "Error!",
             addedText: <p>{response.message}</p>,
+            position: "top-center",
           });
         }
       } catch (error) {
         NotificationService.error({
           message: "Error!",
           addedText: <p>{error.message}</p>,
+          position: "top-center",
         });
         // Handle the error as needed
       }
