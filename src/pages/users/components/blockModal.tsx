@@ -2,10 +2,7 @@ import React from 'react'
 import Image from "next/image";
 import { Button, CustomModal } from "@/components/ui";
 
-
-
-
-function BlockModal({cancelblock, handleBlock, user}) {
+const BlockModal = ({cancelblock, handleBlock, user}) => {
   return (
     <>
     <h1 className="font-semibold text-[24px] px-2 mb-3"> Block user </h1>
