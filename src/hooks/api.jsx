@@ -6,9 +6,7 @@ const cookies = new Cookies();
 let access = "";
 if (typeof window !== "undefined") {
   access =
-    cookies.get("deep-access") ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyNjUwZDJiLTU4YTgtNDU4Yi05N2VlLTcxNDZlNjU0YThmYiIsImlhdCI6MTY5NjQ5OTExOCwiZXhwIjoxNjk2NTg1NTE4fQ.ONzZitRUhcUM0TQrL73ss5hCRRW6H3GnGraXv9m80Ac";
-}
+    cookies.get("deep-access") || ""}
 
 export const requestHeader = {
   Accept: "application/json",
@@ -104,6 +102,55 @@ export async function request2(url, method, payload, token, text, form) {
       });
   } else {
     return fetch(API_USER_URL2 + url, {
+      method,
+      headers: Object.assign(requestHeader),
+      body: form === true ? payload : JSON.stringify(payload),
+    })
+      .then((res) => {
+        if (text === true) {
+          return res.text();
+        } else if (res) {
+          return res.json();
+        } else {
+          return res.json();
+        }
+      })
+      .catch((err) => {
+        console.error(`Request Error ${url}: `, err);
+        throw new Error(err);
+      });
+  }
+}
+
+let API_USER_URL3 = "http://192.81.213.226:81/80/";
+
+export async function request3(url, method, payload, token, text, form) {
+  if (form === true) {
+    requestHeader["Content-Type"] = "multipart/form-data";
+  } else {
+    requestHeader["Content-Type"] = "application/json";
+  }
+
+  if (method === "GET") {
+    return fetch(API_USER_URL3 + url, {
+      method,
+      headers: Object.assign(requestHeader),
+    })
+      .then((res) => {
+        if (text === true) {
+          return res.text();
+        } else if (res) {
+          return res.json();
+        } else {
+          return res.json();
+        }
+      })
+      .catch((err) => {
+        console.error(`Request Error ${url}: `, err);
+        throw new Error(err);
+      });
+  } else {
+    return fetch(API_USER_URL3 + url, {
       method,
       headers: Object.assign(requestHeader),
       body: form === true ? payload : JSON.stringify(payload),
