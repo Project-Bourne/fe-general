@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { CustomModal, DropdownWithFlag, ImagePreview } from "@/components/ui";
+import { CustomModal, ImagePreview } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
 import { setSingleUser, setUpdatedData } from "@/redux/reducer/userSlice";
 import UserService from "@/services/users";

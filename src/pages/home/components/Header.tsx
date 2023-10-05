@@ -1,9 +1,3 @@
-import Image from "next/image";
-
-// import on_exports from "../../../../public/icons/on.exports.svg";
-// import on_bookmark from "../../../../public/icons/on.bookmark.svg";
-// import on_share from "../../../../public/icons/on.share.svg";
-import doc from "../../../../public/icons/doc.svg";
 import { useState } from "react";
 import ReportsTypeDropdown from "./ReportsTypeDropdown";
 import { CustomModal } from "@/components/ui";
