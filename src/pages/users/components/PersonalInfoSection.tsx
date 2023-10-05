@@ -1,44 +1,54 @@
 import { Button, Input } from "@/components/ui";
 import Image from "next/image";
-import { PersonalInformationModel } from "../models/users.module";
+import { PersonalInformationModel } from "../../../utils/mainUsers.module";
 import UserService from "@/services/users";
 import NotificationService from "@/services/notification.service";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleUser } from "@/redux/reducer/userSlice";
+
 export default function PersonalInfoSection({
   handleDeleteUser,
   blockUser,
   isEditing,
-  setIsEditing
+  setIsEditing,
 }) {
-  const dispatch = useDispatch()
-  const { user } = useSelector((state: any) => state?.user)
-  const [isActive, setIsActive] = useState('')
-  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password:'' });
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: any) => state?.user);
+  const [isActive, setIsActive] = useState("");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
 
   const updateUser = async () => {
-    dispatch(setSingleUser(
-      {
+    dispatch(
+      setSingleUser({
         ...user,
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        password: formData.password
-      }
-    ))
-    const response = await UserService.updateUser(user.uuid, user)
+        password: formData.password,
+      })
+    );
+    const response = await UserService.updateUser(user.uuid, user);
     if (response.status) {
-      console.log(response)
-      dispatch(setSingleUser(response.data))
+      console.log(response);
+      dispatch(setSingleUser(response.data));
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center",
       });
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: <p>{response.message}. something went wrong, please try again</p>,
+        addedText: (
+          <p>{response.message}. something went wrong, please try again</p>
+        ),
+        position: "top-center",
       });
     }
   };
@@ -92,21 +102,29 @@ export default function PersonalInfoSection({
           </label>
           <div className="flex gap-x-7 md:w-[37.2%] w-full">
             <input
-              onFocus={() => setIsActive('firstname')}
-              value={isActive !== "firstname" ? user?.firstName : formData.firstName }
+              onFocus={() => setIsActive("firstname")}
+              value={
+                isActive !== "firstname" ? user?.firstName : formData.firstName
+              }
               id="firstname"
               type="text"
               autoComplete="true"
               className="text-[13px] px-3 border p-2 rounded-md"
-              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
             />
             <input
-              onFocus={() => setIsActive('lastname')}
+              onFocus={() => setIsActive("lastname")}
               id="lastname"
-              value={isActive !== "lastname" ? user?.lastName : formData.lastName}
+              value={
+                isActive !== "lastname" ? user?.lastName : formData.lastName
+              }
               type="text"
               className="text-[13px] px-3 border p-2 rounded-md"
-              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
             />
           </div>
         </div>
@@ -117,9 +135,11 @@ export default function PersonalInfoSection({
           <input
             id="password"
             value={isActive !== "password" ? user?.password : formData.password}
-            onFocus={() => setIsActive('password')}
+            onFocus={() => setIsActive("password")}
             type="password"
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
             className="text-[13px] px-3 border p-2 rounded-md w-full"
           />
         </div>
@@ -129,9 +149,9 @@ export default function PersonalInfoSection({
             Email:
           </label>
           <input
-            onFocus={() => setIsActive('email')}
+            onFocus={() => setIsActive("email")}
             type="email"
-            value={user?.email }
+            value={user?.email}
             className="text-[13px] px-3 border p-2 rounded-md w-full"
             id="email"
             disabled

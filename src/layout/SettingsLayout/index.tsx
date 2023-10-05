@@ -1,4 +1,4 @@
-import { TabComp } from "@/pages/settings/components";
+import TabComp from "@/pages/settings/components/TabComp/index";
 import { SettingsData } from "@/utils/constants";
 import React, { ReactNode } from "react";
 import "../../styles/global.css";
@@ -6,12 +6,12 @@ import { useRouter } from "next/router";
 
 type LayoutType = {
   children: ReactNode;
+  data: { name: string; icon: string; selectedIcon: string; id: number; route: string; }[];
 };
+
 
 const SettingsLayout = ({ children }: LayoutType) => {
   const route = useRouter().pathname;
-
-  // console.log({route})
 
   return (
     <div className="w-full h-full">

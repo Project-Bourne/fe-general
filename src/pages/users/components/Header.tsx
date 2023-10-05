@@ -3,95 +3,12 @@ import UserService from "@/services/users";
 import Image from "next/image";
 import SplitButton from "./dropdown";
 import { useState } from "react";
-import { UserRoles } from "@/utils/constants";
-import { HeaderModel } from "../models/users.module";
-import NotificationService from "@/services/notification.service";
+import { HeaderModel } from "../../../utils/mainUsers.module";
 import AddUserModal from "./AddUserModal";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 
-function Header() {
+function Header( props) {
   const [toggleModal, setToggleModal] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    firstName: "",
-    lastName: "",
-    password: "",
-    role: "",
-    country: "",
-  });
-  const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState({
-    email: "",
-  });
-
-  const handleSetCountry = (data: any) => {
-    setFormData({ ...formData, country: data });
-    console.log("header", data);
-  };
-  // handle modal form submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await UserService.createUser(formData);
-    if (response.data) {
-      NotificationService.success({
-        message: "success!",
-        addedText: <p>{response.message}.</p>,
-      });
-      setToggleModal(false);
-      setFormData({
-        email: "",
-        firstName: "",
-        lastName: "",
-        password: "",
-        role: "",
-        country: "",
-      });
-    }
-    NotificationService.error({
-      message: "error!",
-      addedText: <p>{response.msg}. please try again</p>,
-    });
-    console.log(response);
-  };
-
-  // const handleEmailChange = (e: any) => {
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     email: e.target.value,
-  //   }));
-  // };
-
-  const handleEmailChange = (e) => {
-    console.log(e.target.value);
-    // setFormData({
-    //   ...formData,
-    //   email: e.target.value
-    // })
-  };
-
-  const handleFirstNameChange = (e) => {
-    const newFirstName = e.target.value;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      firstName: newFirstName,
-    }));
-  };
-
-  const handleLastNameChange = (e) => {
-    const newLastName = e.target.value;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      lastName: newLastName,
-    }));
-  };
-
-  const handlePasswordChange = (e) => {
-    const newpassworde = e.target.value;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      password: newpassworde,
-    }));
-  };
 
   const closeModalHandler = () => {
     setToggleModal(false);
@@ -115,7 +32,7 @@ function Header() {
           <Button
             className="flex gap-x-1 items-center"
             onClick={() => setToggleModal(true)}
-            size="md"
+            size="sm"
             background="bg-sirp-primary"
             value={
               <div className="flex gap-x-1 text-[12px] items-center justify-center">

@@ -35,6 +35,55 @@ class UserService {
     }
   }
 
+  static async getUserRoles() {
+    try {
+      const response = await request(
+        `roles`,
+        "GET",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async filterByRoles(id) {
+    try {
+      const response = await request(
+        `filter?filterType=role&filterValue=${id}`,
+        "GET",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async filterByAction(id) {
+    try {
+      const response = await request(
+        `filter?filterType=${id}&filterValue=`,
+        "GET",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
   static async deleteUser(id) {
     try {
       const response = await request(
@@ -50,6 +99,23 @@ class UserService {
       throw error;
     }
   }
+  
+  static async rejecteUser(id) {
+    try {
+      const response = await request(
+        `reject-user/${id}`,
+        "PUT",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async verifyUser(id) {
     try {
       const response = await request(
@@ -81,22 +147,22 @@ class UserService {
       throw error;
     }
   }
+  static async unBlockUser(id) {
+    try {
+      const response = await request(
+        `unblock-user/${id}`,
+        "PUT",
+        {},
+        true,
+        false,
+        false,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-  // static async blockUser(id) {
-  //   try {
-  //     const response = await request(
-  //       `block-user/${id}`,
-  //       "PUT",
-  //       {},
-  //       true,
-  //       false,
-  //       false,
-  //     );
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 
 
   static async verifyUser(id) {

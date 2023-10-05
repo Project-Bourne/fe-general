@@ -1,34 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DropdownWithFlag } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
 import UserService from "@/services/users";
 
-const roleMapping = {
-  "0": "Super Admin",
-  "1": "Admin",
-  "2": "Supervisor",
-  "3": "Liason Officer",
-  "4": "Station Officer",
-  "5": "Desk Officer",
-  "6": "Analyst",
-};
-
-const options = Object.keys(roleMapping).map((key) => ({
-  id: key,
-  role: roleMapping[key],
-}));
-
 const AddUserModal = (props) => {
   const [toggleModal, setToggleModal] = useState(false);
+  const [roleName, setRoleName] = useState("");
+  const [options, setOptions] = React.useState([]); // Initialize as an empty array
+
+  useEffect(() => {
+    const getRoles = async () => {
+      try {
+        const response = await UserService.getUserRoles();
+        if (response.status) {
+          const data = response.data;
+
+          // Now, options will contain the roles with UUIDs
+          setOptions(
+            data.map((roleData) => ({
+              id: roleData.uuid,
+              role: roleData.roleName,
+            }))
+          );
+        }
+      } catch (error) {
+        NotificationService.error({
+          message: "success!",
+          addedText: <p>{error.message}</p>,
+          position: "top-center",
+        });
+      }
+    };
+
+    getRoles();
+  }, []); // Empty dependency array to run this effect only once
 
   const [formData, setFormData] = useState({
     // Initialize formData using useState
     email: "",
     firstName: "",
     lastName: "",
-    role: "",
+    roleUuid: "",
     password: "",
-    country: "",
+    country: [""],
   });
 
   // Define event handlers for input changes
@@ -45,7 +59,12 @@ const AddUserModal = (props) => {
   };
 
   const handleRoleChange = (e) => {
-    setFormData({ ...formData, role: e.target.value });
+    // Find the selected role object based on the role name
+    const selectedRoleName = e.target.value;
+    setRoleName(selectedRoleName);
+    const selectedRole = options.find((role) => role.role === selectedRoleName);
+    // Set the formData.role to the ID of the selected role
+    setFormData({ ...formData, roleUuid: selectedRole ? selectedRole.id : "" });
   };
 
   const handlePasswordChange = (e) => {
@@ -53,7 +72,9 @@ const AddUserModal = (props) => {
   };
 
   const handleSetCountry = (selectedCountry) => {
-    setFormData({ ...formData, country: selectedCountry });
+    let res = [];
+    res.push(selectedCountry);
+    setFormData({ ...formData, country: res });
   };
 
   const handleSubmit = async (e) => {
@@ -64,6 +85,7 @@ const AddUserModal = (props) => {
         NotificationService.success({
           message: "Success!",
           addedText: <p>{response.message}.</p>,
+          position: "top-center",
         });
         setToggleModal(false);
         setFormData({
@@ -71,20 +93,22 @@ const AddUserModal = (props) => {
           firstName: "",
           lastName: "",
           password: "",
-          role: "",
-          country: "",
+          roleUuid: "",
+          country: ["Nigeria"],
         });
         props.closeModal();
       } else {
         NotificationService.error({
           message: "Error!",
-          addedText: <p>{response.msg} please try again</p>,
+          addedText: <p>{response.message} please try again</p>,
+          position: "top-center",
         });
       }
     } catch (error) {
       NotificationService.error({
         message: "Error!",
-        addedText: <p>An error occurred while creating the user.</p>,
+        addedText: <p>{error.msg} please try again</p>,
+        position: "top-center",
       });
     }
   };
@@ -127,9 +151,9 @@ const AddUserModal = (props) => {
           <div className="mb-2">
             <label className="text-sm">User role</label>
             <select
-              value={formData.role}
+              value={roleName}
               onChange={handleRoleChange}
-              className="w-full bg-white border border-gray-300 rounded p-2"
+              className="w-full bg-white border border-gray-300 rounded p-2 capitalize"
             >
               {options.map((role, i) => (
                 <option key={i} value={role.role}>

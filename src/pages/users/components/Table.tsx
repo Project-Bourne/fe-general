@@ -8,7 +8,7 @@ import Paper from "@mui/material/Paper";
 import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import BlockModal from "./blockModal";
+import BlockModal from "./BlockModal";
 import ApproveModal from "./ApproveModal";
 import RejectModal from "./RejectModal";
 import UserService from "@/services/users";
@@ -16,40 +16,77 @@ import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
 import DeleteModal from "./deleteModal";
 import { useDispatch, useSelector } from "react-redux";
-import { set } from "date-fns";
-import { setDropDown } from "@/redux/reducer/userSlice";
-// set number of items to be displayed per page
-const calculateRange = (data, rowsPerPage) => {
-  const range = [];
-  const num = Math.ceil(data.length / rowsPerPage);
-  let i = 1;
-  for (let i = 1; i <= num; i++) {
-    range.push(i);
-  }
-  return range;
-};
+import UnblockModal from "./UnblockModal";
+import Loader from "@/components/ui/Loader";
 
-const sliceData = (data, page, rowsPerPage) => {
-  return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-};
-
+// set number of items to be displayed per pag
 function CustomTable({
   tableHeaderData,
-  tableBodyData,
-  rowsPerPage,
-  usertype,
 }) {
-  const { dropDown } = useSelector((state: any) => state?.user);
-  const disptch = useDispatch();
+  const dispatch = useDispatch();
+  const { deleteStatus } = useSelector((state: any) => state.user);
   const [tableRange, setTableRange] = useState([]);
   const [slice, setSlice] = useState([]);
   const [page, setPage] = useState(1);
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showApprove, setShowApprove] = useState(false);
   const [showReject, setShowReject] = useState(false);
   const [showBlock, setShowBlock] = useState(false);
+  const [showUnblock, setShowUnblock] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  //this state is to reload the table
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [isRejected, setIsRejected] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  const [isUnblocked, setIsUnblocked] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const { dropDown } = useSelector((state: any) => state?.user);
+  const [showMore, setShowMore] = useState(false);
+  const [expandedRows, setExpandedRows] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchData = async () => {
+      try {
+        if (isMostlyNumbers(dropDown)) {
+          // It's mostly numbers, treat it as a number
+          const response = await UserService.filterByRoles(dropDown);
+          const data = response.data;
+          setUsers(data);
+        } else {
+          // It's mostly text, treat it as text
+          const response = await UserService.filterByAction(dropDown);
+          const data = response.data;
+          setUsers(data);
+        }
+        setIsLoading(false); // Set isLoading to false when data fetching is complete
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false); // Set isLoading to false in case of an error
+      }
+    };
+
+    function isMostlyNumbers(value) {
+      // Count the number of digits in the value
+      const digitCount = (value.match(/\d/g) || []).length;
+      const letterCount = (value.match(/[a-zA-Z]/g) || []).length;
+
+      // If there are more digits than letters, consider it mostly numbers
+      return digitCount >= letterCount;
+    }
+
+    fetchData(); // Call the async function
+  }, [
+    dispatch,
+    dropDown,
+    isBlocked,
+    isRejected,
+    isApproved,
+    isUnblocked,
+    isDeleted,
+  ]);
 
   const handleBlock = async (id) => {
     const response = await UserService.blockUser(id);
@@ -58,17 +95,20 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
+      setIsBlocked(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
       });
     }
     setShowBlock(false);
   };
+
   const handleDelete = async (id) => {
     const response = await UserService.deleteUser(id);
     console.log(response);
@@ -76,13 +116,15 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
+      setIsDeleted(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
       });
     }
     setShowDelete(false);
@@ -95,32 +137,58 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
+      setIsApproved(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
       });
     }
     setShowApprove(false);
   };
 
-  const handleReject = async (id) => {
-    const response = await UserService.deleteUser(id);
+  const handleUnblock = async (id) => {
+    const response = await UserService.unBlockUser(id);
     console.log(response);
     if (response.status) {
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
+        position: "top-center"
       });
+      setIsUnblocked(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: (
-          <p>{response.message}. Something went wrong, please try again</p>
-        ),
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
+      });
+    }
+    setShowUnblock(false);
+  };
+  
+  const handleReject = async (id) => {
+    const response = await UserService.rejecteUser(id);
+    console.log(response);
+    if (response.status) {
+      NotificationService.success({
+        message: "success!",
+        addedText: <p>{response.message}.</p>,
+        position: "top-center"
+      });
+      setIsRejected(true);
+    } else {
+      NotificationService.error({
+        message: "error!",
+        addedText: 
+          <p>{response.message}. Something went wrong, please try again</p>,
+          position: "top-center"
+        ,
       });
     }
     setShowReject(false);
@@ -131,11 +199,17 @@ function CustomTable({
     setShowDelete(false);
     setShowApprove(false);
     setShowReject(false);
+    setShowUnblock(false);
   };
 
   const openBlockModal = (user) => {
     setSelectedUser(user);
     setShowBlock(true);
+  };
+
+  const openUnblockModal = (user) => {
+    setSelectedUser(user);
+    setShowUnblock(true);
   };
 
   const openDeleteModal = (user) => {
@@ -152,31 +226,6 @@ function CustomTable({
     setShowReject(true);
   };
 
-  useEffect(() => {
-    disptch(setDropDown(0));
-  }, []);
-
-  // set table items to be rendered when table is paginated
-  useEffect(() => {
-    const range = calculateRange(users, rowsPerPage);
-    setTableRange([...range]);
-
-    const slice = sliceData(users, page, rowsPerPage);
-    setSlice([...slice]);
-  }, [users, setTableRange, page, setSlice]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await UserService.getUsers();
-        if (response.status) {
-          setUsers(response.data);
-          console.log(response);
-        }
-      } catch (error) {}
-    };
-    fetchUsers();
-  }, []);
   //   table footer
   useEffect(() => {
     if (slice.length < 1 && page !== 1) {
@@ -198,8 +247,28 @@ function CustomTable({
     }
   };
 
+  const toggleExpandedRow = (index) => {
+    if (expandedRows.includes(index)) {
+      setExpandedRows(expandedRows.filter((rowIndex) => rowIndex !== index));
+    } else {
+      setExpandedRows([...expandedRows, index]);
+    }
+  };
+
   return (
     <TableContainer component={Paper} className="shadow-sm border-r-0">
+      {isLoading && (
+        <CustomModal
+          style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
+          closeModal={() => {
+            setIsLoading(false);
+          }}
+        >
+          <div className="flex flex-row justify-center items-center">
+            <Loader />
+          </div>
+        </CustomModal>
+      )}
       <Table sx={{ minWidth: 650 }}>
         <TableHead className="bg-gray-100">
           <TableRow>
@@ -214,10 +283,10 @@ function CustomTable({
             ))}
           </TableRow>
         </TableHead>
-        {users.length > 0 ? (
+        {Array.isArray(users) && users.length > 0 ? (
           <>
             <TableBody>
-              {slice?.map((item) => (
+              {users?.map((item, index) => (
                 <>
                   <TableRow key={item?.uuid} className="hover:bg-gray-50">
                     <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline">
@@ -226,32 +295,68 @@ function CustomTable({
                       </Link>
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      {item?.role}
+                      {item?.role?.roleName}
                     </TableCell>
-                    <TableCell className=" text-xs capitalize">
-                      {item.country}
+                    <TableCell className="text-xs capitalize">
+                      {item.country.map((countryName, countryIndex) => (
+                        <span key={countryIndex}>
+                          {countryIndex < 2 || expandedRows.includes(index)
+                            ? `${countryName}, `
+                            : ""}
+                        </span>
+                      ))}
+                      {item.country.length > 2 && (
+                        <span>
+                          <button
+                            className="text-sirp-primary hover:underline"
+                            onClick={() => toggleExpandedRow(index)}
+                          >
+                            {expandedRows.includes(index)
+                              ? "Less"
+                              : `+${item.country.length - 2} More`}
+                          </button>
+                        </span>
+                      )}
                     </TableCell>
+
                     <TableCell align="right">
                       <div className="flex gap-x-[0.2rem] items-center">
                         <div
                           className={`rounded-full w-2 h-2 ${
-                            item.status === "Online"
+                            item.onlineStatus === "1"
                               ? "bg-green-600"
                               : "bg-[#EF4444]"
                           }`}
                         ></div>
-                        <p className="text-xs">{item.status}</p>
+                        <p className="text-xs">
+                          {item.onlineStatus === "1" ? "Online" : "Offline"}
+                        </p>
                       </div>
                     </TableCell>
                     <TableCell>
-                      {item.verified ? (
-                          <div className="flex gap-x-3 items-center">
-                          <button
-                            className="bg-transparent text-xs p-0 text-[#9F9036]"
-                            onClick={() => openBlockModal(item)}
-                          >
-                            Block
-                          </button>
+                      {deleteStatus ? (
+                        <span>User Deleted</span>
+                      ) : item.verified ? (
+                        // User is verified
+                        <div className="flex gap-x-3 items-center">
+                          {item.blocked ? (
+                            // User is verified and blocked
+                            <button
+                              className="bg-transparent text-xs p-0 text-[#9F9036]"
+                              onClick={() => openUnblockModal(item)}
+                            >
+                              Unblock
+                            </button>
+                          ) : (
+                            // User is verified but not blocked
+                            <button
+                              className="bg-transparent text-xs p-0 text-[#9F9036]"
+                              onClick={() => openBlockModal(item)}
+                            >
+                              Block
+                            </button>
+                          )}
+
                           <button
                             className="bg-transparent text-xs p-0 text-sirp-primary"
                             onClick={() => openDeleteModal(item)}
@@ -259,8 +364,11 @@ function CustomTable({
                             Delete
                           </button>
                         </div>
-                       
+                      ) : item.delete ? (
+                        // User is not verified and deleted
+                        <span>User Rejected</span>
                       ) : (
+                        // User is not verified but not deleted
                         <div className="flex gap-x-3 items-center">
                           <button
                             className="bg-transparent text-xs p-0 text-[#9F9036]"
@@ -277,35 +385,6 @@ function CustomTable({
                         </div>
                       )}
                     </TableCell>
-                    {/* {usertype >= 0 ? (
-                    <TableCell>
-                      <div className="flex gap-x-3 items-center">
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]">
-                          Chat
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]">
-                          Block
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-sirp-primary">
-                          Delete
-                        </button>
-                      </div>
-                    </TableCell>
-                  ) : (
-                    <TableCell>
-                      <div className="flex gap-x-3 items-center">
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]">
-                          Approve
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-[#9F9036]">
-                          View
-                        </button>
-                        <button className="bg-transparent text-xs p-0 text-sirp-primary">
-                          Reject
-                        </button>
-                      </div>
-                    </TableCell>
-                  )} */}
                   </TableRow>
                 </>
               ))}
@@ -345,6 +424,9 @@ function CustomTable({
           </TableBody>
         )}
       </Table>
+
+      {/* modal for block user, delete user, approve user, reject user, unblock user  */}
+
       {selectedUser && showBlock && (
         <CustomModal
           style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
@@ -388,6 +470,18 @@ function CustomTable({
         >
           <RejectModal
             handleReject={() => handleReject(selectedUser.uuid)}
+            cancelblock={cancelblock}
+            user={selectedUser}
+          />
+        </CustomModal>
+      )}
+      {selectedUser && showUnblock && (
+        <CustomModal
+          style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
+          closeModal={() => setShowUnblock(false)}
+        >
+          <UnblockModal
+            handleUnblock={() => handleUnblock(selectedUser.uuid)}
             cancelblock={cancelblock}
             user={selectedUser}
           />

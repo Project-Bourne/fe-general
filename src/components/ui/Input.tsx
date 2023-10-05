@@ -1,13 +1,22 @@
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { InputModel, DropdownModel } from "@/models/ui/components.models";
 import { useOnClickOutside } from "../custom-hooks";
+import { useSelector } from "react-redux";
 
 const countries = require("../../utils/countries.json");
 
 function Input(props: InputModel) {
-  const { type, value, onChange, placeholder, classNameStyle, onFocus, onBlur, isDisabled } =
-    props;
+  const {
+    type,
+    value,
+    onChange,
+    placeholder,
+    classNameStyle,
+    onFocus,
+    onBlur,
+    isDisabled,
+  } = props;
   const [toggle, setToggle] = useState(false);
 
   const handleToggle = () => {
@@ -89,12 +98,26 @@ function Dropdown(props: DropdownModel) {
 
 // dropdown component of countries and flag
 function DropdownWithFlag(props: DropdownModel) {
-  const { onClick, selectItem, className, style, isDisabled } = props;
+  const { selectItem, className, style, isDisabled } = props;
   const [dropdown, setDropdown] = useState(false);
+  const { user } = useSelector((state: any) => state.user);
   const [country, setCountry] = useState({
-    name: "Nigeria",
-    flag: "https://flagcdn.com/ng.svg",
+    name: "Nigeria", // Default country name
+    flag: "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NG.svg", // Default flag
   });
+  useEffect(() => {
+    // Extract the first element of the user's country array
+    const userCountry = user?.country[0];
+    const selectedCountry = countries.find(
+      (country) => country.name === userCountry
+    );
+    if (selectedCountry) {
+      setCountry({
+        name: selectedCountry.name,
+        flag: selectedCountry.image,
+      });
+    }
+  }, [user]);
   const [filteredCountries, setFilteredCountries] = useState(countries);
   const [countrySearch, setCountrySearch] = useState("");
   const searchInput = useRef();
@@ -122,7 +145,7 @@ function DropdownWithFlag(props: DropdownModel) {
   const handleItemSelect = (country, flag) => {
     setCountry({ name: country, flag });
     setDropdown(false);
-    selectItem(country);
+    selectItem(country); // Call the selectItem function passed as a prop
     setFilteredCountries(countries);
     setCountrySearch("");
   };
@@ -130,7 +153,6 @@ function DropdownWithFlag(props: DropdownModel) {
   const filterCountries = (event) => {
     // event.preventDefault();
     // setCountrySearch(event.target.value);
-    console.log("Filtering", event.target.value);
     let filteredCountries = countries.filter((country) => {
       if (
         country.name
@@ -242,6 +264,5 @@ function DropdownWithFlag(props: DropdownModel) {
     </div>
   );
 }
-
 
 export { Input, Dropdown, DropdownWithFlag };

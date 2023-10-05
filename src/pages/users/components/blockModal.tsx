@@ -11,7 +11,7 @@ function BlockModal({cancelblock, handleBlock, user}) {
     <h1 className="font-semibold text-[24px] px-2 mb-3"> Block user </h1>
     <div className="grid pb-5 pt-2 px-2">
       <p className="text-sm mb-3">
-        Are you sure you want to delete the user{" "}
+        Are you sure you want to bolock the user{" "}
         <span className="text-[#09495D]">{user?.firstName} {user?.lastName}</span> ?
       </p>
       <div className="px-5 py-1.5 flex gap-x-3.5 rounded-md bg-[#45C6ED] mb-4">

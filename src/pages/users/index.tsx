@@ -1,17 +1,17 @@
 // Users.js
-// import React, { useState } from "react";
-import { UsersList } from "./user";
-import { Header } from "./components";
-import { TableBodyData } from "./utils/constants";
+import React from "react";
+import UsersList  from "./components/index";
+import Header from "./components/Header";
 
 function Users() {
-
   return (
     <>
       <div>
         <Header />
         <div>
-          <UsersList tableData={TableBodyData} usertype={-1} /></div>
+        {/* this is the users list table  */}
+          <UsersList /> 
+        </div>
       </div>
     </>
   );

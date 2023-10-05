@@ -1,8 +1,9 @@
 import { ButtonModel } from "@/models/ui/components.models";
-import { ClassNames } from "@emotion/react";
+import ButtonLoader from "./ButtonLoader";
 
 function Button(props: ButtonModel) {
-  const { value, type, onClick, background, classNameStyle, size } = props;
+  const { value, type, onClick, background, classNameStyle, size, loading } =
+    props;
 
   const btnSize = () => {
     if (size === "sm") return "25%";
@@ -13,12 +14,21 @@ function Button(props: ButtonModel) {
 
   return (
     <button
-      className={`rounded-md ${classNameStyle} ${background}`}
+      className={`rounded-md ${classNameStyle} ${background} flex gap-x-3 justify-center pt-3`}
       style={{ width: `${btnSize()}` }}
       type={type}
       onClick={onClick}
     >
-      {value}
+      {loading && (
+        <ButtonLoader
+          height="25px"
+          width="25px"
+          borderTopColor="#4582C4"
+          borderTopWidth="2px"
+          borderWidth="2px"
+        />
+      )}
+      <>{value}</>
     </button>
   );
 }

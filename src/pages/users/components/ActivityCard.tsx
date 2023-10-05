@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { ActivityCardModel } from "../models/users.module";
+import { ActivityCardModel } from "../../../utils/mainUsers.module";
 import { useTruncate } from "@/components/custom-hooks";
 
-export function ActivityCard({
+const ActivityCard = ({
   time,
   actionText,
   activityText,
   docId,
-}: ActivityCardModel) {
+}: ActivityCardModel) =>  {
   return (
     <div className="w-[90%] mt-[2rem] grid md:flex gap-x-2 mx-auto">
       <h3 className="text-[14px] text-[#6F7A82]">{time}</h3>
@@ -34,3 +34,5 @@ export function ActivityCard({
     </div>
   );
 }
+
+export default ActivityCard;
