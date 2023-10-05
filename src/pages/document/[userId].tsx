@@ -85,14 +85,12 @@ const ProfileSettings = () => {
           NotificationService.error({
             message: "Error!",
             addedText: <p>{response.message}</p>,
-            position: "top-center",
           });
         }
       } catch (error) {
         NotificationService.error({
           message: "Error!",
           addedText: <p>{error.message}</p>,
-          position: "top-center",
         });
       }
     };
@@ -171,7 +169,6 @@ const ProfileSettings = () => {
           NotificationService.success({
             message: "success!",
             addedText: <p>{response.message}.</p>,
-            position: "top-center",
           });
 
           dispatch(
@@ -187,14 +184,12 @@ const ProfileSettings = () => {
           NotificationService.success({
             message: "success!",
             addedText: <p>{response.message}.</p>,
-            position: "top-center",
           });
         }
       } catch (err) {
         NotificationService.error({
           message: "Error!",
           addedText: <p>{err.message}.</p>,
-          position: "top-center",
         });
       }
     }

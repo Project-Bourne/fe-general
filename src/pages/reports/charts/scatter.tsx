@@ -1,3 +1,8 @@
+import {
+  dataCredible,
+  dataPopular,
+  dataRelevant,
+} from "@/utils/reports.constants";
 import React from "react";
 import {
   ScatterChart,
@@ -9,7 +14,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { dataRelevant, dataCredible, dataPopular } from "./constant";
 
 const ScatterChartComponent = () => {
   const uniqueMonths = Array.from(

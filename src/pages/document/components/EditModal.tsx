@@ -1,17 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 
-const AddUserModal = ({ closeModal, handleAddSource }) => {
-  const handleSubmit = async (e) => {
+function EditModal({ cancelEditModal, handleEdit, source }) {
+  const [editedSource, setEditedSource] = useState({ ...source });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedSource((prevState) => ({
+      ...prevState,
+      [name]:
+        name === "weight"
+          ? parseInt(value, 10)
+          : name === "crawl"
+          ? value === "true"
+          : value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData);
-    handleAddSource(data);
-    closeModal();
+    cancelEditModal();
+    // Call the handleEdit function with the editedSource data
+    handleEdit(editedSource);
   };
 
   return (
     <>
-      <h1 className="font-semibold text-[24px] px-2 mb-3"> Add Source </h1>
+      <h1 className="font-semibold text-[24px] px-2 mb-3"> Edit Source </h1>
       <div className="grid pb-5 pt-2 px-2">
         <form className="w-full border-r-gray-100 mb-3" onSubmit={handleSubmit}>
           <div className="mb-2">
@@ -20,6 +34,8 @@ const AddUserModal = ({ closeModal, handleAddSource }) => {
               type="text"
               className="w-full my-2 border p-2 capitalize rounded-[.5rem]"
               name="name" // Change the name attribute to "name"
+              value={editedSource.name}
+              onChange={handleChange}
               required
             />
           </div>
@@ -29,6 +45,8 @@ const AddUserModal = ({ closeModal, handleAddSource }) => {
               className="w-full my-2 border p-2 rounded-[.5rem]"
               type="text"
               name="url"
+              value={editedSource.url}
+              onChange={handleChange}
               required
             />
           </div>
@@ -40,6 +58,8 @@ const AddUserModal = ({ closeModal, handleAddSource }) => {
               name="weight"
               min={0}
               max={100}
+              value={editedSource.weight}
+              onChange={handleChange}
               required
             />
           </div>
@@ -48,6 +68,8 @@ const AddUserModal = ({ closeModal, handleAddSource }) => {
             <select
               className="w-full my-2 border p-2 rounded-[.5rem]"
               name="crawl"
+              value={editedSource.crawl.toString()} // Convert boolean to string
+              onChange={handleChange}
             >
               <option value="true">True</option>
               <option value="false">False</option>
@@ -58,12 +80,12 @@ const AddUserModal = ({ closeModal, handleAddSource }) => {
             type="submit"
             className="w-full bg-sirp-primary rounded-[1rem] text-white p-2 mt-3 shadow-md"
           >
-            Add Source
+            Edit Source
           </button>
         </form>
       </div>
     </>
   );
-};
+}
 
-export default AddUserModal;
+export default EditModal;

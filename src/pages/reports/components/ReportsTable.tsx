@@ -10,7 +10,10 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import refresh from "../../../../public/icons/refresh.svg";
+import down from "../../../../public/icons/down.svg";
 
 function ReportsTable({ tableBodyData, showReportDetails }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -33,7 +36,7 @@ function ReportsTable({ tableBodyData, showReportDetails }) {
             <TableCell>
               <div className="flex gap-x-5">
                 <Image
-                  src={require("../../../assets/icons/refresh.svg")}
+                  src={refresh}
                   alt="refresh"
                   onClick={handleRefresh}
                   className={`${isRefreshing && "animate-spin"}`}
@@ -46,14 +49,14 @@ function ReportsTable({ tableBodyData, showReportDetails }) {
                 <p>{`${`1 - 50`} of ${1000}`} &nbsp;</p>
                 <div className="flex gap-x-3">
                   <Image
-                    src={require("../../../assets/icons/down.svg")}
+                    src={down}
                     alt=""
                     className="transform rotate-90"
                     height={20}
                     width={20}
                   />
                   <Image
-                    src={require("../../../assets/icons/down.svg")}
+                    src={down}
                     alt=""
                     className="transform -rotate-90"
                     height={20}
@@ -64,25 +67,26 @@ function ReportsTable({ tableBodyData, showReportDetails }) {
             </TableCell>
           </TableRow>
         </TableHead>
-        {tableBodyData.length > 0 ? (
+        {tableBodyData?.length > 0 ? (
           <>
             <TableBody>
               {tableBodyData?.map((item) => (
                 <TableRow
                   onClick={handleShowDetails}
-                  key={item.id}
+                  key={item?.id}
                   className="hover:bg-gray-50"
                 >
                   <TableCell className="text-xs capitalize hover:cursor-pointer">
-                    <Link href={`users/${item.id}`}>{item.name}</Link>
+                    <Link href={`users/${item?.id}`}>{item?.name}</Link>
                   </TableCell>
                   <TableCell className="text-xs capitalize">
                     <span className="flex justify-center">
-                      Highlights:&nbsp;{useTruncate(item.highlight, 30)}
+                      Highlights:&nbsp;
+                      {item?.highlight && useTruncate(item?.highlight, 30)}
                     </span>
                   </TableCell>
                   <TableCell className="text-xs capitalize">
-                    <span className="flex justify-center">{item.date}</span>
+                    <span className="flex justify-center">{item?.date}</span>
                   </TableCell>
                 </TableRow>
               ))}

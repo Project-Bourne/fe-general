@@ -10,11 +10,11 @@ function Main() {
   const [modalToggle, setModalToggle] = useState(false);
 
   return (
-    <div className="grid gap-y-3 md:h-[78vh] overflow-y-auto w-[78vw] md:px-5 px-2 py-4 bg-sirp-lightGrey rounded-xl">
+    <div className="grid gap-y-3 md:h-[78vh] overflow-y-auto w-[78vw] md:px-5 px-2 pt-4 pb-7 bg-sirp-lightGrey rounded-xl">
       <FirstRow />
       <SecondRow />
-      <ThirdRow />
-      <FourthRow showReportDetails={() => setModalToggle(true)} />
+      {/* <ThirdRow /> */}
+      {/* <FourthRow showReportDetails={() => setModalToggle(true)} /> */}
       {modalToggle && (
         <CustomModal
           style="bg-white md:w-[50%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"

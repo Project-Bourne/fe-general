@@ -1,11 +1,19 @@
 import Image from "next/image";
 import { useState } from "react";
 import DateComponent from "./DatePicker";
-import {
-  ScatterChartComponent,
-  BarChartComponent,
-  LineChartComponent,
-} from "../charts";
+import BarChartComponent from "../charts/bar";
+import ScatterChartComponent from "../charts/scatter";
+import LineChartComponent from "../charts/line";
+
+import on_scatter from "../../../assets/icons/on.chart-scatter.svg"
+import scatter from "../../../assets/icons/chart-scatter.svg";
+import on_bar from "../../../assets/icons/on.chart-bar.svg";
+import bar from "../../../assets/icons/chart-bar.svg";
+import on_line from "../../../assets/icons/on.chart-line.svg";
+import line from "../../../assets/icons/chart-line.svg";
+import calendar from "../../../assets/icons/calendar.svg";
+import right_arrow from "../../../assets/icons/right-arrow.svg";
+import info from "../../../assets/icons/info.svg";
 
 const articlesCrawled = 1000;
 
@@ -70,11 +78,7 @@ function FirstRow() {
           {/* clickable icons  */}
           <div className="flex gap-x-3 items-start">
             <Image
-              src={
-                isActive === "bar"
-                  ? require("../../../assets/icons/on.chart-bar.svg")
-                  : require("../../../assets/icons/chart-bar.svg")
-              }
+              src={isActive === "bar" ? on_bar : bar}
               alt="bar chart"
               height={32}
               width={32}
@@ -86,11 +90,7 @@ function FirstRow() {
               onClick={() => showChart("bar")}
             />
             <Image
-              src={
-                isActive === "scatter"
-                  ? require("../../../assets/icons/on.chart-scatter.svg")
-                  : require("../../../assets/icons/chart-scatter.svg")
-              }
+              src={isActive === "scatter" ? on_scatter : scatter}
               alt="scatter chart"
               height={32}
               width={32}
@@ -102,11 +102,7 @@ function FirstRow() {
               onClick={() => showChart("scatter")}
             />
             <Image
-              src={
-                isActive === "line"
-                  ? require("../../../assets/icons/on.chart-line.svg")
-                  : require("../../../assets/icons/chart-line.svg")
-              }
+              src={isActive === "line" ? on_line : line}
               alt="line chart"
               height={32}
               width={32}
@@ -121,24 +117,14 @@ function FirstRow() {
           {/* date picker  */}
           <div className="flex gap-x-4">
             <div className="flex items-center gap-x-1 border-[2px] border-gray-100 rounded-md h-0 py-4 px-3">
-              <Image
-                src={require("../../../assets/icons/calendar.svg")}
-                alt=""
-                height={20}
-                width={20}
-              />
+              <Image src={calendar} alt="" height={20} width={20} />
               <DateComponent placeholder={"start date"} />
-              <Image
-                src={require("../../../assets/icons/right-arrow.svg")}
-                alt=""
-                width={20}
-              />{" "}
-              &nbsp;
+              <Image src={right_arrow} alt="" width={20} /> &nbsp;
               <DateComponent placeholder={"stop date"} />
             </div>
             <div className="flex items-start mt-2">
               <Image
-                src={require("../../../assets/icons/info.svg")}
+                src={info}
                 alt="info"
                 height={20}
                 width={20}

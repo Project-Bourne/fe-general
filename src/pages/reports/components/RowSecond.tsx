@@ -1,7 +1,9 @@
 import Image from "next/image";
-import { PolarChartComponent } from "../charts";
-import { article_sources } from "../constants";
 import ProgressBar from "@/components/ui/ProgressBar";
+import MapChart from "../charts/map";
+
+import info from "../../../assets/icons/info.svg";
+import { article_sources } from "@/utils/reports.constants";
 
 function SecondRow() {
   const LeftHandDisplay = () => {
@@ -12,16 +14,16 @@ function SecondRow() {
           {/* header text rhs  */}
           <div>
             <h3 className="md:text-[14px] text-[12px] font-light md:tracking-[.7px]">
-              ARTICLE CONFIDENCE
+              LOCATION
             </h3>
             <h3 className="md:text-[14px] text-[12px]  font-normal md:tracking-[.7px]">
-              Average confidence level of articles crawled
+              Location of articles crawled
             </h3>
           </div>
           {/* header text lhs  */}
           <div className="flex items-start ">
             <Image
-              src={require("../../../assets/icons/info.svg")}
+              src={info}
               alt="info"
               height={25}
               width={25}
@@ -32,8 +34,8 @@ function SecondRow() {
 
         {/* body and graph  */}
         <div className="border-[2px] border-sirp-lightGrey h-[300px]">
-          <div className="flex justify-center h-[350px] w-[75%] mx-auto">
-            <PolarChartComponent />
+          <div className="h-[270px]">
+            <MapChart />
           </div>
         </div>
       </div>
@@ -57,7 +59,7 @@ function SecondRow() {
           {/* header text lhs  */}
           <div className="flex items-start">
             <Image
-              src={require("../../../assets/icons/info.svg")}
+              src={info}
               alt="info"
               height={25}
               width={25}

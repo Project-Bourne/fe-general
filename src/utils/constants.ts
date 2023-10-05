@@ -9,7 +9,7 @@ export const NavBarContents = [
     name: "Documents",
     icon: "home.svg",
     id: 2,
-    route: "/home",
+    route: "/document",
   },
   // {
   //   name: "Starred",

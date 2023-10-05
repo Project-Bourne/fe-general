@@ -22,7 +22,7 @@ class SourceService {
   static async AddSource(body) {
     try {
       const response = await request2(
-        `/source`,
+        `source`,
         "POST",
         body,
         true,
@@ -37,7 +37,7 @@ class SourceService {
   static async EditSource(body) {
     try {
       const response = await request2(
-        `/source`,
+        `source`,
         "PUT",
         body,
         true,
@@ -53,7 +53,7 @@ class SourceService {
   static async DeleteSource(body) {
     try {
       const response = await request2(
-        `/source`,
+        `source`,
         "DELETE",
         body,
         true,

@@ -8,6 +8,7 @@ const UserSlice = createSlice({
     dropDownName: 'All',
     roles: [],
     deleteStatus: false,
+    reload: false,
   },
 
   reducers: {
@@ -37,6 +38,9 @@ const UserSlice = createSlice({
       setDeleteStatus: (state, action) => {
         state.deleteStatus = action.payload;
       },
+      setReload: (state, action) => {
+        state.reload = action.payload;
+      },
   },
 });
 
@@ -48,6 +52,7 @@ export const {
     setUpdatedData,
     updateSingleUser,
     setRoles,
+    setReload,
     setDeleteStatus,
 } = UserSlice.actions;
 

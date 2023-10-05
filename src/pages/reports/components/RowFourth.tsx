@@ -1,4 +1,4 @@
-import { tableBodyData } from "../constants";
+import { tableBodyData } from "@/utils/reports.constants";
 import ReportsTable from "./ReportsTable";
 
 function FourthRow({ showReportDetails }) {
