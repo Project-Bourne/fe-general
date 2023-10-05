@@ -106,18 +106,26 @@ function DropdownWithFlag(props: DropdownModel) {
     flag: "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NG.svg", // Default flag
   });
   useEffect(() => {
-    // Extract the first element of the user's country array
-    const userCountry = user?.country[0];
-    const selectedCountry = countries.find(
-      (country) => country.name === userCountry
-    );
-    if (selectedCountry) {
-      setCountry({
-        name: selectedCountry.name,
-        flag: selectedCountry.image,
-      });
+    // Check if user and user.country are defined
+    if (user && user.country && user.country.length > 0) {
+      const userCountry = user.country[0];
+      const selectedCountry = countries.find(
+        (country) => country.name === userCountry
+      );
+      if (selectedCountry) {
+        setCountry({
+          name: selectedCountry.name,
+          flag: selectedCountry.image,
+        });
+      }
     }
   }, [user]);
+  
+  
+  
+  
+  
+  
   const [filteredCountries, setFilteredCountries] = useState(countries);
   const [countrySearch, setCountrySearch] = useState("");
   const searchInput = useRef();
