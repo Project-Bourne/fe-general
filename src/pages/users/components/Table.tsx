@@ -9,7 +9,7 @@ import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import BlockModal from "./blockModal";
-import ApproveModal from "./approveModal";
+import ApproveModal from "./ApproveModal";
 import RejectModal from "./RejectModal";
 import UserService from "@/services/users";
 import { CustomModal } from "@/components/ui";

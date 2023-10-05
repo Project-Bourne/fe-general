@@ -4,7 +4,7 @@ import Image from "next/image";
 import SplitButton from "./dropdown";
 import { useState } from "react";
 import { HeaderModel } from "../../../utils/mainUsers.module";
-import AddUserModal from "./addUserModal";
+import AddUserModal from "./AddUserModal";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 
 function Header( props) {
