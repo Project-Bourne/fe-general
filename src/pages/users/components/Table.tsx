@@ -43,7 +43,6 @@ function CustomTable({
   const [isUnblocked, setIsUnblocked] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const { dropDown } = useSelector((state: any) => state?.user);
-  const [showMore, setShowMore] = useState(false);
   const [expandedRows, setExpandedRows] = useState([]);
 
   useEffect(() => {

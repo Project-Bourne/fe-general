@@ -160,7 +160,6 @@ const ProfileSettings = () => {
     if (firstname !== "" && lastname !== "") {
       try {
         const response = await UserService.updateUser(user?.uuid, {
-          password,
           country: selectedCountry.length === 0 ? country : selectedCountry,
           firstName: firstname,
           lastName: lastname,
@@ -184,8 +183,8 @@ const ProfileSettings = () => {
             })
           );
         } else {
-          NotificationService.success({
-            message: "success!",
+          NotificationService.error({
+            message: "error!",
             addedText: <p>{response.message}.</p>,
             position: "top-center",
           });
