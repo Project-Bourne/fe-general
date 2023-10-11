@@ -3,11 +3,6 @@ import Image from "next/image";
 import { Button, CustomModal } from "@/components/ui";
 
 function DeleteModal({cancelModal, handleDelete, documents}) {
-
-  const handleDeleteItme = () => {
-    handleDelete();
-    cancelModal();
-  }
   return (
     <>
     <h1 className="font-semibold text-[24px] px-2 mb-3"> Delete Document </h1>
@@ -31,7 +26,7 @@ function DeleteModal({cancelModal, handleDelete, documents}) {
       />
       <Button
         value="Yes, Delete Document"
-        onClick={handleDeleteItme}
+        onClick={handleDelete}
         classNameStyle="p-2 rounded-md text-white text-[14px] border-[2px] border-[#EF4444] mt-3"
         background="bg-[#EF4444]"
       />

@@ -14,7 +14,8 @@ import { format, set } from "date-fns";
 import { Tooltip } from "@mui/material";
 import DeleteModal from "./deleteModal";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DownloadIcon from "@mui/icons-material/Download";
 
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
@@ -25,7 +26,10 @@ function CustomTable({ tableHeaderData }) {
   const [isLoading, setIsLoading] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showView, setShowView] = useState(false);
+  const [reload, setReload] = useState(false); // This is used to reload the data after a successful delete
   const [selectedDocuments, setSelectedDocuments] = useState(null);
+  const [ViewDocument, setViewDocuments] = useState(null);
+  const [downloadLink, setDownloadLink] = useState(null);
 
   const DeleteDocuments = (id) => {
     setSelectedDocuments(id);
@@ -33,13 +37,13 @@ function CustomTable({ tableHeaderData }) {
   };
 
   const ViewDocuments = (id) => {
-    setSelectedDocuments(id);
-    setShowView(true);
+    setIsLoading(true);
+    handleViewDocument(id.uuid);
   };
 
   useEffect(() => {
     fetchData();
-  }, [showDelete]);
+  }, [reload]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -69,24 +73,31 @@ function CustomTable({ tableHeaderData }) {
     }
   };
 
- 
-
-  const handleDelete = async (id) => {
+  const handleViewDocument = async (id) => {
     try {
-      setIsLoading(true);
-      const response = await fetch(`http://192.81.213.226:81/89/api/v1/upload/remove/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `http://192.81.213.226:81/89/api/v1/download/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response?.status) {
         const responseData = await response.json();
+        const data = responseData.data.text;
+        const link = responseData.data.url;
+        setIsLoading(false);
+        setDownloadLink(link);
+        setViewDocuments(data);
+        setShowView(true);
         NotificationService.success({
           message: "Success!",
-          addedText: <p>{responseData.message}.</p>,
+          addedText: <p> file loaded successful</p>,
           position: "top-center",
         });
+        setReload(!reload);
         setShowDelete(false);
         fetchData(); // Refresh data after successful delete
       } else {
@@ -109,8 +120,86 @@ function CustomTable({ tableHeaderData }) {
       setIsLoading(false); // Set isLoading to false when the delete operation is complete
     }
   };
+
+   const handeleDownload = async () => {
+    try {
+      if (downloadLink) { 
+        const response = await fetch(
+          downloadLink, 
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 200) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'file.pdf';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          setIsLoading(false);
+          setShowView(true);
+        } else {
+          // Handle the error case
+          // You can display an error message or do something else
+        }
+      } else {
+        // Handle the case where downloadLink is missing or empty
+      }
+    } catch (error) {
+      // Handle the exception
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
-  
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(
+        `http://192.81.213.226:81/89/api/v1/upload/remove/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response?.status) {
+        const responseData = await response.json();
+        NotificationService.success({
+          message: "Success!",
+          addedText: <p>{responseData.message}.</p>,
+          position: "top-center",
+        });
+        setReload(!reload);
+        setShowDelete(false);
+        fetchData(); // Refresh data after successful delete
+      } else {
+        const responseData = await response.json();
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>Something happened. Please try again</p>,
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      NotificationService.error({
+        message: "Error!",
+        addedText: (
+          <p>{`${error.message} Something happened. Please try again`}</p>
+        ),
+        position: "top-center",
+      });
+    } finally {
+      setIsLoading(false); // Set isLoading to false when the delete operation is complete
+    }
+  };
 
   const cancelModal = () => {
     setShowDelete(false);
@@ -187,7 +276,7 @@ function CustomTable({ tableHeaderData }) {
                     </TableCell>{" "}
                     <TableCell className="text-xs capitalize">
                       <div className="flex gap-10 items-center mr-10">
-                      <Tooltip title="view document">
+                        <Tooltip title="view document">
                           <VisibilityIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => ViewDocuments(item)}
@@ -250,6 +339,23 @@ function CustomTable({ tableHeaderData }) {
             cancelModal={cancelModal}
             documents={selectedDocuments}
           />
+        </CustomModal>
+      )}
+      {showView && (
+        <CustomModal
+          style="bg-white md:w-[50%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-5 px-5 pb-5"
+          closeModal={() => setShowView(false)}
+        >
+          <Tooltip title="Download document">
+            <DownloadIcon
+              className="cursor-pointer"
+              onClick={() => handeleDownload()}
+            />
+          </Tooltip>
+
+          <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+            <p className="text-md text-justify">{ViewDocument}</p>
+          </div>
         </CustomModal>
       )}
     </TableContainer>

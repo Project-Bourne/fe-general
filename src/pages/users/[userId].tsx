@@ -12,6 +12,7 @@ import user_icon from "../../assets/icons/userIcon.svg";
 import delete_icon from "../../assets/icons/delete.svg";
 import edit_icon from "../../assets/icons/edit.svg";
 import Multiselect from "multiselect-react-dropdown";
+import { ro } from "date-fns/locale";
 const countriesData = require("../../utils/countries.json");
 
 const ProfileSettings = () => {
@@ -172,7 +173,7 @@ const ProfileSettings = () => {
             addedText: <p>{response.message}.</p>,
             position: "top-center",
           });
-
+          router.push("/users");
           dispatch(
             setUpdatedData({
               firstName: firstname,
