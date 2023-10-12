@@ -1,6 +1,6 @@
 import { Button, CustomModal } from "@/components/ui";
 import Image from "next/image";
-import SplitButton from "./dropdown";
+// import SplitButton from "./dropdown";
 import { use, useEffect, useState } from "react";
 import RolesService from "@/services/roles";
 import NotificationService from "@/services/notification.service";
@@ -34,7 +34,7 @@ function Header() {
       if (response.status) {
         NotificationService.success({
           message: "Success!",
-          addedText: <p>Source updated successfully</p>,
+          addedText: <p>New Roles added successfully</p>,
           position: "top-center",
         });
         setIsLoading(false);

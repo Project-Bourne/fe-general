@@ -266,6 +266,7 @@ function CustomTable({ tableHeaderData }) {
                       {item?.name}
                     </TableCell>
                     <TableCell className="text-xs">{item?.type}</TableCell>
+                    {/* <TableCell className="text-xs text-center">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell> */}
                     <TableCell className="text-xs">
                       {item?.createdAt
                         ? format(
@@ -275,7 +276,7 @@ function CustomTable({ tableHeaderData }) {
                         : ""}
                     </TableCell>{" "}
                     <TableCell className="text-xs capitalize">
-                      <div className="flex gap-10 items-center mr-10">
+                      <div className="flex items-center gap-5">
                         <Tooltip title="view document">
                           <VisibilityIcon
                             className="bg-transparent text-xs hover:cursor-pointer"

@@ -213,11 +213,11 @@ function CustomTable({ tableHeaderData }) {
                       <div key={permissionIndex}>{permission}</div>
                     ))}
                   </TableCell>
-                  <TableCell className="text-xs capitalize">
+                  <TableCell className="text-md capitalize font-bold">
                       {item?.level}
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      <div className="flex gap-x-3 items-center">
+                      <div className="flex gap-10 items-center">
                         <Tooltip title="Edit">
                         <EditIcon
                           className="bg-transparent text-xs hover:cursor-pointer"
@@ -271,7 +271,7 @@ function CustomTable({ tableHeaderData }) {
           </TableBody>
         )}
       </Table>
-      {selectedRoles && showEdit && (
+      {/* {selectedRoles && showEdit && (
         <CustomModal
           style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
           closeModal={() => setShowEdit(false)}
@@ -282,7 +282,7 @@ function CustomTable({ tableHeaderData }) {
             roles={selectedRoles}
           />
         </CustomModal>
-      )}
+      )} */}
       {selectedRoles && showDelete && (
         <CustomModal
           style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
