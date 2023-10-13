@@ -5,11 +5,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import Loader from "@/components/ui/Loader";
 import RolesService from "@/services/roles";
 import { Tooltip } from "@mui/material";
@@ -17,13 +16,9 @@ import EditeModal from "./EditModal";
 import DeleteModal from "./deleteModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Header from "./Header";
 
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
-  const [tableRange, setTableRange] = useState([]);
-  const [slice, setSlice] = useState([]);
-  const [page, setPage] = useState(1);
   const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showEdit, setShowEdit] = useState(false);
@@ -149,26 +144,6 @@ function CustomTable({ tableHeaderData }) {
     setShowDelete(false);
   };
 
-  //   table footer
-  useEffect(() => {
-    if (slice.length < 1 && page !== 1) {
-      setPage(page - 1);
-    }
-  }, [slice, page, setPage]);
-
-  // handle paginate buttons
-  const handlePaginate = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    type: string
-  ) => {
-    event.preventDefault();
-    if (type === "next") {
-      if (page < tableRange.length) setPage(page + 1);
-    }
-    if (type === "back") {
-      if (page > 1) setPage(page - 1);
-    }
-  };
 
   return (
     <TableContainer component={Paper} className="shadow-sm border-r-0">
@@ -241,30 +216,6 @@ function CustomTable({ tableHeaderData }) {
                 </>
               ))}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={5}>
-                  <div className="flex justify-end px-[5rem]">
-                    {page > 1 && (
-                      <>
-                        <button onClick={(e) => handlePaginate(e, "back")}>
-                          &lt;
-                        </button>{" "}
-                        &nbsp;&nbsp;
-                      </>
-                    )}
-                    Page {page} of {tableRange.length} &nbsp;&nbsp;
-                    {page !== tableRange.length && (
-                      <>
-                        <button onClick={(e) => handlePaginate(e, "next")}>
-                          &gt;
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableFooter>
           </>
         ) : (
           <TableBody>
