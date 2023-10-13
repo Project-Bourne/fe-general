@@ -5,7 +5,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { TableFooter } from "@mui/material";
+import { TableFooter, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import BlockModal from "./blockModal";
@@ -18,11 +18,11 @@ import DeleteModal from "./deleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import UnblockModal from "./UnblockModal";
 import Loader from "@/components/ui/Loader";
+import EditIcon from "@mui/icons-material/Edit";
+
 
 // set number of items to be displayed per pag
-function CustomTable({
-  tableHeaderData,
-}) {
+function CustomTable({ tableHeaderData }) {
   const dispatch = useDispatch();
   const { deleteStatus } = useSelector((state: any) => state.user);
   const [tableRange, setTableRange] = useState([]);
@@ -94,15 +94,16 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
-        position: "top-center"
+        position: "top-center",
       });
       setIsBlocked(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: 
-          <p>{response.message}. Something went wrong, please try again</p>,
-          position: "top-center"
+        addedText: (
+          <p>{response.message}. Something went wrong, please try again</p>
+        ),
+        position: "top-center",
       });
     }
     setShowBlock(false);
@@ -115,15 +116,16 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
-        position: "top-center"
+        position: "top-center",
       });
       setIsDeleted(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: 
-          <p>{response.message}. Something went wrong, please try again</p>,
-          position: "top-center"
+        addedText: (
+          <p>{response.message}. Something went wrong, please try again</p>
+        ),
+        position: "top-center",
       });
     }
     setShowDelete(false);
@@ -136,15 +138,16 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
-        position: "top-center"
+        position: "top-center",
       });
       setIsApproved(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: 
-          <p>{response.message}. Something went wrong, please try again</p>,
-          position: "top-center"
+        addedText: (
+          <p>{response.message}. Something went wrong, please try again</p>
+        ),
+        position: "top-center",
       });
     }
     setShowApprove(false);
@@ -157,20 +160,21 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
-        position: "top-center"
+        position: "top-center",
       });
       setIsUnblocked(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: 
-          <p>{response.message}. Something went wrong, please try again</p>,
-          position: "top-center"
+        addedText: (
+          <p>{response.message}. Something went wrong, please try again</p>
+        ),
+        position: "top-center",
       });
     }
     setShowUnblock(false);
   };
-  
+
   const handleReject = async (id) => {
     const response = await UserService.rejecteUser(id);
     console.log(response);
@@ -178,16 +182,16 @@ function CustomTable({
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
-        position: "top-center"
+        position: "top-center",
       });
       setIsRejected(true);
     } else {
       NotificationService.error({
         message: "error!",
-        addedText: 
-          <p>{response.message}. Something went wrong, please try again</p>,
-          position: "top-center"
-        ,
+        addedText: (
+          <p>{response.message}. Something went wrong, please try again</p>
+        ),
+        position: "top-center",
       });
     }
     setShowReject(false);
@@ -268,35 +272,39 @@ function CustomTable({
           </div>
         </CustomModal>
       )}
-      <Table sx={{ minWidth: 650 }}>
-        <TableHead className="bg-gray-100">
-          <TableRow>
-            {tableHeaderData?.map((title: string, index: number) => (
-              <TableCell
-                key={index}
-                align={`${!title[0] ? "right" : "left"}`}
-                scope="col"
-              >
-                {title}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+      <div className="mt-[3.3rem] fixed">
+        <Table sx={{ minWidth: 1150 }}>
+          <TableHead className="bg-gray-100">
+            <TableRow>
+              {tableHeaderData?.map((title: string, index: number) => (
+                <TableCell
+                  key={index}
+                  align={`${!title[0] ? "right" : "left"}`}
+                  scope="col"
+                >
+                  {title}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+        </Table>
+      </div>
+      <Table sx={{ minWidth: 650 }} className="mt-[7rem]">
         {Array.isArray(users) && users.length > 0 ? (
           <>
             <TableBody>
               {users?.map((item, index) => (
                 <>
                   <TableRow key={item?.uuid} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline">
+                    <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline w-[17.3rem]">
                       <Link href={`users/${item?.uuid}`}>
                         {item?.firstName} {item?.lastName}
                       </Link>
                     </TableCell>
-                    <TableCell className="text-xs capitalize">
+                    <TableCell className="text-xs capitalize w-[12rem]">
                       {item?.role?.roleName}
                     </TableCell>
-                    <TableCell className="text-xs capitalize">
+                    <TableCell className="text-xs capitalize w-[18.5rem]">
                       {item.country.map((countryName, countryIndex) => (
                         <span key={countryIndex}>
                           {countryIndex < 2 || expandedRows.includes(index)
@@ -318,7 +326,7 @@ function CustomTable({
                       )}
                     </TableCell>
 
-                    <TableCell align="right">
+                    <TableCell align="right" className="w-[12rem]">
                       <div className="flex gap-x-[0.2rem] items-center">
                         <div
                           className={`rounded-full w-2 h-2 ${
@@ -362,6 +370,13 @@ function CustomTable({
                           >
                             Delete
                           </button>
+                          <div>
+                            <Tooltip title="Edit">
+                            <Link href={`users/${item?.uuid}`}>
+                              <EditIcon className="bg-transparent text-xs hover:cursor-pointer" />
+                            </Link>
+                            </Tooltip>
+                          </div>
                         </div>
                       ) : item.delete ? (
                         // User is not verified and deleted

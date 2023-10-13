@@ -121,24 +121,21 @@ function CustomTable({ tableHeaderData }) {
     }
   };
 
-   const handeleDownload = async () => {
+  const handeleDownload = async () => {
     try {
-      if (downloadLink) { 
-        const response = await fetch(
-          downloadLink, 
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+      if (downloadLink) {
+        const response = await fetch(downloadLink, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (response.status === 200) {
           const blob = await response.blob();
           const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
+          const a = document.createElement("a");
           a.href = url;
-          a.download = 'file.pdf';
+          a.download = "file.pdf";
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
@@ -157,7 +154,6 @@ function CustomTable({ tableHeaderData }) {
       setIsLoading(false);
     }
   };
-  
 
   const handleDelete = async (id) => {
     try {
@@ -242,32 +238,36 @@ function CustomTable({ tableHeaderData }) {
           </div>
         </CustomModal>
       )}
-      <Table sx={{ minWidth: 650 }}>
-        <TableHead className="bg-gray-100">
-          <TableRow>
-            {tableHeaderData?.map((title: string, index: number) => (
-              <TableCell
-                key={index}
-                align={`${!title[0] ? "right" : "left"}`}
-                scope="col"
-              >
-                {title}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+      <div className="mt-[3.3rem] fixed">
+        <Table sx={{ minWidth: 1150 }}>
+          <TableHead className="bg-gray-100">
+            <TableRow>
+              {tableHeaderData?.map((title: string, index: number) => (
+                <TableCell
+                  key={index}
+                  align={`${!title[0] ? "right" : "left"}`}
+                  scope="col"
+                >
+                  {title}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+        </Table>
+      </div>
+      <Table sx={{ minWidth: 650 }} className="mt-[8rem]">
         {Array.isArray(documents) && documents.length > 0 ? (
           <>
             <TableBody>
               {documents?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize">
+                    <TableCell className="text-xs capitalize w-[20rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs">{item?.type}</TableCell>
-                    {/* <TableCell className="text-xs text-center">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell> */}
-                    <TableCell className="text-xs">
+                    <TableCell className="text-xs  w-[6rem]">{item?.type}</TableCell>
+                    <TableCell className="text-xs text-center w-[12rem]">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell>
+                    <TableCell className="text-xs w-[10rem]">
                       {item?.createdAt
                         ? format(
                             new Date(item.createdAt),
@@ -275,7 +275,7 @@ function CustomTable({ tableHeaderData }) {
                           )
                         : ""}
                     </TableCell>{" "}
-                    <TableCell className="text-xs capitalize">
+                    <TableCell className="text-xs capitalize ">
                       <div className="flex items-center gap-5">
                         <Tooltip title="view document">
                           <VisibilityIcon

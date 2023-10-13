@@ -7,23 +7,19 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
-import { CustomModal} from "@/components/ui";
+import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
-import { useDispatch, useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import Loader from "@/components/ui/Loader";
 import SourceService from "@/services/sources";
-import {Tooltip} from "@mui/material";
+import { Tooltip } from "@mui/material";
 import EditeModal from "@/pages/sources/components/EditModal";
 import DeleteModal from "./deleteModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 // set number of items to be displayed per pag
-function CustomTable({
-  tableHeaderData,
-  
-}) {
-  const dispatch = useDispatch();
+function CustomTable({ tableHeaderData }) {
   const [tableRange, setTableRange] = useState([]);
   const [slice, setSlice] = useState([]);
   const [page, setPage] = useState(1);
@@ -40,7 +36,7 @@ function CustomTable({
   };
 
   const DeleteSources = (source) => {
-   setSelectedSource(source);
+    setSelectedSource(source);
     setShowDelete(true);
   };
 
@@ -102,7 +98,7 @@ function CustomTable({
       setIsLoading(false);
     }
   };
-  
+
   const handleDelete = async (deletedSource) => {
     setIsLoading(true);
     try {
@@ -173,49 +169,53 @@ function CustomTable({
           </div>
         </CustomModal>
       )}
-      <Table sx={{ minWidth: 650 }}>
-        <TableHead className="bg-gray-100">
-          <TableRow>
-            {tableHeaderData?.map((title: string, index: number) => (
-              <TableCell
-                key={index}
-                align={`${!title[0] ? "right" : "left"}`}
-                scope="col"
-              >
-                {title}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+      <div className="mt-[3.3rem] fixed">
+        <Table sx={{ minWidth: 1150 }}>
+          <TableHead className="bg-gray-100">
+            <TableRow>
+              {tableHeaderData?.map((title: string, index: number) => (
+                <TableCell
+                  key={index}
+                  align={`${!title[0] ? "right" : "left"}`}
+                  scope="col"
+                >
+                  {title}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+        </Table>
+      </div>
+      <Table sx={{ minWidth: 650 }} className="mt-[6.8rem] border">
         {Array.isArray(source) && source.length > 0 ? (
           <>
             <TableBody>
               {source?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize">
+                    <TableCell className="text-xs capitalize w-[18.6rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs">{item?.url}</TableCell>
-                    <TableCell className="text-xs capitalize">
+                    <TableCell className="text-xs w-[17.8rem]">{item?.url}</TableCell>
+                    <TableCell className="text-xs capitalize w-[12rem]">
                       {item?.weight}
                     </TableCell>
-                    <TableCell className="text-xs capitalize">
+                    <TableCell className="text-xs capitalize w-[10.6rem]">
                       {item.crawl ? "true" : "false"}
                     </TableCell>
                     <TableCell className="text-xs capitalize">
                       <div className="flex gap-x-3 items-center">
                         <Tooltip title="Edit">
-                        <EditIcon
-                          className="bg-transparent text-xs hover:cursor-pointer"
-                          onClick={() => EditSources(item)}
-                        />
+                          <EditIcon
+                            className="bg-transparent text-xs hover:cursor-pointer"
+                            onClick={() => EditSources(item)}
+                          />
                         </Tooltip>
-                      <Tooltip title="Delete">
-                        <DeleteIcon
-                          className="bg-transparent text-xs hover:cursor-pointer"
-                          onClick={() => DeleteSources(item)}
-                        />
+                        <Tooltip title="Delete">
+                          <DeleteIcon
+                            className="bg-transparent text-xs hover:cursor-pointer"
+                            onClick={() => DeleteSources(item)}
+                          />
                         </Tooltip>
                       </div>
                     </TableCell>
@@ -264,7 +264,7 @@ function CustomTable({
           closeModal={() => setShowEdit(false)}
         >
           <EditeModal
-            handleEdit={handleEdit} 
+            handleEdit={handleEdit}
             cancelEditModal={cancelModal}
             source={selectedSource}
           />

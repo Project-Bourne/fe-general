@@ -6,10 +6,10 @@ import Header from "./components/Header";
 const Users = () => {
   return (
     <div>
-      <div className="fixed md:w-[80%] z-20 bg-white pt-[8rem] mt-[-10rem]">
+      <div className="mt-[-0.9rem] z-30 fixed md:w-[80%] bg-white">
         <Header />
       </div>
-      <div className="">
+      <div className="z-10">
         <SourceList />
       </div>
     </div>

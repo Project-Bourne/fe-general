@@ -17,6 +17,7 @@ import EditeModal from "./EditModal";
 import DeleteModal from "./deleteModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Header from "./Header";
 
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
@@ -183,7 +184,9 @@ function CustomTable({ tableHeaderData }) {
           </div>
         </CustomModal>
       )}
-      <div className="fixed mt-[2.2rem]">
+      {/* header section  */}
+    
+      <div className="fixed mt-[3.4rem]">
         <Table sx={{ minWidth: 1150 }} className="">
           <TableHead className="bg-gray-100">
             <TableRow>
@@ -200,7 +203,7 @@ function CustomTable({ tableHeaderData }) {
           </TableHead>
         </Table>
       </div>
-      <Table sx={{ minWidth: 650 }} className="mt-[5.5rem]">
+      <Table sx={{ minWidth: 650 }} className="mt-[6.9rem] pt-[5rem]">
         {Array.isArray(roles) && roles.length > 0 ? (
           <>
             <TableBody>
