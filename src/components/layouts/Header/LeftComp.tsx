@@ -16,7 +16,7 @@ export const LeftComp = (props) => {
         <div className="ml-3 bg-sirp-lightGrey w-full self-center">
           <input
             type="search"
-            placeholder="Search IRP"
+            placeholder="Search"
             className="w-full bg-sirp-lightGrey border-none outline-none text-[13px]"
           />
         </div>

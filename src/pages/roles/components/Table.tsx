@@ -7,12 +7,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
-import { CustomModal} from "@/components/ui";
+import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
-import { useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "@/components/ui/Loader";
 import RolesService from "@/services/roles";
-import {Tooltip} from "@mui/material";
+import { Tooltip } from "@mui/material";
 import EditeModal from "./EditModal";
 import DeleteModal from "./deleteModal";
 import EditIcon from "@mui/icons-material/Edit";
@@ -28,7 +28,7 @@ function CustomTable({ tableHeaderData }) {
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState({});
-  const { reload } = useSelector((state:any) => state?.user);
+  const { reload } = useSelector((state: any) => state?.user);
 
   const EditRoles = (roles) => {
     setSelectedRoles(roles);
@@ -71,50 +71,48 @@ function CustomTable({ tableHeaderData }) {
     }
   };
 
-  // const handleEdit = async (editedSource) => {
-  //   console.log(editedSource);
-  //   setIsLoading(true);
-  //   try {
-  //     // Ensure that the editedSource object contains the required properties
-  //     const editedRole = {
-  //       roleName: editedSource.roleName,
-  //       level: editedSource.level,
-  //       permissions: editedSource.permissions,
-  //     };
-  
-  //     // Add the ID of the role you want to edit (replace 'YOUR_ROLE_ID' with the actual ID)
-  //     const roleId = 'YOUR_ROLE_ID';
-  
-  //     // Call your service to edit the role with the updated role object and the ID
-  //     const response = await RolesService.EditRoles(roleId, editedRole);
-  
-  //     if (response.status) {
-  //       NotificationService.success({
-  //         message: "Success!",
-  //         addedText: <p>Role updated successfully</p>,
-  //         position: "top-center",
-  //       });
-  //       setIsLoading(false);
-  //       fetchData(); // Refetch the roles list or update the state as needed
-  //     } else {
-  //       NotificationService.error({
-  //         message: "Error!",
-  //         addedText: <p>Something happened. Please try again</p>,
-  //         position: "top-center",
-  //       });
-  //       setIsLoading(false);
-  //     }
-  //   } catch (error) {
-  //     NotificationService.error({
-  //       message: "Error!",
-  //       addedText: <p>{error}, Something happened. Please try again</p>,
-  //       position: "top-center",
-  //     });
-  //     setIsLoading(false);
-  //   }
-  // };
-  
-  
+  const handleEdit = async (editedSource) => {
+    const roleId = editedSource.uuid;
+
+    setIsLoading(true);
+    try {
+      // Ensure that the editedSource object contains the required properties
+      const editedRole = {
+        roleName: editedSource.roleName,
+        level: editedSource.level,
+        permissions: editedSource.permissions,
+      };
+
+      // Add the ID of the role you want to edit (replace 'YOUR_ROLE_ID' with the actual ID)
+      // Call your service to edit the role with the updated role object and the ID
+      const response = await RolesService.EditRoles(roleId, editedRole);
+
+      if (response.status) {
+        NotificationService.success({
+          message: "Success!",
+          addedText: <p>Role updated successfully</p>,
+          position: "top-center",
+        });
+        setIsLoading(false);
+        fetchData(); // Refetch the roles list or update the state as needed
+      } else {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>Something happened. Please try again</p>,
+          position: "top-center",
+        });
+        setIsLoading(false);
+      }
+    } catch (error) {
+      NotificationService.error({
+        message: "Error!",
+        addedText: <p>{error}, Something happened. Please try again</p>,
+        position: "top-center",
+      });
+      setIsLoading(false);
+    }
+  };
+
   const handleDelete = async (deletedRoles) => {
     setIsLoading(true);
     try {
@@ -185,50 +183,54 @@ function CustomTable({ tableHeaderData }) {
           </div>
         </CustomModal>
       )}
-      <Table sx={{ minWidth: 650 }}>
-        <TableHead className="bg-gray-100">
-          <TableRow>
-            {tableHeaderData?.map((title: string, index: number) => (
-              <TableCell
-                key={index}
-                align={`${!title[0] ? "right" : "left"}`}
-                scope="col"
-              >
-                {title}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+      <div className="fixed mt-[2.2rem]">
+        <Table sx={{ minWidth: 1150 }} className="">
+          <TableHead className="bg-gray-100">
+            <TableRow>
+              {tableHeaderData?.map((title: string, index: number) => (
+                <TableCell
+                  key={index}
+                  align={`${!title[0] ? "right" : "left"}`}
+                  scope="col"
+                >
+                  {title}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+        </Table>
+      </div>
+      <Table sx={{ minWidth: 650 }} className="mt-[5.5rem]">
         {Array.isArray(roles) && roles.length > 0 ? (
           <>
             <TableBody>
               {roles?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize">
+                    <TableCell className="text-xs capitalize w-[20.5rem]">
                       {item?.roleName}
                     </TableCell>
-                    <TableCell className="text-xs capitalize font-bold">
-                    {item.permissions.map((permission, permissionIndex) => (
-                      <div key={permissionIndex}>{permission}</div>
-                    ))}
-                  </TableCell>
-                  <TableCell className="text-md capitalize font-bold">
+                    <TableCell className="text-xs capitalize font-bold  w-[22.5rem]">
+                      {item.permissions.map((permission, permissionIndex) => (
+                        <div key={permissionIndex}>{permission}</div>
+                      ))}
+                    </TableCell>
+                    <TableCell className="text-md capitalize font-bold  w-[12.5rem]">
                       {item?.level}
                     </TableCell>
                     <TableCell className="text-xs capitalize">
-                      <div className="flex gap-10 items-center">
+                      <div className="flex gap-5 items-center">
                         <Tooltip title="Edit">
-                        <EditIcon
-                          className="bg-transparent text-xs hover:cursor-pointer"
-                          onClick={() => EditRoles(item)}
-                        />
+                          <EditIcon
+                            className="bg-transparent text-xs hover:cursor-pointer"
+                            onClick={() => EditRoles(item)}
+                          />
                         </Tooltip>
-                      <Tooltip title="Delete">
-                        <DeleteIcon
-                          className="bg-transparent text-xs hover:cursor-pointer"
-                          onClick={() => DeleteRoles(item)}
-                        />
+                        <Tooltip title="Delete">
+                          <DeleteIcon
+                            className="bg-transparent text-xs hover:cursor-pointer"
+                            onClick={() => DeleteRoles(item)}
+                          />
                         </Tooltip>
                       </div>
                     </TableCell>
@@ -271,18 +273,18 @@ function CustomTable({ tableHeaderData }) {
           </TableBody>
         )}
       </Table>
-      {/* {selectedRoles && showEdit && (
+      {selectedRoles && showEdit && (
         <CustomModal
           style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
           closeModal={() => setShowEdit(false)}
         >
           <EditeModal
-            handleEdit={handleEdit} 
+            handleEdit={handleEdit}
             cancelEditModal={cancelModal}
             roles={selectedRoles}
           />
         </CustomModal>
-      )} */}
+      )}
       {selectedRoles && showDelete && (
         <CustomModal
           style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
