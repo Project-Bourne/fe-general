@@ -116,7 +116,7 @@ function CustomTable({ tableHeaderData }) {
       if (response.status) {
         NotificationService.success({
           message: "Success!",
-          addedText: <p>Role updated successfully</p>,
+          addedText: <p>Role deleted successfully</p>,
           position: "top-center",
         });
         setIsLoading(false);

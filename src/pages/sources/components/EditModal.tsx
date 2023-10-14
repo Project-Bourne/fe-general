@@ -68,7 +68,7 @@ function EditModal({ cancelEditModal, handleEdit, source }) {
             <select
               className="w-full my-2 border p-2 rounded-[.5rem]"
               name="crawl"
-              value={editedSource.crawl.toString()} // Convert boolean to string
+              value={editedSource.crawl} // Convert boolean to string
               onChange={handleChange}
             >
               <option value="true">True</option>
