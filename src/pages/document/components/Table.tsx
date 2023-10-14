@@ -238,12 +238,12 @@ function CustomTable({ tableHeaderData }) {
               {documents?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize w-[20rem]">
+                    <TableCell className="text-xs capitalize w-[25rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs  w-[6rem]">{item?.type}</TableCell>
-                    <TableCell className="text-xs text-center w-[12rem]">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell>
-                    <TableCell className="text-xs w-[10rem]">
+                    <TableCell className="text-xs   w-[23rem]">{item?.type}</TableCell>
+                     {/* <TableCell className="text-xs text-center w-[12rem]">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell> */}
+                    <TableCell className="text-xs w-[11rem] ">
                       {item?.createdAt
                         ? format(
                             new Date(item.createdAt),
