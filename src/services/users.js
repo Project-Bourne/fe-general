@@ -38,7 +38,7 @@ class UserService {
   static async getUserRoles() {
     try {
       const response = await request(
-        `roles`,
+        `roless`,
         "GET",
         {},
         true,

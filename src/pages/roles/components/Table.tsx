@@ -46,7 +46,7 @@ function CustomTable({ tableHeaderData }) {
       setIsLoading(true); // Set isLoading to true before making the request
       const response = await RolesService.getAllRoles();
       if (response.status) {
-        console.log(response.data);
+        console.log(response.data, 'response.data');
         const data = response.data;
         setRoles(data);
       } else {
@@ -229,7 +229,7 @@ function CustomTable({ tableHeaderData }) {
       </Table>
       {selectedRoles && showEdit && (
         <CustomModal
-          style="bg-white md:w-[30%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
+          style="bg-white md:w-[30%] w-[90%] relative top-[10%] rounded-xl mx-auto pt-3 px-3 pb-5"
           closeModal={() => setShowEdit(false)}
         >
           <EditeModal

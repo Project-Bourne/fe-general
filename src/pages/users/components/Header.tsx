@@ -2,21 +2,53 @@ import { Button, CustomModal } from "@/components/ui";
 import UserService from "@/services/users";
 import Image from "next/image";
 import SplitButton from "./dropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeaderModel } from "../../../utils/mainUsers.module";
 import AddUserModal from "./AddUserModal";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import Loader from "@/components/ui/Loader";
+import { setAddReload } from "@/redux/reducer/userSlice";
+import { useDispatch } from "react-redux";
 
 function Header( props) {
+  const dispatch = useDispatch();
   const [toggleModal, setToggleModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const closeModalHandler = () => {
     setToggleModal(false);
   };
 
+  const openModalHandler = () => {
+    setToggleModal(true);
+    dispatch(setAddReload(false));
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }
+  , [isLoading]);
+
+
+
   return (
     <>
       <div className="flex justify-between pl-5 pr-2  py-3">
+      {isLoading && (
+        <CustomModal
+          style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
+          closeModal={() => {
+            setIsLoading(false);
+          }}
+        >
+          <div className="flex flex-row justify-center items-center">
+            <Loader />
+          </div>
+        </CustomModal>
+      )}
         <h1 className="text-[30px]">Users</h1>
         <div
           className={`justfiy-content-end flex gap-x-3 
@@ -31,7 +63,7 @@ function Header( props) {
 
           <Button
             className="flex gap-x-1 items-center"
-            onClick={() => setToggleModal(true)}
+            onClick={openModalHandler}
             size="sm"
             background="bg-sirp-primary"
             value={

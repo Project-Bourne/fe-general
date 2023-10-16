@@ -23,7 +23,7 @@ import EditIcon from "@mui/icons-material/Edit";
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
   const dispatch = useDispatch();
-  const { deleteStatus } = useSelector((state: any) => state.user);
+  const { deleteStatus, addReload, dropDown  } = useSelector((state: any) => state.user);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -33,55 +33,42 @@ function CustomTable({ tableHeaderData }) {
   const [showUnblock, setShowUnblock] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   //this state is to reload the table
-  const [isBlocked, setIsBlocked] = useState(false);
-  const [isRejected, setIsRejected] = useState(false);
-  const [isApproved, setIsApproved] = useState(false);
-  const [isUnblocked, setIsUnblocked] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
-  const { dropDown } = useSelector((state: any) => state?.user);
+  // const { } = useSelector((state: any) => state?.user);
   const [expandedRows, setExpandedRows] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    const fetchData = async () => {
-      try {
-        if (isMostlyNumbers(dropDown)) {
-          // It's mostly numbers, treat it as a number
-          const response = await UserService.filterByRoles(dropDown);
-          const data = response.data;
-          setUsers(data);
-        } else {
-          // It's mostly text, treat it as text
-          const response = await UserService.filterByAction(dropDown);
-          const data = response.data;
-          setUsers(data);
-        }
-        setIsLoading(false); // Set isLoading to false when data fetching is complete
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false); // Set isLoading to false in case of an error
-      }
-    };
-
-    function isMostlyNumbers(value) {
-      // Count the number of digits in the value
-      const digitCount = (value.match(/\d/g) || []).length;
-      const letterCount = (value.match(/[a-zA-Z]/g) || []).length;
-
-      // If there are more digits than letters, consider it mostly numbers
-      return digitCount >= letterCount;
-    }
-
     fetchData(); // Call the async function
-  }, [
-    dispatch,
-    dropDown,
-    isBlocked,
-    isRejected,
-    isApproved,
-    isUnblocked,
-    isDeleted,
-  ]);
+  }, [dropDown, addReload]);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      if (isMostlyNumbers(dropDown)) {
+        // It's mostly numbers, treat it as a number
+        const response = await UserService.filterByRoles(dropDown);
+        const data = response.data;
+        setUsers(data);
+      } else {
+        // It's mostly text, treat it as text
+        const response = await UserService.filterByAction(dropDown);
+        const data = response.data;
+        setUsers(data);
+      }
+      setIsLoading(false); // Set isLoading to false when data fetching is complete
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false); // Set isLoading to false in case of an error
+    }
+  };
+
+  const isMostlyNumbers = (value) => {
+    // Count the number of digits in the value
+    const digitCount = (value.match(/\d/g) || []).length;
+    const letterCount = (value.match(/[a-zA-Z]/g) || []).length;
+  
+    // If there are more digits than letters, consider it mostly numbers
+    return digitCount >= letterCount;
+  };
 
   const handleBlock = async (id) => {
     const response = await UserService.blockUser(id);
@@ -92,7 +79,6 @@ function CustomTable({ tableHeaderData }) {
         addedText: <p>{response.message}.</p>,
         position: "top-center",
       });
-      setIsBlocked(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -103,6 +89,7 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowBlock(false);
+    fetchData()
   };
 
   const handleDelete = async (id) => {
@@ -114,7 +101,6 @@ function CustomTable({ tableHeaderData }) {
         addedText: <p>{response.message}.</p>,
         position: "top-center",
       });
-      setIsDeleted(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -125,6 +111,7 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowDelete(false);
+    fetchData()
   };
 
   const handleApprove = async (id) => {
@@ -136,7 +123,6 @@ function CustomTable({ tableHeaderData }) {
         addedText: <p>{response.message}.</p>,
         position: "top-center",
       });
-      setIsApproved(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -147,18 +133,17 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowApprove(false);
+    fetchData()
   };
 
   const handleUnblock = async (id) => {
     const response = await UserService.unBlockUser(id);
-    console.log(response);
     if (response.status) {
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
         position: "top-center",
       });
-      setIsUnblocked(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -169,18 +154,17 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowUnblock(false);
+    fetchData()
   };
 
   const handleReject = async (id) => {
     const response = await UserService.rejecteUser(id);
-    console.log(response);
     if (response.status) {
       NotificationService.success({
         message: "success!",
         addedText: <p>{response.message}.</p>,
         position: "top-center",
       });
-      setIsRejected(true);
     } else {
       NotificationService.error({
         message: "error!",
@@ -191,6 +175,7 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowReject(false);
+    fetchData()
   };
 
   const cancelblock = () => {

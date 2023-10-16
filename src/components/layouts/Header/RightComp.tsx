@@ -100,7 +100,7 @@ function RightComp() {
         {/* line break */}
         <div className="h-[100%] w-[0.5px] bg-sirp-grey hidden md:block" />
 
-        <div className="ml-3 bg-sirp-lightGrey w-full self-center hidden md:block">
+        <div className="ml-3 bg-sirp-lightGrey w-full self-center hidden md:block" onClick={()=>router.push("http://192.81.213.226:30/settings/profile")} >
           <h2 className="text-sirp-grey text-[13px] capitalize">
             {userInfo?.firstName && useTruncate(userName(), 14)}
           </h2>
@@ -118,10 +118,10 @@ function RightComp() {
         />
       </div>
       {dropdown && (
-        <div className="absolute bg-sirp-lightGrey text-black text-[13px] border py-2 px-2 w-[90px] text-center top-[5rem] md:mr-[15rem] rounded-lg items-center justify-center">
-          <p className="pb-1  border-b border-black cursor-pointer" onClick={()=>router.push("http://192.81.213.226:30/home")}>Go to IRP</p>
+        <div className="absolute bg-sirp-lightGrey text-black flex flexrow text-[13px] border w-[10rem] text-center top-[5rem] rounded-lg items-center justify-around">
+          <p className="cursor-pointer text-sirp-primary" onClick={()=>router.push("http://192.81.213.226:30/home")}>Go to IRP</p>
 
-          <p onClick={handleLogout} className="cursor-pointer pt-1">
+          <p onClick={handleLogout} className="cursor-pointer text-red-500">
             Log Out
           </p>
         </div>

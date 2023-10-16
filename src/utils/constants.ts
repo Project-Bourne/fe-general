@@ -35,12 +35,12 @@ export const NavBarContents = [
     id: 5,
     route: "/roles",
   },
-  {
-    name: "Settings",
-    icon: "settings.svg",
-    id: 6,
-    route: "http://192.81.213.226:30/settings/profile"
-  },
+  // {
+  //   name: "Settings",
+  //   icon: "settings.svg",
+  //   id: 6,
+  //   route: "http://192.81.213.226:30/settings/profile"
+  // },
 ];
 
 export const SettingsData = [

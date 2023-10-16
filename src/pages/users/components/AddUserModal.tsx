@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { DropdownWithFlag } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
 import UserService from "@/services/users";
+import { setAddReload } from "@/redux/reducer/userSlice";
+import { useDispatch } from "react-redux";
 
 const AddUserModal = (props) => {
+  const dispatch = useDispatch();
   const [toggleModal, setToggleModal] = useState(false);
   const [roleName, setRoleName] = useState("");
   const [options, setOptions] = React.useState([]); // Initialize as an empty array
@@ -14,7 +17,6 @@ const AddUserModal = (props) => {
         const response = await UserService.getUserRoles();
         if (response.status) {
           const data = response.data;
-
           // Now, options will contain the roles with UUIDs
           setOptions(
             data.map((roleData) => ({
@@ -96,6 +98,7 @@ const AddUserModal = (props) => {
           roleUuid: "",
           country: ["Nigeria"],
         });
+        dispatch(setAddReload(true));
         props.closeModal();
       } else {
         NotificationService.error({

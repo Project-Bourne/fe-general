@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const UserSlice = createSlice({
   name: "User",
   initialState: {
@@ -9,6 +8,7 @@ const UserSlice = createSlice({
     roles: [],
     deleteStatus: false,
     reload: false,
+    addReload: false,
   },
 
   reducers: {
@@ -41,6 +41,9 @@ const UserSlice = createSlice({
       setReload: (state, action) => {
         state.reload = action.payload;
       },
+      setAddReload: (state, action) => {
+        state.addReload = action.payload;
+      },
   },
 });
 
@@ -54,6 +57,7 @@ export const {
     setRoles,
     setReload,
     setDeleteStatus,
+    setAddReload,
 } = UserSlice.actions;
 
 export default UserSlice.reducer;

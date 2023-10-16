@@ -1,18 +1,34 @@
 import React, { useState } from "react";
 
+const allpermissions = [
+  "admin",
+  "fact checker",
+  "analyser",
+  "summarizer",
+  "translator",
+  "deep chat",
+  "collab",
+  "interrogator"
+];
+
 function EditModal({ cancelEditModal, handleEdit, roles }) {
   const [editedRoles, setEditedRoles] = useState({ ...roles });
+  const [permissionsState, setPermissionsState] = useState([...roles.permissions]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
 
-    if (name === "permissions") {
-      // Split the input string into an array by commas
-      const permissions = value.split(',').map((permission) => permission.trim());
-      setEditedRoles((prevState) => ({
-        ...prevState,
-        [name]: permissions,
-      }));
+    if (type === "checkbox" && name === "permissions") {
+      const updatedPermissionsState = [...permissionsState];
+      if (checked) {
+        updatedPermissionsState.push(value);
+      } else {
+        const index = updatedPermissionsState.indexOf(value);
+        if (index !== -1) {
+          updatedPermissionsState.splice(index, 1);
+        }
+      }
+      setPermissionsState(updatedPermissionsState);
     } else {
       setEditedRoles((prevState) => ({
         ...prevState,
@@ -24,7 +40,11 @@ function EditModal({ cancelEditModal, handleEdit, roles }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     cancelEditModal();
-    handleEdit(editedRoles);
+  
+    // Create a new editedRoles object with updated permissions
+    const updatedEditedRoles = { ...editedRoles, permissions: permissionsState };
+  
+    handleEdit(updatedEditedRoles);
   };
 
   return (
@@ -45,13 +65,18 @@ function EditModal({ cancelEditModal, handleEdit, roles }) {
           </div>
           <div className="mb-2">
             <label className="text-sm">Permissions</label>
-            <textarea
-              className="w-full my-2 border p-2 rounded-[.5rem]"
-              name="permissions"
-              value={editedRoles.permissions.join(", ")} // Convert permissions array to a string
-              onChange={handleChange}
-              required
-            />
+            {allpermissions.map((permission) => (
+              <label key={permission} className="block">
+                <input
+                  type="checkbox"
+                  name="permissions"
+                  value={permission}
+                  checked={permissionsState.includes(permission)}
+                  onChange={handleChange}
+                />
+                {permission}
+              </label>
+            ))}
           </div>
           <div className="mb-2">
             <label className="text-sm">Role Level</label>
