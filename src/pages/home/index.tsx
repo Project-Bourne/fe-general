@@ -33,7 +33,7 @@ function Reports() {
     }
   }, []);
   return (
-    <div className="md:px-5 px-2 pb-5 h-[87.8vh] relative -mt-[7.5rem]">
+    <div className="md:px-5 px-2 pb-5 h-[87.8vh] relative -mt-[7.5rem] border">
       <Header />
       <Main />
     </div>

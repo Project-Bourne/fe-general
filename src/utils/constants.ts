@@ -39,7 +39,7 @@ export const NavBarContents = [
     name: "Settings",
     icon: "settings.svg",
     id: 6,
-    route: "/settings",
+    route: "http://192.81.213.226:30/settings/profile"
   },
 ];
 

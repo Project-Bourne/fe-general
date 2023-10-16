@@ -13,7 +13,6 @@ import { Cookies, useCookies } from "react-cookie";
 // import DashboardDropdown from "./DropdownItems";
 import { Tooltip } from "@mui/material";
 
-
 function RightComp() {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -59,7 +58,7 @@ function RightComp() {
           priority
         />
       </div>
-      <div className={`${styles.view1} hidden md:flex relative`}>
+      {/* <div className={`${styles.view1} hidden md:flex relative`}>
       <Tooltip title={toggleDashboard ? "Close modules" : "Open all modules"}>
         <Image
           src={dashboard}
@@ -72,11 +71,14 @@ function RightComp() {
           priority
         />
         </Tooltip>
-        {/* {toggleDashboard && <DashboardDropdown />} */}
-      </div>
+        {toggleDashboard && <DashboardDropdown />}
+      </div> */}
 
       <div className="relative bg-sirp-lightGrey flex flex-row mr-2 py-2 px-2 md:px-5 h-[45px] rounded-[12px] items-center justify-center cursor-pointer">
-        <div className="flex flex-row items-center justify-center">
+        <div
+          className="flex flex-row items-center justify-center"
+          onClick={() => setDropdown((prevState) => !prevState)}
+        >
           <img
             src={userInfo?.image ?? userInitials()}
             alt="userImage"
@@ -92,7 +94,6 @@ function RightComp() {
             height={18}
             className="mx-3 object-contain hidden md:block"
             priority
-            onClick={() => setDropdown((prevState) => !prevState)}
           />
         </div>
 
@@ -115,16 +116,16 @@ function RightComp() {
           className="mx-3 object-contain flex md:hidden"
           priority
         />
-
-        {dropdown && (
-          <div
-            className="absolute bg-sirp-lightGrey text-black text-[13px] py-2 px-2 w-[90px] text-center top-[3rem] md:mr-[7.5rem] rounded-lg items-center justify-center"
-            onClick={handleLogout}
-          >
-            <p>Log Out</p>
-          </div>
-        )}
       </div>
+      {dropdown && (
+        <div className="absolute bg-sirp-lightGrey text-black text-[13px] border py-2 px-2 w-[90px] text-center top-[5rem] md:mr-[15rem] rounded-lg items-center justify-center">
+          <p className="pb-1  border-b border-black cursor-pointer" onClick={()=>router.push("http://192.81.213.226:30/home")}>Go to IRP</p>
+
+          <p onClick={handleLogout} className="cursor-pointer pt-1">
+            Log Out
+          </p>
+        </div>
+      )}
     </div>
   );
 }
