@@ -9,7 +9,7 @@ const allpermissions = [
   "deep chat",
   "collab",
   "interrogator"
-];
+]
 
 function EditModal({ cancelEditModal, handleEdit, roles }) {
   const [editedRoles, setEditedRoles] = useState({ ...roles });
