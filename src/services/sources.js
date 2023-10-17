@@ -19,6 +19,23 @@ class SourceService {
     }
   }
 
+  static async getAllReport() {
+    try {
+      const response = await request2(`reports`, "GET", {}, true, false, false);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async getTopSources() {
+    try {
+      const response = await request2(`domains`, "GET", {}, true, false, false);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async AddSource(body) {
     try {
       const response = await request2(

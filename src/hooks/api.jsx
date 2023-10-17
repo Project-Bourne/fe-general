@@ -6,7 +6,7 @@ const cookies = new Cookies();
 let access = "";
 if (typeof window !== "undefined") {
   access =
-    cookies.get("deep-access") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzFiOTVjLWRkOWUtNGNkYS04ZTg3LWFkOGIyZWVjYTg5YSIsImlhdCI6MTY5NzQzODMzOSwiZXhwIjoxNjk3NTI0NzM5fQ.SqMWWSVzMeQ4ipsoa-lyfHZ0dOHlj2LmJi5f8hsnwRA"}
+    cookies.get("deep-access") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzFiOTVjLWRkOWUtNGNkYS04ZTg3LWFkOGIyZWVjYTg5YSIsImlhdCI6MTY5NzU3MDg3NiwiZXhwIjoxNjk3NjU3Mjc2fQ.1oiGkn3-QGVvVtuvM5OXtK4e6g1s6xNUJfxU91q0UmQ"}
 
 export const requestHeader = {
   Accept: "application/json",

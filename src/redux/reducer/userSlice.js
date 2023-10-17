@@ -3,6 +3,8 @@ const UserSlice = createSlice({
   name: "User",
   initialState: {
     user: {},
+    reports: {},
+    topSources: {},
     dropDown: 'all',
     dropDownName: 'All',
     roles: [],
@@ -44,6 +46,12 @@ const UserSlice = createSlice({
       setAddReload: (state, action) => {
         state.addReload = action.payload;
       },
+      setReports: (state, action) => {
+        state.reports = action.payload;
+      },
+      setTopSources: (state, action) => {
+        state.topSources = action.payload;
+      },
   },
 });
 
@@ -58,6 +66,8 @@ export const {
     setReload,
     setDeleteStatus,
     setAddReload,
+    setReports,
+    setTopSources
 } = UserSlice.actions;
 
 export default UserSlice.reducer;

@@ -2,8 +2,8 @@ import Image from "next/image";
 import { useState } from "react";
 import DateComponent from "./DatePicker";
 import BarChartComponent from "../charts/bar";
-import ScatterChartComponent from "../charts/scatter";
-import LineChartComponent from "../charts/line";
+// import ScatterChartComponent from "../charts/scatter";
+// import LineChartComponent from "../charts/line";
 
 import on_scatter from "../../../assets/icons/on.chart-scatter.svg"
 import scatter from "../../../assets/icons/chart-scatter.svg";
@@ -15,7 +15,7 @@ import calendar from "../../../assets/icons/calendar.svg";
 import right_arrow from "../../../assets/icons/right-arrow.svg";
 import info from "../../../assets/icons/info.svg";
 
-const articlesCrawled = 1000;
+const articlesCrawled = '';
 
 function FirstRow() {
   const [isActive, setIsActive] = useState("bar");
@@ -36,22 +36,22 @@ function FirstRow() {
           scatter: false,
         });
         break;
-      case "line":
-        setIsActive("line");
-        setDisplay({
-          bar: false,
-          line: true,
-          scatter: false,
-        });
-        break;
-      case "scatter":
-        setIsActive("scatter");
-        setDisplay({
-          bar: false,
-          line: false,
-          scatter: true,
-        });
-        break;
+      // case "line":
+      //   setIsActive("line");
+      //   setDisplay({
+      //     bar: false,
+      //     line: true,
+      //     scatter: false,
+      //   });
+      //   break;
+      // case "scatter":
+      //   setIsActive("scatter");
+      //   setDisplay({
+      //     bar: false,
+      //     line: false,
+      //     scatter: true,
+      //   });
+      //   break;
       default:
         break;
     }
@@ -89,7 +89,7 @@ function FirstRow() {
               } rounded-lg cursor-pointer`}
               onClick={() => showChart("bar")}
             />
-            <Image
+            {/* <Image
               src={isActive === "scatter" ? on_scatter : scatter}
               alt="scatter chart"
               height={32}
@@ -100,8 +100,8 @@ function FirstRow() {
                   : `bg-gray-50 border-gray-200`
               } rounded-lg cursor-pointer`}
               onClick={() => showChart("scatter")}
-            />
-            <Image
+            /> */}
+            {/* <Image
               src={isActive === "line" ? on_line : line}
               alt="line chart"
               height={32}
@@ -112,7 +112,7 @@ function FirstRow() {
                   : `bg-gray-50 border-gray-200`
               } rounded-lg cursor-pointer`}
               onClick={() => showChart("line")}
-            />
+            /> */}
           </div>
           {/* date picker  */}
           <div className="flex gap-x-4">
@@ -138,8 +138,8 @@ function FirstRow() {
       {/* body and graph  */}
       <div className="border-[2px] md:px-[2rem]  py-4 border-sirp-lightGrey h-[300px] overflow-x-auto">
         {isActive === "bar" && <BarChartComponent />}
-        {isActive === "scatter" && <ScatterChartComponent />}
-        {isActive === "line" && <LineChartComponent />}
+        {/* {isActive === "scatter" && <ScatterChartComponent />} */}
+        {/* {isActive === "line" && <LineChartComponent />} */}
       </div>
     </div>
   );

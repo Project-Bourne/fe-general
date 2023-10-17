@@ -4,8 +4,14 @@ import MapChart from "../charts/map";
 
 import info from "../../../assets/icons/info.svg";
 import { article_sources } from "@/utils/reports.constants";
+import { useSelector } from "react-redux";
+
 
 function SecondRow() {
+  const {topSources} = useSelector((state: any) => state?.user);
+  const topArticle = topSources?.data
+  
+
   const LeftHandDisplay = () => {
     return (
       <div className="grid w-full rounded-xl bg-white">
@@ -71,11 +77,11 @@ function SecondRow() {
         {/* body and graph  */}
         <div className="border-[2px] border-sirp-lightGrey  md:px-8 px-2 md:py-5 py-3 h-[300px]">
           <div className="h-[250px] overflow-y-auto">
-            {article_sources.map((article, index) => (
+            {topArticle?.map((article, index) => (
               <div key={index} className="mb-4">
-                <p className="capitalize mb-1 text-[14px]">{article.source}</p>
+                <p className="capitalize mb-1 text-[14px]">{article.domain}</p>
                 <ProgressBar
-                  percentage={article.qty}
+                  percentage={article.count}
                   progressColor="bg-[#4AC7ED]"
                   classNameStyle="h-2 bg-gray-100 "
                 />
