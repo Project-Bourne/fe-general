@@ -1,9 +1,7 @@
 import Image from "next/image";
 import ProgressBar from "@/components/ui/ProgressBar";
 import MapChart from "../charts/map";
-
 import info from "../../../assets/icons/info.svg";
-import { article_sources } from "@/utils/reports.constants";
 import { useSelector } from "react-redux";
 
 

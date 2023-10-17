@@ -2,28 +2,78 @@ import Image from "next/image";
 import { useState } from "react";
 import DateComponent from "./DatePicker";
 import BarChartComponent from "../charts/bar";
-// import ScatterChartComponent from "../charts/scatter";
-// import LineChartComponent from "../charts/line";
-
-import on_scatter from "../../../assets/icons/on.chart-scatter.svg"
-import scatter from "../../../assets/icons/chart-scatter.svg";
 import on_bar from "../../../assets/icons/on.chart-bar.svg";
 import bar from "../../../assets/icons/chart-bar.svg";
-import on_line from "../../../assets/icons/on.chart-line.svg";
-import line from "../../../assets/icons/chart-line.svg";
 import calendar from "../../../assets/icons/calendar.svg";
 import right_arrow from "../../../assets/icons/right-arrow.svg";
 import info from "../../../assets/icons/info.svg";
+import SourceService from "@/services/sources";
+import { useDispatch } from "react-redux";
+import { setReports } from "@/redux/reducer/userSlice";
+import NotificationService from "@/services/notification.service";
 
-const articlesCrawled = '';
+const articlesCrawled = ""; //will fix this soon
 
 function FirstRow() {
+  const dispatch = useDispatch();
   const [isActive, setIsActive] = useState("bar");
   const [display, setDisplay] = useState({
     bar: true,
-    line: false,
-    scatter: false,
   });
+
+  const [dateRange, setDateRange] = useState({
+    startDate: null,
+    endDate: null,
+  });
+  
+  const handleData = async (e) => {
+    e.preventDefault();
+    let formattedStartDate = "";
+    let formattedEndDate = "";
+    if (dateRange.startDate && dateRange.endDate) {
+      // Format the dates in the desired format: YYYY/MM/DD
+      formattedStartDate = `${dateRange.startDate.getFullYear()}/${(
+        dateRange.startDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${dateRange.startDate
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
+      formattedEndDate = `${dateRange.endDate.getFullYear()}/${(
+        dateRange.endDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${dateRange.endDate
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
+    }
+    // Construct the query parameters
+    const queryParams = `startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+    try {
+      const reports = await SourceService.getReportsByDate(
+        formattedStartDate,
+        formattedEndDate
+      );
+      if (reports.status) {
+        const data = reports.data;
+        dispatch(setReports(data));
+      } else {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p> `${reports.message}, please try again`</p>,
+          position: "top-center",
+        });
+      }
+    } catch (error: any) {
+      NotificationService.error({
+        message: "Error!",
+        addedText: <p> `${error}, something happened. please try again`</p>,
+        position: "top-center",
+      });
+    }
+  };
 
   const showChart = (chartType) => {
     // show each chart depending on state change
@@ -32,8 +82,6 @@ function FirstRow() {
         setIsActive("bar");
         setDisplay({
           bar: true,
-          line: false,
-          scatter: false,
         });
         break;
       // case "line":
@@ -118,11 +166,22 @@ function FirstRow() {
           <div className="flex gap-x-4">
             <div className="flex items-center gap-x-1 border-[2px] border-gray-100 rounded-md h-0 py-4 px-3">
               <Image src={calendar} alt="" height={20} width={20} />
-              <DateComponent placeholder={"start date"} />
-              <Image src={right_arrow} alt="" width={20} /> &nbsp;
-              <DateComponent placeholder={"stop date"} />
+              <DateComponent
+                placeholder={"start date"}
+                selectedDate={dateRange.startDate}
+                onDateChange={(date) =>
+                  setDateRange({ ...dateRange, startDate: date })
+                }
+              />
+              <DateComponent
+                placeholder={"stop date"}
+                selectedDate={dateRange.endDate}
+                onDateChange={(date) =>
+                  setDateRange({ ...dateRange, endDate: date })
+                }
+              />
             </div>
-            <div className="flex items-start mt-2">
+            <div className="flex items-start mt-2" onClick={handleData}>
               <Image
                 src={info}
                 alt="info"
