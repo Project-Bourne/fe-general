@@ -7,7 +7,7 @@ function Settings() {
   useEffect(() => {
     router.push(
       {
-        pathname: `/settings/profile`,
+        pathname: `/settings/log`,
       },
       undefined,
       { shallow: true }

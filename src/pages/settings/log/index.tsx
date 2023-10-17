@@ -7,7 +7,7 @@ import React from 'react'
 const LogSettings = () => {
   return (
     <SettingsLayout data={SettingsData}>
-      <div className='w-full h-full overflow-y-scroll'>
+      <div className='w-full h-full overflow-y-scroll border grid grid-cols-2'>
         {
           LogData.map((item, index) => (
             <ActivityCard

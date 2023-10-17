@@ -25,7 +25,7 @@ function FirstRow() {
     startDate: null,
     endDate: null,
   });
-  
+
   const handleData = async (e) => {
     e.preventDefault();
     let formattedStartDate = "";
@@ -137,30 +137,6 @@ function FirstRow() {
               } rounded-lg cursor-pointer`}
               onClick={() => showChart("bar")}
             />
-            {/* <Image
-              src={isActive === "scatter" ? on_scatter : scatter}
-              alt="scatter chart"
-              height={32}
-              width={32}
-              className={`p-1.5 border-[2px] ${
-                isActive === "scatter"
-                  ? `bg-blue-100 border-sirp-primary`
-                  : `bg-gray-50 border-gray-200`
-              } rounded-lg cursor-pointer`}
-              onClick={() => showChart("scatter")}
-            /> */}
-            {/* <Image
-              src={isActive === "line" ? on_line : line}
-              alt="line chart"
-              height={32}
-              width={32}
-              className={`p-1.5 border-[2px] ${
-                isActive === "line"
-                  ? `bg-blue-100 border-sirp-primary`
-                  : `bg-gray-50 border-gray-200`
-              } rounded-lg cursor-pointer`}
-              onClick={() => showChart("line")}
-            /> */}
           </div>
           {/* date picker  */}
           <div className="flex gap-x-4">
@@ -173,6 +149,7 @@ function FirstRow() {
                   setDateRange({ ...dateRange, startDate: date })
                 }
               />
+              <Image src={right_arrow} alt="info" height={25} width={25} />
               <DateComponent
                 placeholder={"stop date"}
                 selectedDate={dateRange.endDate}
@@ -182,13 +159,12 @@ function FirstRow() {
               />
             </div>
             <div className="flex items-start mt-2" onClick={handleData}>
-              <Image
-                src={info}
-                alt="info"
-                height={20}
-                width={20}
-                className="cursor-pointer"
-              />
+              <button
+                className="bg-sirp-primary text-white rounded-md px-4"
+                type="button"
+              >
+                enter
+              </button>
             </div>
           </div>
         </div>
@@ -197,8 +173,6 @@ function FirstRow() {
       {/* body and graph  */}
       <div className="border-[2px] md:px-[2rem]  py-4 border-sirp-lightGrey h-[300px] overflow-x-auto">
         {isActive === "bar" && <BarChartComponent />}
-        {/* {isActive === "scatter" && <ScatterChartComponent />} */}
-        {/* {isActive === "line" && <LineChartComponent />} */}
       </div>
     </div>
   );
