@@ -1,35 +1,59 @@
 import React, { useState } from "react";
 
+const allPermissions = [
+  "admin",
+  "irp",
+  "fact checker",
+  "analyser",
+  "summarizer",
+  "translator",
+  "deep chat",
+  "collab",
+  "interrogator"
+];
+
 function AddUserModal({ closeModal, handleAddRoles }) {
   const [formData, setFormData] = useState({
-    name: "",
-    permissions: "",
+    roleName: "",
+    permissions: [], // Use an array for permissions
     level: "",
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox" && name === "permissions") {
+      const updatedPermissions = [...formData.permissions];
+      if (checked) {
+        updatedPermissions.push(value);
+      } else {
+        const index = updatedPermissions.indexOf(value);
+        if (index !== -1) {
+          updatedPermissions.splice(index, 1);
+        }
+      }
+
+      setFormData((prevData) => ({
+        ...prevData,
+        permissions: updatedPermissions,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const permissions = formData.permissions.split(",").map((permission) => permission.trim());
-    const data = {
-      roleName: formData.name,
-      permissions,
-      level: formData.level,
-    };
-    handleAddRoles(data);
+    handleAddRoles(formData);
     closeModal();
   };
 
   return (
     <>
-      <h1 className="font-semibold text-[24px] px-2 mb-3"> Add new role </h1>
+      <h1 className="font-semibold text-[24px] px-2 mb-3">Add new role</h1>
       <div className="grid pb-5 pt-2 px-2">
         <form className="w-full border-r-gray-100 mb-3" onSubmit={handleSubmit}>
           <div className="mb-2">
@@ -37,22 +61,26 @@ function AddUserModal({ closeModal, handleAddRoles }) {
             <input
               type="text"
               className="w-full my-2 border p-2 capitalize rounded-[.5rem]"
-              name="name"
-              value={formData.name}
+              name="roleName" // Corrected name attribute
+              value={formData.roleName} // Corrected value attribute
               onChange={handleChange}
               required
             />
           </div>
           <div className="mb-2">
             <label className="text-sm">Role Permissions</label>
-            <input
-              className="w-full my-2 border p-2 rounded-[.5rem]"
-              type="text"
-              name="permissions"
-              value={formData.permissions}
-              onChange={handleChange}
-              required
-            />
+            {allPermissions.map((permission) => (
+              <label key={permission} className="block">
+                <input
+                  type="checkbox"
+                  name="permissions"
+                  value={permission}
+                  checked={formData.permissions.includes(permission)}
+                  onChange={handleChange}
+                />
+                {permission}
+              </label>
+            ))}
           </div>
           <div className="mb-2">
             <label className="text-sm">Role Level</label>

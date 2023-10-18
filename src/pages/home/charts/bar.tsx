@@ -12,10 +12,15 @@ import {
 
 function BarChartComponent() {
   const { reports } = useSelector((state: any) => state?.user);
-  const monthlyReports = reports?.monthlyReports;
+  const monthlyReports = reports?.report?.monthlyReports;
+
+  if (!Array.isArray(monthlyReports)) {
+    // Handle the case where monthlyReports is not an array
+    return <div>No data available</div>;
+  }
 
   // Sort the monthlyReports data in ascending order based on the "month" field
-  const sortedData = [...monthlyReports]?.sort((a, b) => {
+  const sortedData = [...monthlyReports].sort((a, b) => {
     const dateA = new Date(a.month);
     const dateB = new Date(b.month);
     return dateA.getTime() - dateB.getTime();
@@ -25,11 +30,8 @@ function BarChartComponent() {
   const data = sortedData?.map((report) => ({
     month: report.month,
     "Credible Articles": report.percentageCredible || 0,
-    "Not Credible Articles": report.percentageNotCredible || 0,
     "Relevant Articles": report.percentageRelevant || 0,
-    "Not Relevant Articles": report.percentageNotRelevant || 0,
     "Popular Articles": report.percentagePopular || 0,
-    "Not Popular Articles": report.percentageNotPopular || 0,
   }));
 
   // Custom formatter for Tooltip to add % symbol
@@ -53,11 +55,8 @@ function BarChartComponent() {
         <Tooltip formatter={tooltipFormatter} />
         <Legend />
         <Bar dataKey="Credible Articles" fill="#00adcc" />
-        <Bar dataKey="Not Credible Articles" fill="#b22735c5" />
         <Bar dataKey="Relevant Articles" fill="#ccad00c9" />
-        <Bar dataKey="Not Relevant Articles" fill="#3352FF" />
         <Bar dataKey="Popular Articles" fill="#f16023" />
-        <Bar dataKey="Not Popular Articles" fill="#999999" />
       </BarChart>
     </ResponsiveContainer>
   );

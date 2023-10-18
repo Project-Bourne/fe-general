@@ -4,11 +4,9 @@ import MapChart from "../charts/map";
 import info from "../../../assets/icons/info.svg";
 import { useSelector } from "react-redux";
 
-
 function SecondRow() {
-  const {topSources} = useSelector((state: any) => state?.user);
-  const topArticle = topSources?.data
-  
+  const { topSources } = useSelector((state: any) => state?.user);
+  const topArticle = topSources?.data;
 
   const LeftHandDisplay = () => {
     return (
@@ -73,16 +71,21 @@ function SecondRow() {
         </div>
 
         {/* body and graph  */}
-        <div className="border-[2px] border-sirp-lightGrey  md:px-8 px-2 md:py-5 py-3 h-[300px]">
-          <div className="h-[250px] overflow-y-auto">
+        <div className="border-[2px] border-sirp-lightGrey md:px-8 px-2 md:py-5 py-3 h-[300px]">
+          <div className="h-[250px] overflow-y-auto cursor-pointer">
             {topArticle?.map((article, index) => (
-              <div key={index} className="mb-4">
-                <p className="capitalize mb-1 text-[14px]">{article.domain}</p>
-                <ProgressBar
-                  percentage={article.count}
-                  progressColor="bg-[#4AC7ED]"
-                  classNameStyle="h-2 bg-gray-100 "
-                />
+              <div key={index} className="mb-4 group relative">
+                <p className="mb-1 text-[14px]">{article.domain}</p>
+                <div className="relative">
+                  <ProgressBar
+                    percentage={article.percentage}
+                    progressColor="bg-[#4AC7ED]"
+                    classNameStyle="h-2 bg-gray-100 "
+                  />
+                  <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    {article.percentage}% {/* Display percentage */}
+                  </div>
+                </div>
               </div>
             ))}
           </div>

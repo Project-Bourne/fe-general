@@ -8,18 +8,21 @@ import calendar from "../../../assets/icons/calendar.svg";
 import right_arrow from "../../../assets/icons/right-arrow.svg";
 import info from "../../../assets/icons/info.svg";
 import SourceService from "@/services/sources";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setReports } from "@/redux/reducer/userSlice";
 import NotificationService from "@/services/notification.service";
 
-const articlesCrawled = ""; //will fix this soon
-
 function FirstRow() {
+  const { reports } = useSelector((state: any) => state?.user);
+  const totalarticlesCrawled = reports?.report?.totalItems;
+
   const dispatch = useDispatch();
   const [isActive, setIsActive] = useState("bar");
   const [display, setDisplay] = useState({
     bar: true,
   });
+
+  const articlesCrawled = totalarticlesCrawled
 
   const [dateRange, setDateRange] = useState({
     startDate: null,
@@ -143,7 +146,7 @@ function FirstRow() {
             <div className="flex items-center gap-x-1 border-[2px] border-gray-100 rounded-md h-0 py-4 px-3">
               <Image src={calendar} alt="" height={20} width={20} />
               <DateComponent
-                placeholder={"start date"}
+                placeholder={"Start date"}
                 selectedDate={dateRange.startDate}
                 onDateChange={(date) =>
                   setDateRange({ ...dateRange, startDate: date })
@@ -151,7 +154,7 @@ function FirstRow() {
               />
               <Image src={right_arrow} alt="info" height={25} width={25} />
               <DateComponent
-                placeholder={"stop date"}
+                placeholder={"Stop date"}
                 selectedDate={dateRange.endDate}
                 onDateChange={(date) =>
                   setDateRange({ ...dateRange, endDate: date })
@@ -163,7 +166,7 @@ function FirstRow() {
                 className="bg-sirp-primary text-white rounded-md px-4"
                 type="button"
               >
-                enter
+                Enter
               </button>
             </div>
           </div>

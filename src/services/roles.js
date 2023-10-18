@@ -12,7 +12,7 @@ class RolesService {
 
   static async getAllRoles() {
     try {
-      const response = await request4(`roles`, "GET", {}, true, false, false);
+      const response = await request4(`roless`, "GET", {}, true, false, false);
       return response;
     } catch (error) {
       throw error;

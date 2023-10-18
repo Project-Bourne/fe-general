@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const allpermissions = [
   "admin",
+  "irp",
   "fact checker",
   "analyser",
   "summarizer",
@@ -64,9 +65,10 @@ function EditModal({ cancelEditModal, handleEdit, roles }) {
             />
           </div>
           <div className="mb-2">
-            <label className="text-sm">Permissions</label>
+            <label className="text-sm ">Permissions</label>
             {allpermissions.map((permission) => (
-              <label key={permission} className="block">
+              <div className="">
+              <label key={permission} className="block capitalize">
                 <input
                   type="checkbox"
                   name="permissions"
@@ -76,6 +78,7 @@ function EditModal({ cancelEditModal, handleEdit, roles }) {
                 />
                 {permission}
               </label>
+              </div>
             ))}
           </div>
           <div className="mb-2">

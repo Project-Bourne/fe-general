@@ -30,7 +30,7 @@ class SourceService {
 
   static async getTopSources() {
     try {
-      const response = await request2(`domains`, "GET", {}, true, false, false);
+      const response = await request2(`admin/domains`, "GET", {}, true, false, false);
       return response;
     } catch (error) {
       throw error;
@@ -39,7 +39,7 @@ class SourceService {
 
   static async getReportsByDate(startDate, endDate) {
     try {
-      const url = `reports?startDate=${startDate}&endDate=${endDate}`;
+      const url = `admin/reports?startDate=${startDate}&endDate=${endDate}`;
       const response = await request2(url, "GET", {}, true, false, false);
       return response;
     } catch (error) {

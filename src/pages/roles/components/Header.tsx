@@ -28,6 +28,7 @@ function Header() {
   }
 
   const handleAddRoles = async (data) => {
+    console.log(data);
     setIsLoading(true);
     try {
       const response = await RolesService.AddRole(data);
@@ -121,7 +122,7 @@ function Header() {
       </div>
       {toggleModal && (
         <CustomModal
-          style="bg-white md:w-[50%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-3 px-3 pb-5"
+          style="bg-white md:w-[50%] w-[90%] relative top-[5%] rounded-xl mx-auto pt-3 px-3 pb-5"
           closeModal={closeModalHandler}
         >
           <AddRoleeModal closeModal={closeModalHandler} handleAddRoles={handleAddRoles} />
