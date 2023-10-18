@@ -238,12 +238,12 @@ function CustomTable({ tableHeaderData }) {
               {documents?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize w-[25rem]">
+                    <TableCell className="text-xs capitalize w-[22rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs   w-[23rem]">{item?.type}</TableCell>
+                    <TableCell className="text-xs w-[21rem] ">{item?.type}</TableCell>
                      {/* <TableCell className="text-xs text-center w-[12rem]">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell> */}
-                    <TableCell className="text-xs w-[11rem] ">
+                    <TableCell className="text-xs w-[17rem]">
                       {item?.createdAt
                         ? format(
                             new Date(item.createdAt),
@@ -253,13 +253,13 @@ function CustomTable({ tableHeaderData }) {
                     </TableCell>{" "}
                     <TableCell className="text-xs capitalize ">
                       <div className="flex items-center gap-5">
-                        <Tooltip title="view document">
+                        <Tooltip title="View Document">
                           <VisibilityIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => ViewDocuments(item)}
                           />
                         </Tooltip>
-                        <Tooltip title="Delete document">
+                        <Tooltip title="Delete Document">
                           <DeleteIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => DeleteDocuments(item)}

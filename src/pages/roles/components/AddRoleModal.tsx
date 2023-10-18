@@ -70,13 +70,14 @@ function AddUserModal({ closeModal, handleAddRoles }) {
           <div className="mb-2">
             <label className="text-sm">Role Permissions</label>
             {allPermissions.map((permission) => (
-              <label key={permission} className="block">
+              <label key={permission} className="block capitalize">
                 <input
                   type="checkbox"
                   name="permissions"
                   value={permission}
                   checked={formData.permissions.includes(permission)}
                   onChange={handleChange}
+                  className="mr-2"
                 />
                 {permission}
               </label>

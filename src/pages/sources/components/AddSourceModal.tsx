@@ -38,7 +38,7 @@ const AddUserModal = ({ closeModal, handleAddSource }) => {
               className="w-full my-2 border p-2 rounded-[.5rem]"
               type="number"
               name="weight"
-              min={0}
+              min={1}
               max={100}
               required
             />

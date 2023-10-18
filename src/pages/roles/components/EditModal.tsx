@@ -75,6 +75,7 @@ function EditModal({ cancelEditModal, handleEdit, roles }) {
                   value={permission}
                   checked={permissionsState.includes(permission)}
                   onChange={handleChange}
+                  className="mr-2"
                 />
                 {permission}
               </label>

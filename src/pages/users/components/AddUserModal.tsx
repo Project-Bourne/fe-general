@@ -121,7 +121,7 @@ const AddUserModal = (props) => {
       <h1 className="font-semibold text-[24px] md:px-7 mb-3"> All Users </h1>
       <div className="flex justify-between">
         <form
-          className="w-full md:w-3/5 grid md:px-7 border-r-[1px] border-r-gray-100 mb-3"
+          className="w-full  grid md:px-7 mb-3"
           onSubmit={handleSubmit} // Add onSubmit to the form
         >
           <div className="mb-2">
@@ -185,21 +185,6 @@ const AddUserModal = (props) => {
             Add User
           </button>
         </form>
-        <div className="hidden md:block md:w-2/5 px-5 text-[12px] ">
-          <div className="grid gap-y-1">
-            <label>User permissions</label>
-            <p className="text-[#6F7A82] mt-1">
-              Access to only the country assigned
-            </p>
-          </div>
-          <div className="grid gap-y-1 mt-4">
-            <label>States in Austrailia</label>
-            <p className="text-[#6F7A82] mt-1">
-              New South Wales, Victoria, Queensland, Western Australia, South
-              Australia, and Tasmania
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

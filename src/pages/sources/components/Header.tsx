@@ -33,7 +33,7 @@ function Header() {
       if (response.status) {
         NotificationService.success({
           message: "Success!",
-          addedText: <p>Source updated successfully</p>,
+          addedText: <p>Source Added Successfully</p>,
           position: "top-center",
         });
         setIsLoading(false);
@@ -51,7 +51,7 @@ function Header() {
     } catch (error) {
       NotificationService.error({
         message: "Error!",
-        addedText: <p> {error}, something happened. Please try again</p>,
+        addedText: <p> {error}, Something happened. Please try again</p>,
         position: "top-center",
       });
       closeModalHandler();

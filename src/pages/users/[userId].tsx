@@ -273,7 +273,7 @@ const ProfileSettings = () => {
         </div>
 
         {/* Email */}
-        <div className="flex flex-row items-center my-[20px] w-full">
+        {/* <div className="flex flex-row items-center my-[20px] w-full">
           <label htmlFor="email" className="text-[12px] text-sirp-grey">
             Password:{" "}
           </label>
@@ -297,7 +297,7 @@ const ProfileSettings = () => {
               readOnly={isReadOnly}
             />
           </div>
-        </div>
+        </div> */}
         <div className="flex flex-row items-center my-[20px] w-full">
           <label htmlFor="email" className="text-[12px] text-sirp-grey">
             Email:{" "}

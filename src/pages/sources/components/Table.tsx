@@ -131,7 +131,6 @@ function CustomTable({ tableHeaderData }) {
     setShowDelete(false);
   };
 
-
   // handle paginate buttons
 
   return (
@@ -175,12 +174,16 @@ function CustomTable({ tableHeaderData }) {
                     <TableCell className="text-xs capitalize w-[18.6rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs w-[17.8rem]">{item?.url}</TableCell>
+                    <TableCell className="text-xs w-[17.8rem]">
+                      {item?.url}
+                    </TableCell>
                     <TableCell className="text-xs capitalize w-[12rem]">
                       {item?.weight}
                     </TableCell>
                     <TableCell className="text-xs capitalize w-[10.6rem]">
-                      {item.crawl ? "true" : "false"}
+                      {item.crawl === true || item.crawl === "true"
+                        ? "True"
+                        : "False"}
                     </TableCell>
                     <TableCell className="text-xs capitalize">
                       <div className="flex gap-x-3 items-center">
@@ -202,8 +205,7 @@ function CustomTable({ tableHeaderData }) {
                 </>
               ))}
             </TableBody>
-            <TableFooter>
-            </TableFooter>
+            <TableFooter></TableFooter>
           </>
         ) : (
           <TableBody>
