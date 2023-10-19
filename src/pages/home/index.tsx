@@ -43,7 +43,7 @@ function Reports() {
   const fetchData = async () => {
     try {
       setIsLoading(true); // Set isLoading to true before making the request
-      const response = await SourceService.getAllReport();
+      const response = await SourceService?.getAllReport();
       if (response.status) {
         const data = response.data;
         dispatch(setReports(data))

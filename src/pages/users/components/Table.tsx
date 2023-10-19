@@ -269,14 +269,14 @@ function CustomTable({ tableHeaderData }) {
                       {item?.role?.roleName}
                     </TableCell>
                     <TableCell className="text-xs capitalize w-[18.5rem]">
-                      {item.country.map((countryName, countryIndex) => (
+                      {item?.country?.map((countryName, countryIndex) => (
                         <span key={countryIndex}>
                           {countryIndex < 2 || expandedRows.includes(index)
                             ? `${countryName}, `
                             : ""}
                         </span>
                       ))}
-                      {item.country.length > 2 && (
+                      {item?.country?.length > 2 && (
                         <span>
                           <button
                             className="text-sirp-primary hover:underline"
@@ -310,7 +310,7 @@ function CustomTable({ tableHeaderData }) {
                       ) : item.verified ? (
                         // User is verified
                         <div className="flex gap-x-3 items-center">
-                          {item.blocked ? (
+                          {item?.blocked ? (
                             // User is verified and blocked
                             <button
                               className="bg-transparent text-xs p-0 text-[#9F9036]"
@@ -342,7 +342,7 @@ function CustomTable({ tableHeaderData }) {
                             </Tooltip>
                           </div>
                         </div>
-                      ) : item.delete ? (
+                      ) : item?.delete ? (
                         // User is not verified and deleted
                         <span>User Rejected</span>
                       ) : (
