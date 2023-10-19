@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
 import Loader from "@/components/ui/Loader";
-import { format} from "date-fns";
+import { format } from "date-fns";
 import { Tooltip } from "@mui/material";
 import DeleteModal from "./deleteModal";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,6 +25,7 @@ function CustomTable({ tableHeaderData }) {
   const [reload, setReload] = useState(false); // This is used to reload the data after a successful delete
   const [selectedDocuments, setSelectedDocuments] = useState(null);
   const [ViewDocument, setViewDocuments] = useState(null);
+  const [viewDocumnetTitle, setViewDocumnetTitle] = useState(null);
   const [downloadLink, setDownloadLink] = useState(null);
 
   const DeleteDocuments = (id) => {
@@ -34,6 +35,7 @@ function CustomTable({ tableHeaderData }) {
 
   const ViewDocuments = (id) => {
     setIsLoading(true);
+    setViewDocumnetTitle(id.name);
     handleViewDocument(id.uuid);
   };
 
@@ -199,6 +201,10 @@ function CustomTable({ tableHeaderData }) {
     setIsLoading(false);
   };
 
+  // function to extract file extension from a file name
+  function getFileExtension(filename) {
+    return filename.split(".").pop();
+  }
 
   return (
     <TableContainer component={Paper} className="shadow-sm border-r-0">
@@ -241,8 +247,10 @@ function CustomTable({ tableHeaderData }) {
                     <TableCell className="text-xs capitalize w-[22rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs w-[21rem] ">{item?.type}</TableCell>
-                     {/* <TableCell className="text-xs text-center w-[12rem]">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell> */}
+                    <TableCell className="text-xs w-[21rem] capitalize">
+                      {getFileExtension(item?.name)}
+                    </TableCell>{" "}
+                    {/* <TableCell className="text-xs text-center w-[12rem]">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell> */}
                     <TableCell className="text-xs w-[17rem]">
                       {item?.createdAt
                         ? format(
@@ -296,18 +304,25 @@ function CustomTable({ tableHeaderData }) {
       )}
       {showView && (
         <CustomModal
-          style="bg-white md:w-[50%] w-[90%] relative top-[20%] rounded-xl mx-auto pt-5 px-5 pb-5"
+          style="bg-white md:w-[50%] w-[90%] relative top-[20%] rounded-xl border-4 border-sirp-primary mx-auto pt-5 px-5 pb-5"
           closeModal={() => setShowView(false)}
         >
-          <Tooltip title="Download document">
+          <div className="flex items-center justify-start">
+          <Tooltip title="Download Document">
             <DownloadIcon
               className="cursor-pointer"
               onClick={() => handeleDownload()}
             />
           </Tooltip>
 
+        {/* add document name here  */}
+          <h3 className="text-center text-[18px] font-semibold px-3">
+            {viewDocumnetTitle}
+          </h3>
+          </div>
+
           <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-            <p className="text-md text-justify">{ViewDocument}</p>
+            <p className="text-md text-justify py-5">{ViewDocument}</p>
           </div>
         </CustomModal>
       )}

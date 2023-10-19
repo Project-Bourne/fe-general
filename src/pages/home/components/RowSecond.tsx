@@ -23,7 +23,7 @@ function SecondRow() {
             </h3>
           </div>
           {/* header text lhs  */}
-          <div className="flex items-start ">
+          {/* <div className="flex items-start ">
             <Image
               src={info}
               alt="info"
@@ -31,7 +31,7 @@ function SecondRow() {
               width={25}
               className="cursor-pointer"
             />
-          </div>
+          </div> */}
         </div>
 
         {/* body and graph  */}
@@ -59,7 +59,7 @@ function SecondRow() {
             </h3>
           </div>
           {/* header text lhs  */}
-          <div className="flex items-start">
+          {/* <div className="flex items-start">
             <Image
               src={info}
               alt="info"
@@ -67,7 +67,7 @@ function SecondRow() {
               width={25}
               className="cursor-pointer"
             />
-          </div>
+          </div> */}
         </div>
 
         {/* body and graph  */}
