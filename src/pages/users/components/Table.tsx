@@ -61,6 +61,7 @@ function CustomTable({ tableHeaderData }) {
     }
   };
 
+  console.log(users);
   const isMostlyNumbers = (value) => {
     // Count the number of digits in the value
     const digitCount = (value.match(/\d/g) || []).length;
@@ -269,7 +270,7 @@ function CustomTable({ tableHeaderData }) {
                       {item?.role?.roleName}
                     </TableCell>
                     <TableCell className="text-xs capitalize w-[18.5rem]">
-                      {item?.country?.map((countryName, countryIndex) => (
+                      {item?.country?.map((countryName, countryIndex) => (                      
                         <span key={countryIndex}>
                           {countryIndex < 2 || expandedRows.includes(index)
                             ? `${countryName}, `

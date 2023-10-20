@@ -244,14 +244,14 @@ function CustomTable({ tableHeaderData }) {
               {documents?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize w-[22rem]">
+                    <TableCell className="text-xs capitalize w-[18rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs w-[21rem] capitalize">
+                    <TableCell className="text-xs w-[17rem] uppercase">
                       {getFileExtension(item?.name)}
                     </TableCell>{" "}
-                    {/* <TableCell className="text-xs text-center w-[12rem]">{item?.classified == '1' ? 'Yes' : 'No'}</TableCell> */}
-                    <TableCell className="text-xs w-[17rem]">
+                    <TableCell className="text-xs text-center w-[14rem] capitalize">{item?.userName ? item?.userName : "Null"}</TableCell>
+                    <TableCell className="text-xs w-[13.5rem]">
                       {item?.createdAt
                         ? format(
                             new Date(item.createdAt),

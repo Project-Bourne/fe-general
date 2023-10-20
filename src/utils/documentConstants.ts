@@ -6,8 +6,9 @@ interface TabHeaderModel {
 }
 
 export const SourcesTableHeaderData: string[] = [
-  "Document name",
-  "Document type",
+  "Document Name",
+  "Document Type",
+  "Uploaded By",
   "Time Stamp",
   "Action"
 ];
