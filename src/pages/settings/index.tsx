@@ -1,22 +1,12 @@
-import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import React from 'react'
+import AuditLoagTab from "./tab"
 
-function Settings() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push(
-      {
-        pathname: `/settings/log`,
-      },
-      undefined,
-      { shallow: true }
-    )
-  },);
-
+const index = () => {
   return (
-    <></>
+    <div>
+      <AuditLoagTab/>
+    </div>
   )
 }
 
-export default Settings
+export default index

@@ -7,9 +7,9 @@ export interface TableBodyDataModel {
 }
 
 export interface ActivityCardModel {
-    id?: number,
-    docId: number,
-    actionText: string,
-    activityText: string,
-    time: string
+    id?: any,
+    docId: any,
+    actionText: any,
+    activityText: any,
+    time: any
 }

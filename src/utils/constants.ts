@@ -40,7 +40,7 @@ export const NavBarContents = [
     icon: "log.svg",
     selectedIcon: "on.log.svg",
     id: 6,
-    route: "/settings/log",
+    route: "/settings",
   },
 ];
 

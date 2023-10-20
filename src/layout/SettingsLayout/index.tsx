@@ -17,7 +17,7 @@ const SettingsLayout = ({ children }: LayoutType) => {
     <div className="w-full h-full">
       {/* Header */}
       <div className="flex flex-row w-full py-7 px-7 items-center justify-between">
-        <h1 className="text-[18px] font-semibold">Profile Settings</h1>
+        <h1 className="text-[18px] font-semibold"></h1>
       </div>
 
       {/* Settings tabs */}
