@@ -5,7 +5,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Tooltip } from "@mui/material";
+import { Pagination, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import BlockModal from "./blockModal";
@@ -23,8 +23,10 @@ import EditIcon from "@mui/icons-material/Edit";
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
   const dispatch = useDispatch();
-  const { deleteStatus, addReload, dropDown  } = useSelector((state: any) => state.user);
-  const [users, setUsers] = useState([]);
+  const { deleteStatus, addReload, dropDown } = useSelector(
+    (state: any) => state.user
+  );
+  const [users, setUsers] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showApprove, setShowApprove] = useState(false);
@@ -32,25 +34,28 @@ function CustomTable({ tableHeaderData }) {
   const [showBlock, setShowBlock] = useState(false);
   const [showUnblock, setShowUnblock] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  //this state is to reload the table
-  // const { } = useSelector((state: any) => state?.user);
   const [expandedRows, setExpandedRows] = useState([]);
+  const itemsPerPage = users?.itemsPerPage || 10;
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(users?.currentPage || 1);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
   useEffect(() => {
-    fetchData(); // Call the async function
+    fetchData(1); // Call the async function
   }, [dropDown, addReload]);
 
-  const fetchData = async () => {
+  const fetchData = async (page) => {
     setIsLoading(true);
     try {
       if (isMostlyNumbers(dropDown)) {
         // It's mostly numbers, treat it as a number
-        const response = await UserService.filterByRoles(dropDown);
+        const response = await UserService.filterByRoles(dropDown, page);
         const data = response.data;
         setUsers(data);
       } else {
         // It's mostly text, treat it as text
-        const response = await UserService.filterByAction(dropDown);
+        const response = await UserService.filterByAction(dropDown, page);
         const data = response.data;
         setUsers(data);
       }
@@ -60,20 +65,17 @@ function CustomTable({ tableHeaderData }) {
       setIsLoading(false); // Set isLoading to false in case of an error
     }
   };
-
-  console.log(users);
   const isMostlyNumbers = (value) => {
     // Count the number of digits in the value
     const digitCount = (value.match(/\d/g) || []).length;
     const letterCount = (value.match(/[a-zA-Z]/g) || []).length;
-  
+
     // If there are more digits than letters, consider it mostly numbers
     return digitCount >= letterCount;
   };
 
-  const handleBlock = async (id) => {
+  const handleBlock = async (id,page) => {
     const response = await UserService.blockUser(id);
-    console.log(response);
     if (response.status) {
       NotificationService.success({
         message: "success!",
@@ -90,12 +92,11 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowBlock(false);
-    fetchData()
+    fetchData(page);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id,page) => {
     const response = await UserService.deleteUser(id);
-    console.log(response);
     if (response.status) {
       NotificationService.success({
         message: "success!",
@@ -112,12 +113,11 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowDelete(false);
-    fetchData()
+    fetchData(page);
   };
 
-  const handleApprove = async (id) => {
+  const handleApprove = async (id,page) => {
     const response = await UserService.verifyUser(id);
-    console.log(response);
     if (response.status) {
       NotificationService.success({
         message: "success!",
@@ -134,10 +134,10 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowApprove(false);
-    fetchData()
+    fetchData(page);
   };
 
-  const handleUnblock = async (id) => {
+  const handleUnblock = async (id,page) => {
     const response = await UserService.unBlockUser(id);
     if (response.status) {
       NotificationService.success({
@@ -155,10 +155,10 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowUnblock(false);
-    fetchData()
+    fetchData(page);
   };
 
-  const handleReject = async (id) => {
+  const handleReject = async (id, page) => {
     const response = await UserService.rejecteUser(id);
     if (response.status) {
       NotificationService.success({
@@ -176,7 +176,7 @@ function CustomTable({ tableHeaderData }) {
       });
     }
     setShowReject(false);
-    fetchData()
+    fetchData(page);
   };
 
   const cancelblock = () => {
@@ -223,6 +223,19 @@ function CustomTable({ tableHeaderData }) {
     }
   };
 
+  const handlePageChange = async (event, page) => {
+    setLoading(true);
+    setCurrentPage(page);
+
+    try {
+      fetchData(page); // Fetch data for the current page
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <TableContainer component={Paper} className="shadow-sm border-r-0">
       {isLoading && (
@@ -255,10 +268,10 @@ function CustomTable({ tableHeaderData }) {
         </Table>
       </div>
       <Table sx={{ minWidth: 650 }} className="mt-[7rem]">
-        {Array.isArray(users) && users.length > 0 ? (
+        {users?.users?.length > 0 ? (
           <>
             <TableBody>
-              {users?.map((item, index) => (
+              {users?.users?.map((item, index) => (
                 <>
                   <TableRow key={item?.uuid} className="hover:bg-gray-50">
                     <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline w-[17.3rem]">
@@ -270,7 +283,7 @@ function CustomTable({ tableHeaderData }) {
                       {item?.role?.roleName}
                     </TableCell>
                     <TableCell className="text-xs capitalize w-[18.5rem]">
-                      {item?.country?.map((countryName, countryIndex) => (                      
+                      {item?.country?.map((countryName, countryIndex) => (
                         <span key={countryIndex}>
                           {countryIndex < 2 || expandedRows.includes(index)
                             ? `${countryName}, `
@@ -368,6 +381,15 @@ function CustomTable({ tableHeaderData }) {
                 </>
               ))}
             </TableBody>
+            <div className="me:w-[100%] m-5 flex justify-end items-center ">
+              <Pagination
+                count={Math.ceil((users as any)?.totalItems / itemsPerPage)}
+                page={currentPage}
+                onChange={handlePageChange}
+                variant="outlined"
+                color="primary"
+              />
+            </div>
           </>
         ) : (
           <TableBody>
@@ -388,7 +410,7 @@ function CustomTable({ tableHeaderData }) {
           closeModal={() => setShowBlock(false)}
         >
           <BlockModal
-            handleBlock={() => handleBlock(selectedUser.uuid)}
+            handleBlock={() => handleBlock(selectedUser.uuid, currentPage)}
             cancelblock={cancelblock}
             user={selectedUser}
           />
@@ -400,7 +422,7 @@ function CustomTable({ tableHeaderData }) {
           closeModal={() => setShowDelete(false)}
         >
           <DeleteModal
-            handleDelete={() => handleDelete(selectedUser.uuid)}
+            handleDelete={() => handleDelete(selectedUser.uuid, currentPage)}
             cancelblock={cancelblock}
             user={selectedUser}
           />
@@ -412,7 +434,7 @@ function CustomTable({ tableHeaderData }) {
           closeModal={() => setShowApprove(false)}
         >
           <ApproveModal
-            handleApprove={() => handleApprove(selectedUser.uuid)}
+            handleApprove={() => handleApprove(selectedUser.uuid, currentPage)}
             cancelblock={cancelblock}
             user={selectedUser}
           />
@@ -424,7 +446,7 @@ function CustomTable({ tableHeaderData }) {
           closeModal={() => setShowReject(false)}
         >
           <RejectModal
-            handleReject={() => handleReject(selectedUser.uuid)}
+            handleReject={() => handleReject(selectedUser.uuid, currentPage)}
             cancelblock={cancelblock}
             user={selectedUser}
           />
@@ -436,7 +458,7 @@ function CustomTable({ tableHeaderData }) {
           closeModal={() => setShowUnblock(false)}
         >
           <UnblockModal
-            handleUnblock={() => handleUnblock(selectedUser.uuid)}
+            handleUnblock={() => handleUnblock(selectedUser.uuid, currentPage)}
             cancelblock={cancelblock}
             user={selectedUser}
           />

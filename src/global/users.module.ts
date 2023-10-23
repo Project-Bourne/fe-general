@@ -8,8 +8,10 @@ export interface TableBodyDataModel {
 
 export interface ActivityCardModel {
     id?: any,
-    docId: any,
+    // docId: any,
     actionText: any,
     activityText: any,
-    time: any
+    time: any,
+    moduleName: any,
+    userName: any,
 }

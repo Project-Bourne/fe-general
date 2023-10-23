@@ -51,10 +51,10 @@ class UserService {
     }
   }
 
-  static async filterByRoles(id) {
+  static async filterByRoles(id, page=1) {
     try {
       const response = await request(
-        `filter?filterType=role&filterValue=${id}`,
+        `filter?filterType=role&filterValue=${id}&page=${page}`,
         "GET",
         {},
         true,
@@ -67,10 +67,10 @@ class UserService {
     }
   }
 
-  static async filterByAction(id) {
+  static async filterByAction(id, page=1) {
     try {
       const response = await request(
-        `filter?filterType=${id}&filterValue=`,
+        `filter?filterType=${id}&filterValue=&page=${page}`,
         "GET",
         {},
         true,
@@ -213,6 +213,23 @@ class UserService {
       throw error;
     }
   }
+
+  static async filterByAudit(page = 1, perPage = 30) {
+    try {
+      const response = await request(
+        `admin/audit?page=${page}&per_page=${perPage}`,
+        "GET",
+        {},
+        true,
+        false,
+        false
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+  
 }
 
 // Export the Service class.
