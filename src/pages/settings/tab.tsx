@@ -4,12 +4,12 @@ import Tab from "@mui/material/Tab";
 import HistoryIcon from "@mui/icons-material/History";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import Irp from "./irp";
-import Collab from "./collab";
-import Summarizer from "./summariser";
-import Analyser from "./analyser";
-import Factcher from "./factchecker";
-import Interrogator from "./interrogator";
-import DeepChat from "./deepchat";
+// import Collab from "./collab";
+// import Summarizer from "./summariser";
+// import Analyser from "./analyser";
+// import Factcher from "./factchecker";
+// import Interrogator from "./interrogator";
+// import DeepChat from "./deepchat";
 
 function BasicTabs() {
   const [activeTab, setActiveTab] = useState(0);
@@ -29,11 +29,11 @@ function BasicTabs() {
         <Tab
           label={
             <div style={{ display: "flex", alignItems: "center" }}>
-              IRP
+              Audit Log
             </div>
           }
         />
-        <Tab
+        {/* <Tab
           label={
             <div style={{ display: "flex", alignItems: "center" }}>
               Collab
@@ -74,15 +74,15 @@ function BasicTabs() {
               DeepChat
             </div>
           }
-        />
+        /> */}
       </Tabs>
       {activeTab === 0 && <Irp />}
-      {activeTab === 1 && <Collab />}
+      {/* {activeTab === 1 && <Collab />}
       {activeTab === 2 && <Summarizer />}
       {activeTab === 3 && <Analyser />}
       {activeTab === 4 && <Factcher />}
       {activeTab === 5 && <Interrogator />}
-      {activeTab === 6 && <DeepChat />}
+      {activeTab === 6 && <DeepChat />} */}
     </div>
   );
 }

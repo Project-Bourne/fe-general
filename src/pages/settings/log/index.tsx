@@ -9,15 +9,15 @@ const LogSettings = () => {
     <SettingsLayout data={SettingsData}>
       <div className='w-full h-full overflow-y-scroll border grid grid-cols-2'>
         {
-          LogData.map((item, index) => (
-            <ActivityCard
-                key={index}
-               time={item.time}
-               actionText={item.action}
-               activityText={'Redesigned Naira: CBN launches Cash Swap Programme for rural '}
-               docId={item.id}
-             />
-          ))
+          // LogData.map((item, index) => (
+          //   // <ActivityCard
+          //   //     key={index}
+          //   //    time={item.time}
+          //   //    actionText={item.action}
+          //   //    activityText={'Redesigned Naira: CBN launches Cash Swap Programme for rural '}
+          //   //    docId={item.id}
+          //   //  />
+          // ))
         }
       </div>
     </SettingsLayout>

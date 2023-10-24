@@ -35,6 +35,7 @@ const IrpListItem = () => {
 
   useEffect(() => {
     async function fetchInitialData() {
+      setLoading(true);
       try {
         const initialAuditData = await UserService.filterByAudit(
           currentPage,
@@ -43,13 +44,13 @@ const IrpListItem = () => {
         setAuditData(initialAuditData.data);
         console.log(auditData);
       } catch (error) {
-        console.log(error);
         NotificationService.error({
           message: "Error!",
           addedText: <p>Something happened. Please try again</p>,
           position: "top-center",
         });
       }
+      setLoading(false);
     }
 
     // Fetch initial data on component mount
@@ -75,9 +76,9 @@ const IrpListItem = () => {
           auditData?.logs.map((item, index) => (
             <IrpContent
               key={index}
-              moduleName={item?.moduleName}
+              moduleName={item?.moduleName || "No module name ound"}
               time={new Date(item?.time).toLocaleString()} // Format the time
-              actionText={item?.moduleAction}
+              actionText={item?.moduleAction || "No action found"}
               userName={
                 item?.remoteUser?.firstName && item?.remoteUser?.lastName
                   ? `${item?.remoteUser?.firstName} ${item?.remoteUser?.lastName}`
@@ -88,9 +89,7 @@ const IrpListItem = () => {
               // docId={item?.id}
             />
           ))
-        ) : (
-          <p className="">No Logs Available</p>
-        )}
+        ) : (null)}
       </div>
       <div className="me:w-[100%] m-5 flex justify-end items-center">
         {auditData?.pages && (
