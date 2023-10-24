@@ -1,16 +1,17 @@
 // Users.js
-import React from "react";
+import React, { useState } from "react";
 import SourceList from "./components/index";
 import Header from "./components/Header";
 
 const Sources = () => {
+  const [source, setSource] = useState([]);
   return (
     <>
       <div className="mt-[-0.9rem] z-30 fixed md:w-[80%] w-[86%] bg-white">
-        <Header />
+        <Header source={source} setSource={setSource} />
       </div>
       <div className="z-10">
-        <SourceList />
+        <SourceList source={source} />
       </div>
     </>
   );

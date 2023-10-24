@@ -9,7 +9,7 @@ import { TableFooter } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CustomModal } from "@/components/ui";
 import NotificationService from "@/services/notification.service";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "@/components/ui/Loader";
 import SourceService from "@/services/sources";
 import { Tooltip } from "@mui/material";
@@ -17,54 +17,58 @@ import EditeModal from "@/pages/sources/components/EditModal";
 import DeleteModal from "./deleteModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { setReload } from "@/redux/reducer/userSlice";
 
 // set number of items to be displayed per pag
-function CustomTable({ tableHeaderData }) {
-  const [source, setSource] = useState([]);
+function CustomTable({ tableHeaderData, source}) {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [selectedSource, setSelectedSource] = useState([]);
-  const { reload } = useSelector((state: any) => state?.user);
 
   const EditSources = (source) => {
     setSelectedSource(source);
     setShowEdit(true);
+    dispatch(setReload(false));
+
   };
 
   const DeleteSources = (source) => {
     setSelectedSource(source);
     setShowDelete(true);
+    dispatch(setReload(false));
+
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [reload]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [reload]);
 
-  const fetchData = async () => {
-    try {
-      setIsLoading(true); // Set isLoading to true before making the request
-      const response = await SourceService.getAllSources();
-      if (response.status) {
-        const data = response.data;
-        setSource(data);
-      } else {
-        NotificationService.error({
-          message: "Error!",
-          addedText: <p>something happened. please try again</p>,
-          position: "top-center",
-        });
-      }
-    } catch (error: any) {
-      NotificationService.error({
-        message: "Error!",
-        addedText: <p> `${error}, something happened. please try again`</p>,
-        position: "top-center",
-      });
-    } finally {
-      setIsLoading(false); // Set isLoading to false when data fetching is complete (whether it succeeds or fails)
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     setIsLoading(true); // Set isLoading to true before making the request
+  //     const response = await SourceService.getAllSources();
+  //     if (response.status) {
+  //       const data = response.data;
+  //       setSource(data);
+  //     } else {
+  //       NotificationService.error({
+  //         message: "Error!",
+  //         addedText: <p>something happened. please try again</p>,
+  //         position: "top-center",
+  //       });
+  //     }
+  //   } catch (error: any) {
+  //     NotificationService.error({
+  //       message: "Error!",
+  //       addedText: <p> `${error}, something happened. please try again`</p>,
+  //       position: "top-center",
+  //     });
+  //   } finally {
+  //     setIsLoading(false); // Set isLoading to false when data fetching is complete (whether it succeeds or fails)
+  //   }
+  // };
 
   const handleEdit = async (editedSource) => {
     setIsLoading(true);
@@ -77,7 +81,7 @@ function CustomTable({ tableHeaderData }) {
           position: "top-center",
         });
         setIsLoading(false);
-        fetchData();
+        dispatch(setReload(true));
       } else {
         NotificationService.error({
           message: "Error!",
@@ -107,7 +111,7 @@ function CustomTable({ tableHeaderData }) {
           position: "top-center",
         });
         setIsLoading(false);
-        fetchData();
+        dispatch(setReload(true));
       } else {
         NotificationService.error({
           message: "Error!",
@@ -131,11 +135,12 @@ function CustomTable({ tableHeaderData }) {
     setShowDelete(false);
   };
 
-  // handle paginate buttons
+ 
 
   return (
+    <>
     <TableContainer component={Paper} className="shadow-sm border-r-0">
-      {isLoading && (
+      {/* {isLoading && (
         <CustomModal
           style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
           closeModal={() => {
@@ -146,7 +151,7 @@ function CustomTable({ tableHeaderData }) {
             <Loader />
           </div>
         </CustomModal>
-      )}
+      )} */}
       <div className="mt-[3.3rem] fixed">
         <Table sx={{ minWidth: 1150 }}>
           <TableHead className="bg-gray-100">
@@ -242,6 +247,7 @@ function CustomTable({ tableHeaderData }) {
         </CustomModal>
       )}
     </TableContainer>
+    </>
   );
 }
 

@@ -104,7 +104,7 @@ function RightComp() {
           <h2 className="text-sirp-grey text-[13px] capitalize">
             {userInfo?.firstName && useTruncate(userName(), 14)}
           </h2>
-          <h2 className="text-sirp-primary text-[11px]">
+          <h2 className="text-sirp-primary text-[11px] capitalize">
             {userInfo?.role?.roleName}
           </h2>
         </div>

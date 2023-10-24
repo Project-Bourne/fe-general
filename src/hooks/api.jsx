@@ -39,7 +39,6 @@ export async function request(url, method, payload, token, text, form) {
     })
       .then((res) => {
         if (res.status === 403) {
-          console.error("403 Forbidden: Redirecting to login page");
           // Redirect to the login page
           window.location.href = "http://192.81.213.226:30/auth/login";
           throw new Error("Access forbidden. Redirecting to login page.");
@@ -95,7 +94,6 @@ export async function request2(url, method, payload, token, text, form) {
     })
       .then((res) => {
         if (res.status === 403) {
-          console.error("403 Forbidden: Redirecting to login page");
           // Redirect to the login page
           window.location.href = "http://192.81.213.226:30/auth/login";
           throw new Error("Access forbidden. Redirecting to login page.");
@@ -150,7 +148,6 @@ export async function request3(url, method, payload, token, text, form) {
     })
       .then((res) => {
         if (res.status === 403) {
-          console.error("403 Forbidden: Redirecting to login page");
           // Redirect to the login page
           window.location.href = "http://192.81.213.226:30/auth/login";
           throw new Error("Access forbidden. Redirecting to login page.");
@@ -205,7 +202,6 @@ export async function request4(url, method, payload, token, text, form) {
     })
       .then((res) => {
         if (res.status === 403) {
-          console.error("403 Forbidden: Redirecting to login page");
           // Redirect to the login page
           window.location.href = "http://192.81.213.226:30/auth/login";
           throw new Error("Access forbidden. Redirecting to login page.");

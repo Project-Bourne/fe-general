@@ -52,6 +52,14 @@ function CustomTable({ tableHeaderData }) {
       if (response.status) {
         const data = await response.json();
         const docs = data.data.docs;
+
+        // Sort the 'docs' array in ascending order based on the 'createdAt' field
+        docs.sort((a, b) => {
+          const dateA = new Date(a.createdAt).getTime();
+          const dateB = new Date(b.createdAt).getTime();
+          return dateA - dateB;
+        });
+
         setDocuments(docs);
       } else {
         NotificationService.error({
@@ -250,7 +258,9 @@ function CustomTable({ tableHeaderData }) {
                     <TableCell className="text-xs w-[17rem] uppercase">
                       {getFileExtension(item?.name)}
                     </TableCell>{" "}
-                    <TableCell className="text-xs text-center w-[14rem] capitalize">{item?.userName ? item?.userName : "Null"}</TableCell>
+                    <TableCell className="text-xs text-center w-[14rem] capitalize">
+                      {item?.userName ? item?.userName : "Null"}
+                    </TableCell>
                     <TableCell className="text-xs w-[13.5rem]">
                       {item?.createdAt
                         ? format(
@@ -308,17 +318,17 @@ function CustomTable({ tableHeaderData }) {
           closeModal={() => setShowView(false)}
         >
           <div className="flex items-center justify-start">
-          <Tooltip title="Download Document">
-            <DownloadIcon
-              className="cursor-pointer"
-              onClick={() => handeleDownload()}
-            />
-          </Tooltip>
+            <Tooltip title="Download Document">
+              <DownloadIcon
+                className="cursor-pointer"
+                onClick={() => handeleDownload()}
+              />
+            </Tooltip>
 
-        {/* add document name here  */}
-          <h3 className="text-center text-[18px] font-semibold px-3">
-            {viewDocumnetTitle}
-          </h3>
+            {/* add document name here  */}
+            <h3 className="text-center text-[18px] font-semibold px-3">
+              {viewDocumnetTitle}
+            </h3>
           </div>
 
           <div style={{ maxHeight: "400px", overflowY: "auto" }}>

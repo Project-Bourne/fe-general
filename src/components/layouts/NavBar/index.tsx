@@ -2,8 +2,10 @@ import Image from "next/image";
 import React, { useState } from "react";
 import NavBarItem from "./NavBarItem";
 import { NavBarContents } from "@/utils/constants";
+import { useRouter } from "next/router";
 
 function NavBar() {
+  const router = useRouter();
   const [isCrawling, setIsCrawling] = useState(false);
 
   const handleCrawler = () => {
@@ -14,7 +16,7 @@ function NavBar() {
 
   return (
     <div className="w-[15vw] md:w-[20vw] h-full border-3 border-r bg-white px-3 py-10 md:p-10 fixed z-[20]">
-      <div className="flex flex-row items-center cursor-pointer justify-center">
+      <div className="flex flex-row items-center cursor-pointer justify-center" onClick={()=>{router.push('http://192.81.213.226:30/')}}>
         <Image
           src={require("../../../assets/svg/logo.svg")}
           alt="IRP Logo"
