@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SourceList from "./components/index";
 import Header from "./components/Header";
+import Auth from "@/services/auth.service";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "@/redux/reducer/authReducer";
+import NotificationService from "@/services/notification.service";
 
 function Users() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    Auth.getUserViaAccessToken()
+      .then((response) => {
+        if (response.status) {
+          dispatch(setUserInfo(response.data));
+        }
+      })
+      .catch((err) => {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>Access forbidden. Redirecting to login page.</p>,
+          position: "top-center",
+        });
+      });
+  }, []);
   return (
     <>
       <div>
