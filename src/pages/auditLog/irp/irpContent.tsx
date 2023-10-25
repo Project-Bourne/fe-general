@@ -21,7 +21,7 @@ const IrpContent = ({
         <div className="md:flex justify-between flex-col items-start gap-5">
         <div className="flex gap-x-3">
             <label className="text-[13px] text-sirp-grey font-bold">User:</label>
-            <p className="text-[14px]">{userName}</p>
+            <p className="text-[14px] capitalize">{userName}</p>
           </div>
           <div className="flex gap-x-3">
             <label className="text-[13px] text-sirp-grey font-bold">Action:</label>

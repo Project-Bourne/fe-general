@@ -69,7 +69,12 @@ function RightComp() {
         />
       </div> */}
 
-      <div className="relative">
+      <div
+        className="relative"
+        onClick={() => {
+          router.push("http://192.81.213.226:30");
+        }}
+      >
         <div
           className="grid justify-center mt-3.5"
           onClick={handleDashboardToggle}
@@ -93,7 +98,7 @@ function RightComp() {
             Menu
           </label>
         </div>
-        {toggleDashboard && <DropdownItems />}
+        {/* {toggleDashboard && <DropdownItems />} */}
       </div>
 
       {/* <div

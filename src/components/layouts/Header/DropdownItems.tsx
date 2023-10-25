@@ -45,7 +45,7 @@ const dropdownItems = [
   },
   {
     name: 'Fact checker',
-    to: `${BASE_URL}34/home`,
+    to: `${BASE_URL}:34/home`,
     key: 'fact checker',
     icon: fact
   },
@@ -71,7 +71,7 @@ function DashboardDropdown() {
   );
 
   return (
-    <ul className="bg-sirp-lightGrey shadow absolute top-[4rem] -right-[6.7rem] pt-1 flex md:grid grid-cols-3 rounded z-150 w-[130px] md:w-[300px]">
+    <ul className="bg-sirp-lightGrey shadow absolute top-[4rem] -right-[6.7rem] pt-1 flex md:grid grid-cols-3 rounded z-[70] w-[130px] md:w-[300px]">
       {dropdownItems.map((item, index) => {
         const shouldRender = item.key === 'irp' || permissions.includes(item.key);
         
