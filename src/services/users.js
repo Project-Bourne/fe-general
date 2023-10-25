@@ -184,7 +184,7 @@ class UserService {
   static async updateUser(id, body) {
     try {
       const response = await request(
-        `user/${id}`,
+        `edit/user/${id}`,
         "PUT",
         body,
         true,
