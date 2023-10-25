@@ -1,4 +1,4 @@
-import TabComp from "@/pages/settings/components/TabComp/index";
+import TabComp from "@/pages/auditLog/components/TabComp/index";
 import { SettingsData } from "@/utils/constants";
 import React, { ReactNode } from "react";
 import "../../styles/global.css";

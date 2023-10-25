@@ -43,11 +43,9 @@ export async function request(url, method, payload, token, text, form) {
           window.location.href = "http://192.81.213.226:30/auth/login";
           throw new Error("Access forbidden. Redirecting to login page.");
         }
-        if (text === true) {
+        else if (text === true) {
           return res.text();
-        } else if (res) {
-          return res.json();
-        } else {
+        }  else {
           return res.json();
         }
       })
@@ -98,10 +96,8 @@ export async function request2(url, method, payload, token, text, form) {
           window.location.href = "http://192.81.213.226:30/auth/login";
           throw new Error("Access forbidden. Redirecting to login page.");
         }
-        if (text === true) {
+        else if (text === true) {
           return res.text();
-        } else if (res) {
-          return res.json();
         } else {
           return res.json();
         }
@@ -152,11 +148,9 @@ export async function request3(url, method, payload, token, text, form) {
           window.location.href = "http://192.81.213.226:30/auth/login";
           throw new Error("Access forbidden. Redirecting to login page.");
         }
-        if (text === true) {
+        else if (text === true) {
           return res.text();
-        } else if (res) {
-          return res.json();
-        } else {
+        }  else {
           return res.json();
         }
       })
@@ -206,11 +200,9 @@ export async function request4(url, method, payload, token, text, form) {
           window.location.href = "http://192.81.213.226:30/auth/login";
           throw new Error("Access forbidden. Redirecting to login page.");
         }
-        if (text === true) {
+        else if (text === true) {
           return res.text();
-        } else if (res) {
-          return res.json();
-        } else {
+        }  else {
           return res.json();
         }
       })

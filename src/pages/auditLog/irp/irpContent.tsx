@@ -28,7 +28,7 @@ const IrpContent = ({
             <p className="text-[14px]">{actionText}</p>
           </div>
           <div className="flex gap-x-3">
-            <label className="text-[13px] text-sirp-grey font-bold">Snippet:</label>
+            <label className="text-[13px] text-sirp-grey font-bold">IP Address:</label>
             <p className="text-[14px]">{activityText}</p>
           </div>
          

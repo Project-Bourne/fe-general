@@ -37,7 +37,7 @@ const IrpListItem = () => {
     async function fetchInitialData() {
       setLoading(true);
       try {
-        const initialAuditData = await UserService.filterByAudit(
+        const initialAuditData = await UserService?.filterByAudit(
           currentPage,
           itemsPerPage
         );
@@ -59,7 +59,7 @@ const IrpListItem = () => {
 
   return (
     <div>
-       {loading && (
+      {loading && (
         <CustomModal
           style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
           closeModal={() => {
@@ -72,24 +72,23 @@ const IrpListItem = () => {
         </CustomModal>
       )}
       <div className="w-full h-[100%] overflow-y-scroll grid grid-cols-2">
-        {auditData?.logs ? (
-          auditData?.logs.map((item, index) => (
-            <IrpContent
-              key={index}
-              moduleName={item?.moduleName || "No module name ound"}
-              time={new Date(item?.time).toLocaleString()} // Format the time
-              actionText={item?.moduleAction || "No action found"}
-              userName={
-                item?.remoteUser?.firstName && item?.remoteUser?.lastName
-                  ? `${item?.remoteUser?.firstName} ${item?.remoteUser?.lastName}`
-                  : "User Name Not Found"
-              } activityText={
-                "Redesigned Naira: CBN launches Cash Swap Programme for rural"
-              }
-              // docId={item?.id}
-            />
-          ))
-        ) : (null)}
+        {auditData?.logs
+          ? auditData?.logs?.map((item, index) => (
+              <IrpContent
+                key={index}
+                moduleName={item?.moduleName || "No module name ound"}
+                time={new Date(item?.time).toLocaleString()} // Format the time
+                actionText={item?.moduleAction || "No action found"}
+                userName={
+                  item?.remoteUser?.firstName && item?.remoteUser?.lastName
+                    ? `${item?.remoteUser?.firstName} ${item?.remoteUser?.lastName}`
+                    : "User Name Not Found"
+                }
+                activityText={item?.remoteIP || "No IP address found"}
+                // docId={item?.id}
+              />
+            ))
+          : null}
       </div>
       <div className="me:w-[100%] m-5 flex justify-end items-center">
         {auditData?.pages && (
