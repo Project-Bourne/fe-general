@@ -3,7 +3,7 @@ import AuditLoagTab from "./tab"
 
 const index = () => {
   return (
-    <div>
+    <div className='py-10'>
       <AuditLoagTab/>
     </div>
   )

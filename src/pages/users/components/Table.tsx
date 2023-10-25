@@ -74,7 +74,7 @@ function CustomTable({ tableHeaderData }) {
     return digitCount >= letterCount;
   };
 
-  const handleBlock = async (id,page) => {
+  const handleBlock = async (id, page) => {
     const response = await UserService.blockUser(id);
     if (response.status) {
       NotificationService.success({
@@ -95,7 +95,7 @@ function CustomTable({ tableHeaderData }) {
     fetchData(page);
   };
 
-  const handleDelete = async (id,page) => {
+  const handleDelete = async (id, page) => {
     const response = await UserService.deleteUser(id);
     if (response.status) {
       NotificationService.success({
@@ -116,7 +116,7 @@ function CustomTable({ tableHeaderData }) {
     fetchData(page);
   };
 
-  const handleApprove = async (id,page) => {
+  const handleApprove = async (id, page) => {
     const response = await UserService.verifyUser(id);
     if (response.status) {
       NotificationService.success({
@@ -137,7 +137,7 @@ function CustomTable({ tableHeaderData }) {
     fetchData(page);
   };
 
-  const handleUnblock = async (id,page) => {
+  const handleUnblock = async (id, page) => {
     const response = await UserService.unBlockUser(id);
     if (response.status) {
       NotificationService.success({
@@ -206,6 +206,7 @@ function CustomTable({ tableHeaderData }) {
     setSelectedUser(user);
     setShowApprove(true);
   };
+
   const openRejectModal = (user) => {
     setSelectedUser(user);
     setShowReject(true);
@@ -213,8 +214,7 @@ function CustomTable({ tableHeaderData }) {
 
   //   table footer
 
-  // handle paginate buttons
-
+  //  handle expand counrty row
   const toggleExpandedRow = (index) => {
     if (expandedRows.includes(index)) {
       setExpandedRows(expandedRows.filter((rowIndex) => rowIndex !== index));
@@ -222,6 +222,7 @@ function CustomTable({ tableHeaderData }) {
       setExpandedRows([...expandedRows, index]);
     }
   };
+  // handle pagination
 
   const handlePageChange = async (event, page) => {
     setLoading(true);
@@ -381,15 +382,6 @@ function CustomTable({ tableHeaderData }) {
                 </>
               ))}
             </TableBody>
-            <div className="me:w-[100%] m-5 flex justify-end items-center ">
-              <Pagination
-                count={Math.ceil((users as any)?.totalItems / itemsPerPage)}
-                page={currentPage}
-                onChange={handlePageChange}
-                variant="outlined"
-                color="primary"
-              />
-            </div>
           </>
         ) : (
           <TableBody>
@@ -401,6 +393,15 @@ function CustomTable({ tableHeaderData }) {
           </TableBody>
         )}
       </Table>
+      <div className="me:w-[100%] m-5 flex justify-end items-center">
+        <Pagination
+          count={Math.ceil((users as any)?.totalItems / itemsPerPage)}
+          page={currentPage}
+          onChange={handlePageChange}
+          variant="outlined"
+          color="primary"
+        />
+      </div>
 
       {/* modal for block user, delete user, approve user, reject user, unblock user  */}
 
