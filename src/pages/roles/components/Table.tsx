@@ -7,8 +7,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import { CustomModal } from "@/components/ui";
+import Auth from "@/services/auth.service"
 import NotificationService from "@/services/notification.service";
-import {  useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 import Loader from "@/components/ui/Loader";
 import RolesService from "@/services/roles";
 import { Tooltip } from "@mui/material";
@@ -16,15 +17,33 @@ import EditeModal from "./EditModal";
 import DeleteModal from "./deleteModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { setUserInfo } from "@/redux/reducer/authReducer";
 
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
+  const dispatch = useDispatch()
   const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState({});
   const { reload } = useSelector((state: any) => state?.user);
+
+  useEffect(() => {
+    Auth.getUserViaAccessToken()
+      .then((response) => {
+        if (response?.status) {
+          dispatch(setUserInfo(response?.data));
+        }
+      })
+      .catch((err) => {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
+          position: "top-center",
+        });
+      });
+  }, []); 
 
   const EditRoles = (roles) => {
     setSelectedRoles(roles);
@@ -162,7 +181,7 @@ function CustomTable({ tableHeaderData }) {
       {/* header section  */}
     
       <div className="fixed mt-[3.4rem]">
-        <Table sx={{ minWidth: 1150 }} className="">
+        <Table sx={{ minWidth: 1350 }} className="">
           <TableHead className="bg-gray-100">
             <TableRow>
               {tableHeaderData?.map((title: string, index: number) => (
@@ -185,15 +204,15 @@ function CustomTable({ tableHeaderData }) {
               {roles?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize w-[20.5rem]">
+                    <TableCell className="text-xs capitalize w-[23.8rem]">
                       {item?.roleName}
                     </TableCell>
-                    <TableCell className="text-xs capitalize font-bold  w-[22.5rem]">
+                    <TableCell className="text-xs capitalize font-bold  w-[26.5rem] ">
                       {item.permissions.map((permission, permissionIndex) => (
                         <div key={permissionIndex}>{permission}</div>
                       ))}
                     </TableCell>
-                    <TableCell className="text-md capitalize font-bold  w-[12.5rem]">
+                    <TableCell className="text-md capitalize font-bold  w-[15rem] ">
                       {item?.level}
                     </TableCell>
                     <TableCell className="text-xs capitalize">

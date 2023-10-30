@@ -100,7 +100,7 @@ function CustomTable({ tableHeaderData }) {
         setShowView(true);
         NotificationService.success({
           message: "Success!",
-          addedText: <p> file loaded successful</p>,
+          addedText: <p> File Loaded Successful</p>,
           position: "top-center",
         });
         setReload(!reload);
@@ -229,7 +229,7 @@ function CustomTable({ tableHeaderData }) {
         </CustomModal>
       )}
       <div className="mt-[3.3rem] fixed">
-        <Table sx={{ minWidth: 1150 }}>
+        <Table sx={{ minWidth: 1350 }}>
           <TableHead className="bg-gray-100">
             <TableRow>
               {tableHeaderData?.map((title: string, index: number) => (
@@ -252,16 +252,16 @@ function CustomTable({ tableHeaderData }) {
               {documents?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize w-[18rem]">
+                    <TableCell className="text-xs capitalize w-[20.8rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs w-[17rem] uppercase">
+                    <TableCell className="text-xs w-[19.8rem] uppercase ">
                       {getFileExtension(item?.name)}
                     </TableCell>{" "}
-                    <TableCell className="text-xs text-center w-[14rem] capitalize">
+                    <TableCell className="text-xs text-center w-[17rem] capitalize ">
                       {item?.userName ? item?.userName : "Null"}
                     </TableCell>
-                    <TableCell className="text-xs w-[13.5rem]">
+                    <TableCell className="text-xs w-[15.8rem]">
                       {item?.createdAt
                         ? format(
                             new Date(item.createdAt),

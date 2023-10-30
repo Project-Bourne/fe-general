@@ -140,7 +140,7 @@ function CustomTable({ tableHeaderData, source}) {
   return (
     <>
     <TableContainer component={Paper} className="shadow-sm border-r-0">
-      {/* {isLoading && (
+      {isLoading && (
         <CustomModal
           style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
           closeModal={() => {
@@ -151,9 +151,9 @@ function CustomTable({ tableHeaderData, source}) {
             <Loader />
           </div>
         </CustomModal>
-      )} */}
+      )}
       <div className="mt-[3.3rem] fixed">
-        <Table sx={{ minWidth: 1150 }}>
+        <Table sx={{ minWidth: 1350 }}>
           <TableHead className="bg-gray-100">
             <TableRow>
               {tableHeaderData?.map((title: string, index: number) => (
@@ -176,16 +176,16 @@ function CustomTable({ tableHeaderData, source}) {
               {source?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize w-[18.6rem]">
+                    <TableCell className="text-xs capitalize w-[21.8rem] ">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs w-[17.8rem]">
+                    <TableCell className="text-xs w-[20.7rem]">
                       {item?.url}
                     </TableCell>
-                    <TableCell className="text-xs capitalize w-[12rem]">
+                    <TableCell className="text-xs capitalize w-[14.4rem]">
                       {item?.weight}
                     </TableCell>
-                    <TableCell className="text-xs capitalize w-[10.6rem]">
+                    <TableCell className="text-xs capitalize w-[12.3rem]">
                       {item.crawl === true || item.crawl === "true"
                         ? "True"
                         : "False"}

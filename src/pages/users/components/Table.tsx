@@ -9,6 +9,7 @@ import { Pagination, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import BlockModal from "./blockModal";
+import Auth from "@/services/auth.service"
 import ApproveModal from "./ApproveModal";
 import RejectModal from "./RejectModal";
 import UserService from "@/services/users";
@@ -19,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UnblockModal from "./UnblockModal";
 import Loader from "@/components/ui/Loader";
 import EditIcon from "@mui/icons-material/Edit";
+import { setUserInfo } from "@/redux/reducer/authReducer";
 
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
@@ -40,6 +42,22 @@ function CustomTable({ tableHeaderData }) {
   const [currentPage, setCurrentPage] = useState(users?.currentPage || 1);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+
+  useEffect(() => {
+    Auth.getUserViaAccessToken()
+      .then((response) => {
+        if (response?.status) {
+          dispatch(setUserInfo(response?.data));
+        }
+      })
+      .catch((err) => {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
+          position: "top-center",
+        });
+      });
+  }, []); 
 
   useEffect(() => {
     fetchData(1); // Call the async function
@@ -252,7 +270,7 @@ function CustomTable({ tableHeaderData }) {
         </CustomModal>
       )}
       <div className="mt-[3.3rem] fixed">
-        <Table sx={{ minWidth: 1150 }}>
+        <Table sx={{ minWidth: 1350 }}>
           <TableHead className="bg-gray-100">
             <TableRow>
               {tableHeaderData?.map((title: string, index: number) => (
@@ -275,15 +293,15 @@ function CustomTable({ tableHeaderData }) {
               {users?.users?.map((item, index) => (
                 <>
                   <TableRow key={item?.uuid} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline w-[17.3rem]">
+                    <TableCell className="text-xs capitalize hover:cursor-pointer hover:underline w-[20.3rem]">
                       <Link href={`users/${item?.uuid}`}>
                         {item?.firstName} {item?.lastName}
                       </Link>
                     </TableCell>
-                    <TableCell className="text-xs capitalize w-[12rem]">
+                    <TableCell className="text-xs capitalize w-[13.9rem]">
                       {item?.role?.roleName}
                     </TableCell>
-                    <TableCell className="text-xs capitalize w-[18.5rem]">
+                    <TableCell className="text-xs capitalize w-[21.5rem]">
                       {item?.country?.map((countryName, countryIndex) => (
                         <span key={countryIndex}>
                           {countryIndex < 2 || expandedRows.includes(index)
@@ -305,7 +323,7 @@ function CustomTable({ tableHeaderData }) {
                       )}
                     </TableCell>
 
-                    <TableCell align="right" className="w-[12rem]">
+                    <TableCell align="right" className="w-[14.3rem]">
                       <div className="flex gap-x-[0.2rem] items-center">
                         <div
                           className={`rounded-full w-2 h-2 ${

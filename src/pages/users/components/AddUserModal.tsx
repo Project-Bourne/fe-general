@@ -169,7 +169,7 @@ const AddUserModal = (props) => {
             <label className="text-sm">Password</label>
             <input
               className="w-full my-2 border p-2 rounded-[.5rem]"
-              type="password"
+              type="text"
               value={formData.password}
               onChange={handlePasswordChange}
             />
