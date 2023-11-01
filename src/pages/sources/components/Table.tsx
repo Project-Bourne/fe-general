@@ -140,7 +140,7 @@ function CustomTable({ tableHeaderData, source}) {
   return (
     <>
     <TableContainer component={Paper} className="shadow-sm border-r-0">
-      {isLoading && (
+      {/* {isLoading && (
         <CustomModal
           style="md:w-[50%] w-[90%] h-[100%] md:h-[100vh] relative top-[5%] rounded-xl mx-auto pt-[4rem] px-3 pb-5"
           closeModal={() => {
@@ -151,7 +151,7 @@ function CustomTable({ tableHeaderData, source}) {
             <Loader />
           </div>
         </CustomModal>
-      )}
+      )} */}
       <div className="mt-[3.3rem] fixed">
         <Table sx={{ minWidth: 1350 }}>
           <TableHead className="bg-gray-100">
