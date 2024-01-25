@@ -14,7 +14,7 @@ const IrpContent = ({
     <TableRow
       key={Date.parse(time)}
       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-      className="bg-white hover:bg-grey-600 hover:text-white transition-all duration-3000 cursor-pointer"
+      className="bg-white !hover:bg-grey-600 !hover:text-white !transition-all !duration-3000 cursor-pointer"
     >
       <TableCell component="th" scope="row">
         {userName}

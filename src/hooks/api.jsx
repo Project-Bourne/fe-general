@@ -7,7 +7,7 @@ let access = "";
 if (typeof window !== "undefined") {
   access =
     cookies.get("deep-access") ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxNWFmNzQxLTBmZTItNGQ5My05MzdmLTJkOTYyYmZhYTdhOSIsImlhdCI6MTcwNjEzOTU2NywiZXhwIjoxNzA2MTQzMTY3fQ.jG44qdthOjlqc-rsWsdGPZs5i3nZr9UUfRzlYPnsGz8"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxNWFmNzQxLTBmZTItNGQ5My05MzdmLTJkOTYyYmZhYTdhOSIsImlhdCI6MTcwNjE0MzIxOCwiZXhwIjoxNzA2MTQ2ODE4fQ.ql9COVutYdKPqM5_2cfvrsMc6XOWsXjx9XythOWDIfI"
   }
 
 export const requestHeader = {

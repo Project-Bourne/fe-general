@@ -6,6 +6,10 @@ import { Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHe
 import { CustomModal } from "@/components/ui";
 import Loader from "@/components/ui/Loader";
 
+/**
+ * This function fetches audit logs from the server and displays them in a table.
+ * It also handles pagination and sorting.
+ */
 const IrpListItem = () => {
   const [auditData, setAuditData] = useState(null);
   const itemsPerPage = 49; // Set a constant number of items per page
@@ -81,11 +85,21 @@ const IrpListItem = () => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>User</TableCell>
-              <TableCell align="right">Action</TableCell>
-              <TableCell align="right">Module</TableCell>
-              <TableCell align="right">Remote IP</TableCell>
-              <TableCell align="right">Time</TableCell>
+              <TableCell
+            className="!font-bold !text-md !text-sirp-primary"
+          >User</TableCell>
+              <TableCell align="right"
+            className="!font-bold !text-md !text-sirp-primary"
+          >Action</TableCell>
+              <TableCell align="right"
+            className="!font-bold !text-md !text-sirp-primary"
+          >Module</TableCell>
+              <TableCell align="right"
+            className="!font-bold !text-md !text-sirp-primary"
+          >Remote IP</TableCell>
+              <TableCell align="right"
+            className="!font-bold !text-md !text-sirp-primary"
+          >Time</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -93,9 +107,9 @@ const IrpListItem = () => {
             ? auditData?.logs?.map((item, index) => (
                 <IrpContent
                   key={index}
-                  moduleName={item?.moduleName || "No module name ound"}
-                  time={new Date(item?.time).toUTCString()} // Format the time
-                  actionText={item?.moduleAction || "No action found"}
+                  moduleName={item.moduleName || "No module name found"}
+                  time={new Date(item.time).toUTCString()} // Format the time
+                  actionText={item.moduleAction || "No action found"}
                   userName={
                     item?.remoteUser?.firstName && item?.remoteUser?.lastName
                       ? `${item?.remoteUser?.firstName} ${item?.remoteUser?.lastName}`
