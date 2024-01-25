@@ -1,25 +1,39 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createRoot} from "react-dom/client";
 import CustomToast from "@/components/ui/CustomToast"; // Make sure to import CustomToast correctly
 
 class NotificationService {
   static showCustomToast({ type, message, addedText, position }) {
     const container = document.createElement("div");
+    const root = createRoot(container)
     document.body.appendChild(container);
 
-    ReactDOM?.render(
+    // log content of message and addedText
+    console.log(message);
+    console.log(addedText);
+
+    if (message.type === 'p') {
+      message = String(message).replace("<p>", "").replace("</p>", "");
+    }
+    if (addedText.type === 'p') {
+      addedText = addedText.props.children;
+    }
+
+    // Render the toast component
+
+    root.render(
       <CustomToast
         type={type}
         message={message}
         addedText={addedText}
         position={position}
-      />,
-      container
+      />
     );
 
-    // Automatically remove the notification after 5 seconds
+    // Automatically remove the notification after 3 seconds
     setTimeout(() => {
-      ReactDOM.unmountComponentAtNode(container);
+      root.unmount();
       document.body.removeChild(container);
     }, 3000);
   }

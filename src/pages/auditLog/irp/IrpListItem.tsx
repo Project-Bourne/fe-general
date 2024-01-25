@@ -41,8 +41,13 @@ const IrpListItem = () => {
           currentPage,
           itemsPerPage
         );
-        setAuditData(initialAuditData.data);
-        console.log(auditData);
+        // sort items by date in descending order
+        let sortedData = {
+          ...initialAuditData.data,
+          logs: initialAuditData.data.logs.sort((a: any, b: any) => Date.parse(b.time) - Date.parse(a.time)),
+        };
+        setAuditData(sortedData);
+        // console.log('AUDIT DATA:', auditData);
       } catch (error) {
         NotificationService.error({
           message: "Error!",
