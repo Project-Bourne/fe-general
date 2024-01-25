@@ -6,8 +6,7 @@ const cookies = new Cookies();
 let access = "";
 if (typeof window !== "undefined") {
   access =
-    cookies.get("deep-access") ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxNWFmNzQxLTBmZTItNGQ5My05MzdmLTJkOTYyYmZhYTdhOSIsImlhdCI6MTcwNjE0MzIxOCwiZXhwIjoxNzA2MTQ2ODE4fQ.ql9COVutYdKPqM5_2cfvrsMc6XOWsXjx9XythOWDIfI"
+    cookies.get("deep-access") || ""
   }
 
 export const requestHeader = {
