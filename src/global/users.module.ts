@@ -10,7 +10,6 @@ export interface ActivityCardModel {
     id?: any,
     // docId: any,
     actionText: any,
-    activityText: any,
     time: any,
     moduleName: any,
     userName: any,

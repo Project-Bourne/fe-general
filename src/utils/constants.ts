@@ -36,10 +36,16 @@ export const NavBarContents = [
     route: "/roles",
   },
   {
+    name: "Enquiries",
+    icon: "question.svg",
+    id: 6,
+    route: "/enquiries",
+  },
+  {
     name: "Audit Log",
     icon: "log.svg",
     selectedIcon: "on.log.svg",
-    id: 6,
+    id: 7,
     route: "/auditLog",
   },
 ];

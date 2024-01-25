@@ -29,25 +29,24 @@ function CustomTable({ tableHeaderData }) {
   const [selectedRoles, setSelectedRoles] = useState({});
   const { reload } = useSelector((state: any) => state?.user);
 
-  useEffect(() => {
-    Auth.getUserViaAccessToken()
-      .then((response) => {
-        if (response?.status) {
-          dispatch(setUserInfo(response?.data));
-        }
-      })
-      .catch((err) => {
-        NotificationService.error({
-          message: "Error!",
-          addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
-          position: "top-center",
-        });
-      });
-  }, []); 
+  // useEffect(() => {
+  //   Auth.getUserViaAccessToken()
+  //     .then((response) => {
+  //       if (response?.status) {
+  //         dispatch(setUserInfo(response?.data));
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       NotificationService.error({
+  //         message: "Error!",
+  //         addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
+  //         position: "top-center",
+  //       });
+  //     });
+  // }, []); 
 
   const EditRoles = (roles) => {
     setSelectedRoles(roles);
-    console.log(roles);
     setShowEdit(true);
   };
 

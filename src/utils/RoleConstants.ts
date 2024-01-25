@@ -11,3 +11,8 @@ export const RolesTableHeaderData: string[] = [
   "Level",
   "Actions"
 ];
+export const EnquiriesTableHeaderData: string[] = [
+  "User Name",
+  "Module",
+  "Comment",
+];
