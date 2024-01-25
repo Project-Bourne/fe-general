@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import IrpContent from "./irpContent";
 import UserService from "@/services/users";
 import NotificationService from "@/services/notification.service";
-import { Pagination } from "@mui/material";
+import { Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { CustomModal } from "@/components/ui";
 import Loader from "@/components/ui/Loader";
 
@@ -76,24 +76,40 @@ const IrpListItem = () => {
           </div>
         </CustomModal>
       )}
-      <div className="w-full h-[100%] overflow-y-scroll grid grid-cols-2">
-        {auditData?.logs
-          ? auditData?.logs?.map((item, index) => (
-              <IrpContent
-                key={index}
-                moduleName={item?.moduleName || "No module name ound"}
-                time={new Date(item?.time).toLocaleString()} // Format the time
-                actionText={item?.moduleAction || "No action found"}
-                userName={
-                  item?.remoteUser?.firstName && item?.remoteUser?.lastName
-                    ? `${item?.remoteUser?.firstName} ${item?.remoteUser?.lastName}`
-                    : "User Name Not Found"
-                }
-                activityText={item?.remoteIP || "No IP address found"}
-                // docId={item?.id}
-              />
-            ))
-          : null}
+      <div className="w-full h-[100%] overflow-y-scroll flex flex-col gap-4">
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>User</TableCell>
+              <TableCell align="right">Action</TableCell>
+              <TableCell align="right">Module</TableCell>
+              <TableCell align="right">Remote IP</TableCell>
+              <TableCell align="right">Time</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {auditData?.logs
+            ? auditData?.logs?.map((item, index) => (
+                <IrpContent
+                  key={index}
+                  moduleName={item?.moduleName || "No module name ound"}
+                  time={new Date(item?.time).toUTCString()} // Format the time
+                  actionText={item?.moduleAction || "No action found"}
+                  userName={
+                    item?.remoteUser?.firstName && item?.remoteUser?.lastName
+                      ? `${item?.remoteUser?.firstName} ${item?.remoteUser?.lastName}`
+                      : "User Name Not Found"
+                  }
+                  activityText={item?.remoteIP || "No IP address found"}
+                  // docId={item?.id}
+                />
+              ))
+            : null}
+          </TableBody>
+        </Table>
+      </TableContainer>
+        
       </div>
       <div className="me:w-[100%] m-5 flex justify-end items-center">
         {auditData?.pages && (
