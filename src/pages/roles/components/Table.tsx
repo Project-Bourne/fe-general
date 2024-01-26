@@ -29,21 +29,21 @@ function CustomTable({ tableHeaderData }) {
   const [selectedRoles, setSelectedRoles] = useState({});
   const { reload } = useSelector((state: any) => state?.user);
 
-  // useEffect(() => {
-  //   Auth.getUserViaAccessToken()
-  //     .then((response) => {
-  //       if (response?.status) {
-  //         dispatch(setUserInfo(response?.data));
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       NotificationService.error({
-  //         message: "Error!",
-  //         addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
-  //         position: "top-center",
-  //       });
-  //     });
-  // }, []); 
+  useEffect(() => {
+    Auth.getUserViaAccessToken()
+      .then((response) => {
+        if (response?.status) {
+          dispatch(setUserInfo(response?.data));
+        }
+      })
+      .catch((err) => {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
+          position: "top-center",
+        });
+      });
+  }, []); 
 
   const EditRoles = (roles) => {
     setSelectedRoles(roles);
@@ -64,7 +64,6 @@ function CustomTable({ tableHeaderData }) {
       setIsLoading(true); // Set isLoading to true before making the request
       const response = await RolesService.getAllRoles();
       if (response.status) {
-        console.log(response.data, 'response.data');
         const data = response.data;
         setRoles(data);
       } else {

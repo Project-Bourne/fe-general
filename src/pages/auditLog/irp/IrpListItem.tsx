@@ -25,7 +25,6 @@ const IrpListItem = () => {
     try {
       const newAuditData = await UserService.filterByAudit(page, itemsPerPage);
       setAuditData(newAuditData.data);
-      console.log(auditData);
     } catch (error) {
       NotificationService.error({
         message: "Error!",
@@ -51,7 +50,6 @@ const IrpListItem = () => {
           logs: initialAuditData.data.logs.sort((a: any, b: any) => Date.parse(b.time) - Date.parse(a.time)),
         };
         setAuditData(sortedData);
-        // console.log('AUDIT DATA:', auditData);
       } catch (error) {
         NotificationService.error({
           message: "Error!",

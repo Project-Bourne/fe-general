@@ -13,4 +13,5 @@ export interface ActivityCardModel {
     time: any,
     moduleName: any,
     userName: any,
+    activityText?: any
 }

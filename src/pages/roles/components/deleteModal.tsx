@@ -8,7 +8,6 @@ function DeleteModal({ cancelModal, handleDelete, roles }) {
     handleDelete(roleId);
     cancelModal();
   };
-  console.log(roles);
   return (
     <>
       <h1 className="font-semibold text-[24px] px-2 mb-3"> Delete Role </h1>

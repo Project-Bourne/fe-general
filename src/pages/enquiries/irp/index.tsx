@@ -8,21 +8,21 @@ import { useDispatch } from 'react-redux';
 const index = () => {
 const dispatch  = useDispatch()
 
-  // useEffect(() => {
-  //   Auth.getUserViaAccessToken()
-  //     .then((response) => {
-  //       if (response?.status) {
-  //         dispatch(setUserInfo(response?.data));
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       NotificationService.error({
-  //         message: "Error!",
-  //         addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
-  //         position: "top-center",
-  //       });
-  //     });
-  // }, []); 
+  useEffect(() => {
+    Auth.getUserViaAccessToken()
+      .then((response) => {
+        if (response?.status) {
+          dispatch(setUserInfo(response?.data));
+        }
+      })
+      .catch((err) => {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
+          position: "top-center",
+        });
+      });
+  }, []); 
   return (
     <div className='h-[100%] py-10'>
         <IrpListItem />

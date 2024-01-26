@@ -28,7 +28,6 @@ function Header() {
   }
 
   const handleAddRoles = async (data) => {
-    console.log(data);
     setIsLoading(true);
     try {
       const response = await RolesService.AddRole(data);

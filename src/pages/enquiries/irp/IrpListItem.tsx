@@ -20,10 +20,12 @@ import Loader from "@/components/ui/Loader";
  * It also handles pagination and sorting.
  */
 const IrpListItem = () => {
-  const [auditData, setAuditData] = useState(null);
-  const itemsPerPage = 49; // Set a constant number of items per page
+  const [enquiriesData, setEnquiriesData] = useState(null);
+  const itemsPerPage = 49;
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(auditData?.page || 1);
+  const [currentPage, setCurrentPage] = useState(
+    enquiriesData?.currentPage || 1
+  );
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -32,9 +34,8 @@ const IrpListItem = () => {
     setLoading(true);
     setCurrentPage(page);
     try {
-      const newAuditData = await UserService.filterByAudit(page, itemsPerPage);
-      setAuditData(newAuditData.data);
-      console.log(auditData);
+      const newEnquiriesData = await UserService.enquiries(page, itemsPerPage);
+      setEnquiriesData(newEnquiriesData.data);
     } catch (error) {
       NotificationService.error({
         message: "Error!",
@@ -50,32 +51,34 @@ const IrpListItem = () => {
     async function fetchInitialData() {
       setLoading(true);
       try {
-        const initialAuditData = await UserService?.filterByAudit(
+        const initialEnquiriesData = await UserService?.enquiries(
           currentPage,
           itemsPerPage
         );
-        // sort items by date in descending order
+
+        // Sort items by date in descending order
         let sortedData = {
-          ...initialAuditData.data,
-          logs: initialAuditData.data.logs.sort(
-            (a: any, b: any) => Date.parse(b.time) - Date.parse(a.time)
+          ...initialEnquiriesData.data,
+          feedbacks: initialEnquiriesData?.data.feedbacks?.sort(
+            (a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
           ),
         };
-        setAuditData(sortedData);
-        // console.log('AUDIT DATA:', auditData);
+
+        setEnquiriesData(sortedData);
       } catch (error) {
         NotificationService.error({
           message: "Error!",
           addedText: <p>Something happened. Please try again</p>,
           position: "top-center",
         });
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     // Fetch initial data on component mount
     fetchInitialData();
-  }, []); // Empty dependency array to run this effect once
+  }, [currentPage, itemsPerPage]);
 
   return (
     <div>
@@ -111,7 +114,7 @@ const IrpListItem = () => {
                 >
                   Module
                 </TableCell>
-                
+
                 <TableCell
                   align="right"
                   className="!font-bold !text-md !text-sirp-primary"
@@ -121,35 +124,37 @@ const IrpListItem = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {auditData?.logs
-                ? auditData?.logs?.map((item, index) => (
-                    <IrpContent
-                      key={index}
-                      moduleName={item.moduleName || "No module name found"}
-                      time={new Date(item.time).toUTCString()} // Format the time
-                      actionText={item.moduleAction || "No action found"}
-                      userName={
-                        item?.remoteUser?.firstName &&
-                        item?.remoteUser?.lastName
-                          ? `${item?.remoteUser?.firstName} ${item?.remoteUser?.lastName}`
-                          : "User Name Not Found"
-                      }
-                      // docId={item?.id}
-                    />
-                  ))
-                : null}
+              {enquiriesData?.feedbacks ? (
+                enquiriesData?.feedbacks?.map((item, index) => (
+                  <IrpContent
+                    key={index}
+                    moduleName={item.module || "No module name found"}
+                    time={new Date(item.updatedAt).toUTCString()} // Format the time
+                    actionText={item.comment || "No comment found"}
+                    userName={
+                      item?.user?.firstName && item?.user?.lastName
+                        ? `${item?.user?.firstName} ${item?.user?.lastName}`
+                        : "User Name Not Found"
+                    }
+                    // docId={item?.id}
+                  />
+                ))
+              ) : (
+                <p>No data available</p>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </div>
       <div className="me:w-[100%] m-5 flex justify-end items-center">
-        {auditData?.pages && (
+        {enquiriesData?.currentPage && (
           <Pagination
-            count={Math.ceil(auditData.pages)}
+            count={enquiriesData?.totalPages || 1}
             page={currentPage}
             onChange={handlePageChange}
             variant="outlined"
             color="primary"
+            disabled={enquiriesData?.totalPages === 1}
           />
         )}
       </div>

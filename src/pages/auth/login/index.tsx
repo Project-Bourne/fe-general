@@ -24,7 +24,6 @@ function Login() {
       return;
     }
 
-    console.log(formData);
   };
 
   return (

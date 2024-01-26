@@ -43,21 +43,21 @@ function CustomTable({ tableHeaderData }) {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  // useEffect(() => {
-  //   Auth.getUserViaAccessToken()
-  //     .then((response) => {
-  //       if (response?.status) {
-  //         dispatch(setUserInfo(response?.data));
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       NotificationService.error({
-  //         message: "Error!",
-  //         addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
-  //         position: "top-center",
-  //       });
-  //     });
-  // }, []); 
+  useEffect(() => {
+    Auth.getUserViaAccessToken()
+      .then((response) => {
+        if (response?.status) {
+          dispatch(setUserInfo(response?.data));
+        }
+      })
+      .catch((err) => {
+        NotificationService.error({
+          message: "Error!",
+          addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
+          position: "top-center",
+        });
+      });
+  }, []); 
 
   useEffect(() => {
     fetchData(1); // Call the async function

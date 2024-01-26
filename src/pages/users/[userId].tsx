@@ -40,7 +40,6 @@ const ProfileSettings = () => {
   };
 
   const handleRemoveCountry = (selectedList, removedItem) => {
-    console.log("Removed Item:", removedItem);
     const newSelectedList = selectedList.filter(
       (item) => item.key !== removedItem.key
     );
@@ -49,8 +48,6 @@ const ProfileSettings = () => {
   };
 
   useEffect(() => {
-    console.log("selectedCountry:", selectedCountry);
-    console.log("country:", country);
   }, [selectedCountry, reload]);
 
   useEffect(() => {
@@ -101,7 +98,6 @@ const ProfileSettings = () => {
     fetchUserRoles();
   }, [user?.firstName, user?.lastName]);
 
-  console.log("country:", country);
 
   // convert the user's country array to an array of objects with the key and id properties
   const stringArray = country;

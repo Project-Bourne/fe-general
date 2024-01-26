@@ -60,7 +60,6 @@ function PasswordRecovery() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (passwordStatus === 1) {
-      console.log(password);
     } else {
       console.log("oops sorry, incorrect data");
     }

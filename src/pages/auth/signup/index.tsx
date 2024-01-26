@@ -49,7 +49,6 @@ function SignUp() {
       return;
     }
 
-    console.log(formData);
   };
 
   return (

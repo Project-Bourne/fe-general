@@ -1,17 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createRoot} from "react-dom/client";
-import CustomToast from "@/components/ui/CustomToast"; // Make sure to import CustomToast correctly
-
+import CustomToast from "@/components/ui/CustomToast";
 class NotificationService {
   static showCustomToast({ type, message, addedText, position }) {
     const container = document.createElement("div");
     const root = createRoot(container)
-    document.body.appendChild(container);
-
-    // log content of message and addedText
-    console.log(message);
-    console.log(addedText);
+    document.body.appendChild(container); 
 
     if (message.type === 'p') {
       message = String(message).replace("<p>", "").replace("</p>", "");

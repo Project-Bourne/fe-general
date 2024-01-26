@@ -35,7 +35,6 @@ export default function PersonalInfoSection({
     );
     const response = await UserService.updateUser(user.uuid, user);
     if (response.status) {
-      console.log(response);
       dispatch(setSingleUser(response.data));
       NotificationService.success({
         message: "success!",
