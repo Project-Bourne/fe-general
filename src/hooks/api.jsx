@@ -25,8 +25,8 @@ const logout = () => {
     },
   }).then((res) => {
     cookies.remove("deep-access");
-    localStorage.clear();
-    window.location.href = "http://192.81.213.226:30/auth/login";
+    localStorage.clear();Ï
+   window.location.replace("http://192.81.213.226:30/auth/login");
   });
 };
 
