@@ -16,29 +16,29 @@ function Reports() {
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   try {
-  //     Auth
-  //       .getUserViaAccessToken()
-  //       .then((response) => {
-  //         setLoading(false);
-  //         if (response?.status) {
-  //           dispatch(setUserInfo(response?.data));
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         NotificationService.error({
-  //           message: "Error!",
-  //           addedText: <p>{`${err?.message}, please try again`}</p>,
-  //           position: "top-center",
-  //         });
-  //       });
-  //   } catch (err) {
-  //   }
-  //   fetchData();
-  //   topSources();
-  // }, []);
+  useEffect(() => {
+    setLoading(true);
+    try {
+      Auth
+        .getUserViaAccessToken()
+        .then((response) => {
+          setLoading(false);
+          if (response?.status) {
+            dispatch(setUserInfo(response?.data));
+          }
+        })
+        .catch((err) => {
+          NotificationService.error({
+            message: "Error!",
+            addedText: <p>{`${err?.message}, please try again`}</p>,
+            position: "top-center",
+          });
+        });
+    } catch (err) {
+    }
+    fetchData();
+    topSources();
+  }, []);
 
   const fetchData = async () => {
     try {

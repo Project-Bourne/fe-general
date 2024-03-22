@@ -40,7 +40,7 @@ function Header() {
         setIsLoading(false);
         dispatch(setReload(true));
         closeModalHandler();
-        router.push("/roles");
+        router.replace("/roles");
       } else {
         NotificationService.error({
           message: "Error!",

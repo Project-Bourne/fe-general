@@ -169,7 +169,7 @@ const ProfileSettings = () => {
             addedText: <p>{response.message}.</p>,
             position: "top-center",
           });
-          router.push("/users");
+          router.replace("/users");
           dispatch(
             setUpdatedData({
               firstName: firstname,
