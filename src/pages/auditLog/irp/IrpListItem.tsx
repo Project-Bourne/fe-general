@@ -47,7 +47,9 @@ const IrpListItem = () => {
         // sort items by date in descending order
         let sortedData = {
           ...initialAuditData.data,
-          logs: initialAuditData.data.logs.sort((a: any, b: any) => Date.parse(b.time) - Date.parse(a.time)),
+          logs: initialAuditData.data.logs
+            .sort((a: any, b: any) => Date.parse(b.time) - Date.parse(a.time))
+            .filter((log) => log.remoteUser && log.remoteUser.firstName && log.remoteUser.lastName)
         };
         setAuditData(sortedData);
       } catch (error) {
