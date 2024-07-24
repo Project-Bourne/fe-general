@@ -58,7 +58,8 @@ function CustomTable({ tableHeaderData }) {
           const dateA = new Date(a.createdAt).getTime();
           const dateB = new Date(b.createdAt).getTime();
           return dateA - dateB;
-        });
+        })
+        // \.filter((data) => data.userName)
 
         setDocuments(docs);
       } else {
@@ -228,15 +229,22 @@ function CustomTable({ tableHeaderData }) {
           </div>
         </CustomModal>
       )}
-      <div className="mt-[3.3rem] fixed">
-        <Table sx={{ minWidth: 1350 }}>
+      <div className="mt-[3.3rem] sticky">
+        <Table sx={{ minWidth: 650 }}>
           <TableHead className="bg-gray-100">
             <TableRow>
               {tableHeaderData?.map((title: string, index: number) => (
                 <TableCell
                   key={index}
-                  align={`${!title[0] ? "right" : "left"}`}
+                  align={`${index !== 0 ? "right" : "left"}`}
                   scope="col"
+                  className={
+                    index === 0 && 'w-[20.8rem]' ||
+                    index === 1 && 'w-[19.8rem]' ||
+                    index === 2 && 'w-[17rem]' ||
+                    index === 3 && 'w-[15.8rem]' ||
+                    index === 4 && 'w-auto'
+                  }
                 >
                   {title}
                 </TableCell>
@@ -245,7 +253,7 @@ function CustomTable({ tableHeaderData }) {
           </TableHead>
         </Table>
       </div>
-      <Table sx={{ minWidth: 650 }} className="mt-[8rem]">
+      <Table sx={{ minWidth: 650 }} className="">
         {Array.isArray(documents) && documents.length > 0 ? (
           <>
             <TableBody>
@@ -255,13 +263,13 @@ function CustomTable({ tableHeaderData }) {
                     <TableCell className="text-xs capitalize w-[20.8rem]">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs w-[19.8rem] uppercase ">
+                    <TableCell className="text-xs w-[19.8rem] uppercase " align="right">
                       {getFileExtension(item?.name)}
                     </TableCell>{" "}
-                    <TableCell className="text-xs text-center w-[17rem] capitalize ">
-                      {item?.userName ? item?.userName : "Null"}
+                    <TableCell className="text-xs text-center w-[17rem] capitalize " align="right">
+                      {item?.userName ? item?.userName : "Crawler"}
                     </TableCell>
-                    <TableCell className="text-xs w-[15.8rem]">
+                    <TableCell className="text-xs w-[15.8rem]" align="right">
                       {item?.createdAt
                         ? format(
                             new Date(item.createdAt),
@@ -269,18 +277,20 @@ function CustomTable({ tableHeaderData }) {
                           )
                         : ""}
                     </TableCell>{" "}
-                    <TableCell className="text-xs capitalize ">
+                    <TableCell className="text-xs capitalize w-auto" align="right">
                       <div className="flex items-center gap-5">
                         <Tooltip title="View Document">
                           <VisibilityIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => ViewDocuments(item)}
+                            color={'info'}
                           />
                         </Tooltip>
                         <Tooltip title="Delete Document">
                           <DeleteIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => DeleteDocuments(item)}
+                            color={'error'}
                           />
                         </Tooltip>
                       </div>

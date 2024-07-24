@@ -164,7 +164,7 @@ function Header({ source, setSource }) {
             size="sm"
             background="bg-sirp-primary"
             value={
-              <div className="flex gap-x-1 text-[12px] items-center justify-center">
+              <div className="flex flex-row gap-x-1 text-[12px] items-center justify-center">
                 <Image
                   src={require("../../../assets/icons/add-source.svg")}
                   alt="add user"
@@ -174,7 +174,7 @@ function Header({ source, setSource }) {
                   style={{ alignSelf: "center" }}
                   priority
                 />
-                <label className="text-white">Add Source</label>
+                <label className="text-white hidden lg:block">Add Source</label>
               </div>
             }
           />

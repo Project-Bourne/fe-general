@@ -152,15 +152,23 @@ function CustomTable({ tableHeaderData, source}) {
           </div>
         </CustomModal>
       )} */}
-      <div className="mt-[3.3rem] fixed">
-        <Table sx={{ minWidth: 1350 }}>
+      <div className="mt-[3.3rem] sticky">
+        <Table sx={{ minWidth: 650 }}>
           <TableHead className="bg-gray-100">
             <TableRow>
               {tableHeaderData?.map((title: string, index: number) => (
                 <TableCell
                   key={index}
-                  align={`${!title[0] ? "right" : "left"}`}
+                  // align={`${index === 0 ? "left" : "right"}`}
+                  align="left"
                   scope="col"
+                  className={
+                    index === 0 && 'w-[23.8rem]' ||
+                    index === 1 && 'w-[26.5rem]' ||
+                    index === 2 && 'w-[15rem]' ||
+                    index === 3 && 'w-[15rem]' ||
+                    index === 4 && 'w-auto'
+                  }
                 >
                   {title}
                 </TableCell>
@@ -169,23 +177,23 @@ function CustomTable({ tableHeaderData, source}) {
           </TableHead>
         </Table>
       </div>
-      <Table sx={{ minWidth: 650 }} className="mt-[6.8rem] border">
+      <Table sx={{ minWidth: 650 }} className="">
         {Array.isArray(source) && source.length > 0 ? (
           <>
             <TableBody>
               {source?.map((item, index) => (
                 <>
                   <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell className="text-xs capitalize w-[21.8rem] ">
+                    <TableCell className="text-xs capitalize w-[23.8rem] ">
                       {item?.name}
                     </TableCell>
-                    <TableCell className="text-xs w-[20.7rem]">
+                    <TableCell className="text-xs w-[26.5rem]">
                       {item?.url}
                     </TableCell>
-                    <TableCell className="text-xs capitalize w-[14.4rem]">
+                    <TableCell className="text-xs capitalize w-[15rem]">
                       {item?.weight}
                     </TableCell>
-                    <TableCell className="text-xs capitalize w-[12.3rem]">
+                    <TableCell className="text-xs capitalize w-[15rem]">
                       {item.crawl === true || item.crawl === "true"
                         ? "True"
                         : "False"}
@@ -196,12 +204,14 @@ function CustomTable({ tableHeaderData, source}) {
                           <EditIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => EditSources(item)}
+                            color={'info'}
                           />
                         </Tooltip>
                         <Tooltip title="Delete">
                           <DeleteIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => DeleteSources(item)}
+                            color={'error'}
                           />
                         </Tooltip>
                       </div>

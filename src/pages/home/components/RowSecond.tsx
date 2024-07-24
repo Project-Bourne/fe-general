@@ -3,10 +3,28 @@ import ProgressBar from "@/components/ui/ProgressBar";
 import MapChart from "../charts/map";
 import info from "../../../assets/icons/info.svg";
 import { useSelector } from "react-redux";
+import Tooltip from "@mui/material/Tooltip";
+import { useEffect, useState } from "react";
+const countriesData = require("../../../utils/countries.json");
 
-function SecondRow() {
+function SecondRow({ countries }) {
   const { topSources } = useSelector((state: any) => state?.user);
+  const [countryInfo, setCountryInfo] = useState([]);
   const topArticle = topSources?.data;
+
+  useEffect(() => {
+    if (countries && countries?.length > 0) {
+      let filteredCountries = [];
+      for (let i = 0; i < countries.length; i++) {
+        for (let j = 0; j < countriesData.length; j++) {
+          if (countriesData[j].name === countries[i]) {
+            filteredCountries.push(countriesData[j]);
+          }
+        }
+      }
+      setCountryInfo(filteredCountries);
+    }
+  }, [countries]);
 
   const LeftHandDisplay = () => {
     return (
@@ -23,21 +41,23 @@ function SecondRow() {
             </h3>
           </div>
           {/* header text lhs  */}
-          {/* <div className="flex items-start ">
-            <Image
-              src={info}
-              alt="info"
-              height={25}
-              width={25}
-              className="cursor-pointer"
-            />
-          </div> */}
+          <div className="flex items-start ">
+            <Tooltip title="location for data source">
+              <Image
+                src={info}
+                alt="info"
+                height={25}
+                width={25}
+                className="cursor-pointer"
+              />
+            </Tooltip>
+          </div>
         </div>
 
         {/* body and graph  */}
         <div className="border-[2px] border-sirp-lightGrey h-[300px]">
           <div className="h-[270px]">
-            <MapChart />
+            <MapChart userCountries={countryInfo} />
           </div>
         </div>
       </div>
