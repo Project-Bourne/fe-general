@@ -113,7 +113,7 @@ function Header() {
                   style={{ alignSelf: "center" }}
                   priority
                 />
-                <label className="text-white">Add Roles</label>
+                <label className="text-white hidden lg:flex">Add Roles</label>
               </div>
             }
           />

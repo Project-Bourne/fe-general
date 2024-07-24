@@ -178,8 +178,8 @@ function CustomTable({ tableHeaderData }) {
       )}
       {/* header section  */}
     
-      <div className="fixed mt-[3.4rem]">
-        <Table sx={{ minWidth: 1350 }} className="">
+      <div className="sticky mt-[3.4rem]">
+        <Table sx={{ minWidth: 650 }} className="">
           <TableHead className="bg-gray-100">
             <TableRow>
               {tableHeaderData?.map((title: string, index: number) => (
@@ -195,7 +195,7 @@ function CustomTable({ tableHeaderData }) {
           </TableHead>
         </Table>
       </div>
-      <Table sx={{ minWidth: 650 }} className="mt-[6.9rem] pt-[5rem]">
+      <Table sx={{ minWidth: 650 }} className="">
         {Array.isArray(roles) && roles.length > 0 ? (
           <>
             <TableBody>
@@ -206,9 +206,10 @@ function CustomTable({ tableHeaderData }) {
                       {item?.roleName}
                     </TableCell>
                     <TableCell className="text-xs capitalize font-bold  w-[26.5rem] ">
-                      {item.permissions.map((permission, permissionIndex) => (
+                      { item.permissions.join(', ')}
+                      {/* {item.permissions.map((permission, permissionIndex) => (
                         <div key={permissionIndex}>{permission}</div>
-                      ))}
+                      ))} */}
                     </TableCell>
                     <TableCell className="text-md capitalize font-bold  w-[15rem] ">
                       {item?.level}
@@ -219,12 +220,14 @@ function CustomTable({ tableHeaderData }) {
                           <EditIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => EditRoles(item)}
+                            color={'info'}
                           />
                         </Tooltip>
                         <Tooltip title="Delete">
                           <DeleteIcon
                             className="bg-transparent text-xs hover:cursor-pointer"
                             onClick={() => DeleteRoles(item)}
+                            color={'error'}
                           />
                         </Tooltip>
                       </div>
