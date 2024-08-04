@@ -57,8 +57,8 @@ function CustomTable({ tableHeaderData }) {
           addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
           position: "top-center",
         });
+        logout();
       });
-      logout();
   }, []); 
 
   useEffect(() => {

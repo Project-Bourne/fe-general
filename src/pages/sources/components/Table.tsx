@@ -38,7 +38,6 @@ function CustomTable({ tableHeaderData, source}) {
     setSelectedSource(source);
     setShowDelete(true);
     dispatch(setReload(false));
-
   };
 
   // useEffect(() => {
@@ -107,11 +106,13 @@ function CustomTable({ tableHeaderData, source}) {
       if (response.status) {
         NotificationService.success({
           message: "Success!",
-          addedText: <p>Source deleted successfully</p>,
+          addedText: <p>Source deleted successfully. Wait for page to reload</p>,
           position: "top-center",
         });
         setIsLoading(false);
-        dispatch(setReload(true));
+        setTimeout(() => { 
+          dispatch(setReload(true));
+        }, 2000);
       } else {
         NotificationService.error({
           message: "Error!",

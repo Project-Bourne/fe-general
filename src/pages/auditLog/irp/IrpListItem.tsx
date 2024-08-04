@@ -113,7 +113,7 @@ const IrpListItem = () => {
                   userName={
                     item?.remoteUser?.firstName && item?.remoteUser?.lastName
                       ? `${item?.remoteUser?.firstName} ${item?.remoteUser?.lastName}`
-                      : "User Name Not Found"
+                      : "Crawler"
                   }
                   activityText={item?.remoteIP || "No IP address found"}
                   // docId={item?.id}
