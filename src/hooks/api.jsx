@@ -16,7 +16,7 @@ export const requestHeader = {
   "deep-token": access,
 };
 
-const logout = () => {
+export const logout = () => {
   const access = cookies.get("deep-access");
   fetch("http://192.81.213.226:81/80/logout", {
     method: "POST",
@@ -25,7 +25,7 @@ const logout = () => {
     },
   }).then((res) => {
     cookies.remove("deep-access");
-    localStorage.clear();Ï
+    localStorage.clear();
    window.location.replace("http://192.81.213.226:30/auth/login");
   });
 };

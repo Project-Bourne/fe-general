@@ -21,6 +21,7 @@ import UnblockModal from "./UnblockModal";
 import Loader from "@/components/ui/Loader";
 import EditIcon from "@mui/icons-material/Edit";
 import { setUserInfo } from "@/redux/reducer/authReducer";
+import { logout } from "@/hooks/api";
 
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
@@ -57,6 +58,7 @@ function CustomTable({ tableHeaderData }) {
           position: "top-center",
         });
       });
+      logout();
   }, []); 
 
   useEffect(() => {

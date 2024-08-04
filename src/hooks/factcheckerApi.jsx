@@ -18,7 +18,7 @@ export let requestHeader = {
   "deep-token": cookies.get("deep-access"),
 };
 
-const logout = () => {
+export const logout = () => {
   let access = cookies.get("deep-access");
   fetch("http://192.81.213.226:81/80/logout", {
     method: "POST",

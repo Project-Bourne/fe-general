@@ -6,6 +6,7 @@ import NotificationService from "@/services/notification.service";
 import { setUserInfo } from "@/redux/reducer/authReducer";
 import Auth from "@/services/auth.service";
 import { useDispatch } from "react-redux";
+import { logout } from "@/hooks/api";
 
 const Users = () => {
 const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const dispatch = useDispatch();
           addedText: <p>Access forbidden. Redirecting to login page.</p>,
           position: "top-center",
         });
+        logout();
       });
   }, []);
   

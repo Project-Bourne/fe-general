@@ -18,6 +18,7 @@ import DeleteModal from "./deleteModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { setUserInfo } from "@/redux/reducer/authReducer";
+import { logout } from "@/hooks/api";
 
 // set number of items to be displayed per pag
 function CustomTable({ tableHeaderData }) {
@@ -42,6 +43,7 @@ function CustomTable({ tableHeaderData }) {
           addedText: <p>{`Access forbidden. Redirecting to login page.`}</p>,
           position: "top-center",
         });
+        logout();
       });
   }, []); 
 
