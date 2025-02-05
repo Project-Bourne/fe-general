@@ -20,7 +20,8 @@ export let requestHeader = {
 
 export const logout = () => {
   let access = cookies.get("deep-access");
-  fetch("http://192.81.213.226:81/80/logout", {
+  // fetch("http://192.81.213.226:81/80/logout", {
+  fetch(`http://${process.env.NEXT_PUBLIC_SERVER_IP_ADDRESS}:${process.env.NEXT_PUBLIC_IRP_API_PORT}/80/logout`, {
     method: "POST",
     body: {
       refreshToken: access,
@@ -48,7 +49,8 @@ export const logout = () => {
  *
  */
 
-let API_USER_URL = "http://192.81.213.226:81/84";
+// let API_USER_URL = "http://192.81.213.226:81/84";
+let API_USER_URL = `http://${process.env.NEXT_PUBLIC_SERVER_IP_ADDRESS}:${process.env.NEXT_PUBLIC_IRP_API_PORT}/${process.env.NEXT_PUBLIC_FACT_CHECKER_API_ROUTE}`;
 export async function factCheckRequest(
   url,
   method,

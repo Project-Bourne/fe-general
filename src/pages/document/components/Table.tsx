@@ -47,7 +47,8 @@ function CustomTable({ tableHeaderData }) {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "http://192.81.213.226:81/89/api/v1/upload/docs"
+        // "http://192.81.213.226:81/89/api/v1/upload/docs"
+        `http://${process.env.NEXT_PUBLIC_SERVER_IP_ADDRESS}:${process.env.NEXT_PUBLIC_IRP_API_PORT}/${process.env.NEXT_PUBLIC_FILE_UPLOAD_API_ROUTE}/api/v1/upload/docs`
       );
       if (response.status) {
         const data = await response.json();
@@ -83,7 +84,8 @@ function CustomTable({ tableHeaderData }) {
   const handleViewDocument = async (id) => {
     try {
       const response = await fetch(
-        `http://192.81.213.226:81/89/api/v1/download/${id}`,
+        // `http://192.81.213.226:81/89/api/v1/download/${id}`,
+        `http://${process.env.NEXT_PUBLIC_SERVER_IP_ADDRESS}:${process.env.NEXT_PUBLIC_IRP_API_PORT}/${process.env.NEXT_PUBLIC_FILE_UPLOAD_API_ROUTE}/api/v1/download/${id}`,
         {
           method: "GET",
           headers: {
@@ -165,7 +167,8 @@ function CustomTable({ tableHeaderData }) {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://192.81.213.226:81/89/api/v1/upload/remove/${id}`,
+        // `http://192.81.213.226:81/89/api/v1/upload/remove/${id}`,
+        `http://${process.env.NEXT_PUBLIC_SERVER_IP_ADDRESS}:${process.env.NEXT_PUBLIC_IRP_API_PORT}/${process.env.NEXT_PUBLIC_FILE_UPLOAD_API_ROUTE}/api/v1/upload/remove/${id}`,
         {
           method: "DELETE",
           headers: {
