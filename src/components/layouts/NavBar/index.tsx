@@ -4,6 +4,10 @@ import NavBarItem from "./NavBarItem";
 import { NavBarContents } from "@/utils/constants";
 import { useRouter } from "next/router";
 
+const COMPANY_INFO = {
+  copyright: `© ${new Date().getFullYear()} Powered by RIDU. All rights reserved.`,
+}
+
 function NavBar() {
   const router = useRouter();
   const [isCrawling, setIsCrawling] = useState(false);
@@ -54,6 +58,9 @@ function NavBar() {
         {NavBarContents.map((item, index) => (
           <NavBarItem item={item} index={index} key={index} />
         ))}
+        <p className="bg-sirp-primary text-white px-2 py-1 rounded-md">
+            {COMPANY_INFO.copyright}
+        </p>
       </div>
     </div>
   );
