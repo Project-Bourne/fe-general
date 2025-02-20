@@ -74,7 +74,7 @@ function RightComp() {
         className="relative"
         onClick={() => {
           // router.replace("http://192.81.213.226:30");
-          router.replace(`${process.env.NEXT_PUBLIC_SERVER_IP_ADDRESS}:${process.env.NEXT_PUBLIC_IRP_PORT}`);
+          router.replace(`http://${process.env.NEXT_PUBLIC_SERVER_IP_ADDRESS}:${process.env.NEXT_PUBLIC_IRP_PORT}`);
         }}
       >
         <div
