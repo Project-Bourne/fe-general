@@ -10,12 +10,13 @@ export default function MapChart({ userCountries }) {
       {userCountries?.map((country, index) => (
         <li key={index}>
           <Tooltip title={country.name}>
-            <Image
+            {/* <Image
               src={country.image}
               alt={country.name}
               height={30}
               width={90}
-            />
+            /> */}
+            <div className="text-[90px] font-light">{country.emoji}</div>
           </Tooltip>
         </li>
       ))}

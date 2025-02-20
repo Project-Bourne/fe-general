@@ -103,7 +103,8 @@ function DropdownWithFlag(props: DropdownModel) {
   const { user } = useSelector((state: any) => state.user);
   const [country, setCountry] = useState({
     name: "Nigeria", // Default country name
-    flag: "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NG.svg", // Default flag
+    // flag: "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NG.svg", // Default flag
+    emoji: "🇳🇬",
   });
   useEffect(() => {
     // Check if user and user.country are defined
@@ -115,7 +116,7 @@ function DropdownWithFlag(props: DropdownModel) {
       if (selectedCountry) {
         setCountry({
           name: selectedCountry.name,
-          flag: selectedCountry.image,
+          emoji: selectedCountry.emoji,
         });
       }
     }
@@ -150,8 +151,8 @@ function DropdownWithFlag(props: DropdownModel) {
     // }
   };
   // add a selected country from dropdown
-  const handleItemSelect = (country, flag) => {
-    setCountry({ name: country, flag });
+  const handleItemSelect = (country, emoji) => {
+    setCountry({ name: country, emoji });
     setDropdown(false);
     selectItem(country); // Call the selectItem function passed as a prop
     setFilteredCountries(countries);
@@ -238,14 +239,7 @@ function DropdownWithFlag(props: DropdownModel) {
         onClick={handleDropdown}
       >
         <div className="flex gap-2 items-center">
-          <Image
-            src={country.flag}
-            alt="Filter"
-            height={20}
-            width={20}
-            className="rounded-full h-[20px] w-[20px]"
-            priority
-          />
+          <div className="text-[15px] font-light">{country.emoji}</div>
           <div className="text-[15px] font-light">{country.name}</div>
         </div>
         <div>&#8964; </div>
